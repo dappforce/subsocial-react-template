@@ -1,0 +1,84 @@
+@import src/styles/vars
+
+.bar
+  box-shadow: 0 3px 10px rgba(153, 153, 153, 0.12), 0 3px 9px rgba(153, 153, 153, 0.12), 0 1px 20px rgba(153, 153, 153, 0.2)
+
+.header
+  display: grid !important
+  justify-content: space-between
+  width: 100%
+  grid-template-columns: 1fr minmax(0, 765px) 1fr
+
+  @media (max-width: 1100px)
+    padding: 0
+    grid-template-columns: 1fr 1fr
+    grid-template-rows: 1fr 1fr
+
+.icon
+  margin-right: 1.125rem
+  margin-left: 0
+
+  @media (max-width: 1100px)
+    margin-right: 1rem
+
+.label
+  color: $color_black
+
+  a
+    white-space: nowrap
+
+.tabs
+  max-width: 765px
+  width: 100%
+  background-color: transparent
+
+  @media (max-width: 1100px)
+    grid-area: 2 / 1 / 2 / 3
+    justify-self: center
+    max-width: 100%
+
+  & :global(.MuiButtonBase-root.MuiTab-root)
+    min-height: 56px
+
+    @media (max-width: 1100px)
+      min-height: 48px
+
+  & button:first-child
+    margin-left: 1px
+
+  & button:last-child
+    margin-right: 1px
+
+.user
+  justify-self: flex-end
+  display: flex
+  cursor: pointer
+
+  @media (max-width: 1100px)
+    padding-right: 1.1875rem
+
+.account
+  display: flex
+  align-items: center
+  gap: 10px
+  cursor: pointer
+
+.menu
+  display: flex
+
+  @media (max-width: 1100px)
+    padding-left: 1.1875rem
+
+.name
+  text-align: left
+  white-space: nowrap
+  color: $color_dark
+  font-weight: 500
+
+.button
+  min-width: auto
+
+.balance
+  font-size: $font_small !important
+  *
+    color: $color_font_secondary !important

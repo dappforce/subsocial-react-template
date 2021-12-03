@@ -1,0 +1,43 @@
+$color_page_bg: #f2f2f2
+$color_font_normal: #222
+$color_font_secondary: #a0a0a0
+$color_primary: #eb2f96
+$color_link_hover: #f759ab
+$color_light_border: #ddd
+$color_warn_border: #f3e8ac
+$color_hover_selectable_bg: #fff0f6
+$color_border: #e8e8e8
+$color_shadow: #eeecec
+$color_yellow: #f3e8ac
+$color_white: #fff
+$color_black: #000
+$color_dark: #222
+$color_gray: #5f5f5f
+$color_red: #d42c19
+$color_green: #34c759
+
+$font_small: .875rem
+$font_normal: 1.0625rem
+$font_large: 1.1875rem
+$font_huge: 1.375rem
+
+@mixin scroll
+  &::-webkit-scrollbar
+    box-sizing: content-box
+    position: relative
+    width: 10px
+    height: 10px
+    z-index: 1
+
+  &::-webkit-scrollbar-thumb
+    border-radius: 10px
+    border-right: 4px white solid
+    border-top: 4px white solid
+    border-bottom: 4px white solid
+    background: #e0e0e0
+
+  &::-webkit-scrollbar-thumb:hover
+    background: #b3afb3
+
+  &::-webkit-scrollbar-track
+    background: #fff

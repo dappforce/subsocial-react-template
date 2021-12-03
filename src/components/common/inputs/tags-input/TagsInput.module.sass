@@ -1,0 +1,19 @@
+@import src/styles/common
+
+.tags
+  & :global(.MuiInputBase-root)
+    flex-wrap: wrap
+    gap: 0.5rem
+
+  & :global(.MuiOutlinedInput-input)
+    height: 26px !important
+    width: min-content
+    min-width: 270px
+    padding: 0 !important
+
+  & label ~ :global(.MuiInputBase-root)
+    padding: 0.5rem 1rem
+
+    textarea
+      padding: 0 !important
+

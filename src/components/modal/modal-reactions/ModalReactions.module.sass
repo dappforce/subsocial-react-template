@@ -1,0 +1,22 @@
+@import src/styles/common
+
+.header
+  position: relative
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2)
+  z-index: 1
+
+.title
+  display: inline-block
+  margin: 0.5rem 1rem
+
+.scroll
+  @include scroll
+
+.label
+  color: $color_font_secondary
+  font-weight: 400
+
+.follow
+  :global(.MuiListItem-root)
+    &:first-child
+      padding-top: 0 !important

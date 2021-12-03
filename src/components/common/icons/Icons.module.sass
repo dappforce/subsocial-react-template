@@ -1,0 +1,12 @@
+@import src/styles/vars
+
+.like
+  fill: $color_green
+  &:global(.MuiSvgIcon-root)
+    fill: $color_green
+
+.dislike
+  fill: $color_red
+  transform: scale(-1, 1)
+  &:global(.MuiSvgIcon-root)
+    fill: $color_red

@@ -1,0 +1,33 @@
+@import src/styles/vars
+
+.button
+  display: inline-flex
+  column-gap: 0.785rem
+  width: 99px
+  height: 36px
+  font-size: $font_normal
+  font-weight: 500
+  box-shadow: none
+
+  @media (max-width: 480px)
+    width: 90px
+
+  &:global(.MuiButton-containedPrimary)
+    background-color: $color_primary
+    box-shadow: none
+
+    &[disabled]
+      background-color: $color_primary
+      opacity: 0.5
+      color: $color_white
+
+    &:hover
+      background-color: $color_primary
+
+  &:global(.MuiButton-outlinedPrimary)
+    border-color: $color_primary
+    color: $color-primary
+
+    &:hover
+      background-color: rgba(244, 142, 198, .05)
+      border-color: $color_primary

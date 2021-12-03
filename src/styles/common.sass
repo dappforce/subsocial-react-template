@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;900&display=swap')
+@import vars
+
+html
+  font-size: 16px
+
+html,
+body
+  padding: 0
+  margin: 0
+  font-family: -apple-system, Roboto, sans-serif
+
+body
+  padding-top: 56px
+  background-color: $color-page_bg
+
+a
+  color: inherit
+  text-decoration: none
+
+button
+  background: none
+  border: none
+  font-family: inherit
+  font-size: $font_normal
+  cursor: pointer
+
+*
+  box-sizing: border-box
+  &::selection
+    color: $color_white
+    background-color: $color_primary
+
+.MuiToolbar-regular
+  background-color: $color_white
+
+.MuiBox-root
+  background-color: $color_white
+
+.MuiAppBar-colorPrimary
+  background-color: $color_white
+
+  [data-testid="MenuIcon"]
+    fill: $color_black
+
+.MuiIconButton-root
+  padding: 0 !important
+
+.MuiTypography-root
+  .markdown-body
+    &>:last-child
+      margin-bottom: 0!important
+    &>:first-child
+      margin-top: 0!important
+
+.MuiTypography-paragraph
+  margin-bottom: 0 !important
+
+.MuiTypography-subtitle2
+  font-size: $font_normal
+
+.MuiButton-root
+  text-transform: none !important
+
+.MuiTabs-scroller
+  max-width: 765px
+  margin: 0 auto
+
+.MuiInputBase-input
+  padding: 0.5rem 1rem !important
+
+.MuiCardContent-root:last-child
+  padding-bottom: 0.875rem
+
+.MuiButton-text
+  color: $color_black !important
+
+.MuiCardActions-root > :not(:first-of-type)
+  margin-left: 0 !important
+
+.MuiToolbar-root
+  min-height: 56px
+
+  @media screen and (min-width: 600px)
+    min-height: 56px !important
+
+.Mui-selected
+  color: $color_primary !important
+
+.MuiTabs-indicator
+  background-color: $color_primary !important
+
+[data-testid="ThumbDownAltOutlinedIcon"]
+  transform: scale(-1, 1)
+
+.MuiDrawer-paper
+  max-width: 425px !important
+  width: 100% !important
+  overflow: hidden
+
+.MuiListItemIcon-root
+  min-width: 36px
+
+.MuiInputLabel-root.MuiInputLabel-formControl.Mui-focused
+  color: #666 !important
+
+.MuiCircularProgress-root
+  display: inline-block
+  width: 100%
+  overflow: hidden
+
+  svg
+    margin: 0 auto
+
+.infinite-scroll-component
+  overflow: visible !important

@@ -1,0 +1,29 @@
+@import src/styles/vars
+
+.downvote
+  fill: $color_red
+  transform: scale(-1, 1)
+
+  &:global(.MuiSvgIcon-root)
+    fill: $color_red
+
+.red
+  color: $color_red !important
+  font-weight: 500 !important
+
+.label
+  font-weight: 500 !important
+
+.upvote
+  fill: $color_green
+
+  &:global(.MuiSvgIcon-root)
+    fill: $color_green
+
+.green
+  color: $color_green !important
+  font-weight: 500 !important
+
+.value
+  color: $color_black
+  font-weight: 400

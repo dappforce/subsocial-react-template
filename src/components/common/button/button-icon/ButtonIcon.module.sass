@@ -1,0 +1,24 @@
+@import src/styles/vars
+
+.button
+  display: flex
+  align-items: center
+  column-gap: .5rem
+  color: #666 !important
+  box-shadow: none
+
+  svg
+    fill: rgba(0, 0, 0, .54)
+
+  &:hover
+    &:global(.MuiButton-root)
+      background: none
+
+  &:global(.MuiButton-contained)
+    box-shadow: none
+    &:hover
+      background-color: $color_primary
+
+  &:global(.MuiButton-outlined)
+    &:hover
+      background-color: rgba(244, 142, 198, .05)

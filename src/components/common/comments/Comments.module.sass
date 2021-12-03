@@ -1,0 +1,51 @@
+@import src/styles/vars
+
+.title
+  margin-bottom: 1rem
+
+.comment
+  padding: .625rem 1rem
+  text-align: left
+  background-color: #f2f2f2
+  border-radius: .25rem
+
+.details
+  display: flex
+  align-items: center
+
+.textarea
+  & :global(.MuiOutlinedInput-root)
+    height: 36px
+  & :global(.MuiInputBase-root.MuiOutlinedInput-root)
+    padding: 0
+    textarea
+      height: 22px !important
+
+.options
+  margin-left: .5rem
+  transform: rotate(-90deg)
+
+.group
+  display: flex
+  gap: .375rem
+  margin-top: 2px
+
+.button
+  margin-top: 1rem !important
+
+.new
+  margin-top: 1rem
+
+.time
+  color: $color_font_secondary
+
+.replies
+  display: flex
+  align-items: center
+  margin-bottom: 1.0625rem
+  color: $color_link_hover
+  &:global(.MuiTypography-root)
+    font-weight: 500
+
+  svg
+    padding-top: 2px

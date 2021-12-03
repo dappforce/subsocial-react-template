@@ -1,0 +1,125 @@
+@import src/styles/common
+
+.file
+  position: relative
+  display: flex
+  flex-direction: column
+  align-items: center
+
+  p
+    margin: 0
+
+  &.avatar
+    .hint
+      margin-top: 1rem
+
+    .button
+      width: 80px
+      height: 80px
+      border-radius: 50%
+
+    .example
+      object-fit: cover
+      width: 100%
+      height: 100%
+
+  &.image
+    padding-bottom: 0.5rem
+
+    .button
+      width: 100%
+      min-height: 98px
+      border-radius: 3.5px
+      border-style: solid
+
+      &:hover
+        border-color: #ccc
+        filter: none
+
+    .wrapper
+      width: 100%
+
+    .example
+      width: 100%
+      height: auto
+      object-fit: contain
+
+.hint
+  color: $color_font_secondary
+  font-size: $font_small
+
+  @media screen and (max-width: 767px)
+    font-size: 12px
+
+.input
+  display: none !important
+
+.button
+  &:global(.MuiButton-root)
+    position: relative
+    display: flex
+    flex-direction: column
+    font-weight: 400
+    border: 1px #ccc dashed
+    padding: 0
+    overflow: hidden
+
+    &:hover
+      border-color: $color_primary
+      filter: brightness(0.8)
+
+    &:hover .hover
+      opacity: 1
+
+    ~ div
+      position: absolute !important
+
+.border
+  border: none
+
+.hover
+  position: absolute !important
+  left: 50% !important
+  transform: translateX(-50%) !important
+  filter: brightness(0) invert(1)
+  z-index: 1
+  transition: opacity 300ms
+  opacity: 0
+
+.delete
+  &:global(.MuiButton-root)
+    padding: 0
+    position: absolute
+    right: -70%
+    top: 50%
+    z-index: 1
+    transform: translate(0, -50%)
+
+.wrapper
+  position: relative
+
+.settings
+  position: absolute
+  top: 0.625rem
+  right: 0.625rem
+  display: flex
+  padding: 0 0.5rem
+  animation-name: appear
+  animation-duration: 300ms
+  background-color: rgba(0, 0, 0, 0.3)
+  border-radius: 35px
+  z-index: 1
+
+  .buttonIcon
+    min-width: min-content
+    border-radius: 50%
+    svg
+      fill: $color_white
+    img
+      filter: brightness(0) invert(1)
+
+@keyframes appear
+  0%
+    opacity: 0
+  100%
+    opacity: 1

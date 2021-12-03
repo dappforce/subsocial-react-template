@@ -1,0 +1,116 @@
+@import src/styles/vars
+
+.close
+  position: absolute !important
+  right: 0
+  top: 0
+  margin: 1rem !important
+  padding: 0
+  z-index: 2
+
+.drawer
+  display: flex
+  flex-direction: column
+
+  @media screen and (min-width: 767px)
+    & :global(.MuiBackdrop-root)
+      background: none
+
+  @media screen and (max-width: 767px)
+    & :global(.MuiBox-root)
+      display: flex
+      flex-direction: column
+      max-width: 90%
+      width: 100%
+      height: 80%
+      margin: auto
+      border-radius: 5px
+      overflow: hidden
+
+.title
+  margin-bottom: 0.25rem
+
+.account
+  row-gap: 0.5rem
+  padding: 1rem 1rem 0
+
+.header
+  display: flex
+  gap: 1rem
+  align-items: center
+  padding-bottom: 1.25rem
+
+.followers
+  button
+    font-size: $font_small
+
+.item
+  padding-top: 0.25rem
+  padding-bottom: 0.25rem
+  padding-right: 1.5rem
+  gap: 1rem
+
+  .info
+    width: 100%
+    margin: 0.375rem 0
+
+  .address
+    margin: 0 !important
+    color: $color_font_secondary
+
+  &:hover
+    background-color: #f5f5f5
+
+  .balance
+    font-size: $font_small
+    margin: 0 !important
+
+  & :global(.MuiListItemAvatar-root)
+    min-width: auto
+
+  & :global(.MuiListItemIcon-root)
+    min-width: 40px
+
+
+.accounts
+  margin-right: -1rem
+  @media screen and (min-width: 767px)
+    @include scroll
+
+.icon
+  padding-left: 0.5rem
+  svg
+    fill: $color_black
+
+.signout
+  display: flex
+  flex-direction: column
+  gap: 1.5rem
+  position: relative
+  width: 100%
+  padding: 0 1rem 1rem 1rem
+  margin-top: auto
+  box-shadow: 0 30px 22px 56px rgba(255, 255, 255, 1)
+  background: $color_white
+
+.button
+  width: 100% !important
+  text-transform: uppercase !important
+
+.follow
+  display: flex
+  column-gap: 0.6rem
+
+  button
+    padding: 0
+
+  p
+    margin: 0
+
+.address
+  > div
+    margin-right: .75rem !important
+
+.balance,
+.address
+  margin: 0 0 .5rem .5rem !important
