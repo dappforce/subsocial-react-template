@@ -1,34 +1,19 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import styles from './ProfileAccount.module.sass'
 import Options from '../../common/button/button-options/ButtonOptions'
-import ButtonFollow from '../../common/button/ButtonFollow'
 import Tabs from '../../common/tabs/Tabs'
 import ButtonComponent from '../../common/button/button-component/ButtonComponent'
 import Account from '../../account/Account'
 import { ProfileAccountProps } from 'src/models/profile'
 import { toShortAddress } from '../../utils/address'
-import { useApi } from '../../api'
-import { AnyAccountId } from '@subsocial/types/substrate/interfaces/utils'
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks'
+import ButtonFollowAccount from '../../common/button/button-follow/ButtonFollowAccount'
 
 const ProfileAccount: FC<ProfileAccountProps> = (props) => {
-    const {content, struct, id} = props
+    const { content, struct, id } = props
     const tabs = [
-        {label: 'Posts', tabValue: 'userPosts'},
-        {label: 'Spaces', tabValue: 'userSpaces'}
+        { label: 'Posts', tabValue: 'userPosts' },
+        { label: 'Spaces', tabValue: 'userSpaces' }
     ]
-    const address = useMyAddress()
-    const {api} = useApi()
-    const [isFollowed, setIsFollowed] = useState(false)
-
-    useEffect(() => {
-        if (id) {
-            (async () => {
-                const isFollower = await api.subsocial.substrate.isAccountFollower(address as AnyAccountId, id)
-                setIsFollowed(isFollower)
-            })()
-        }
-    }, [])
 
     if (!struct || !id) return null
 
@@ -43,9 +28,9 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
                 <ButtonComponent variant={'outlined'} className={styles.button}>
                     Send tips
                 </ButtonComponent>
-                <ButtonFollow isFollowing={isFollowed} className={styles.button}/>
+                <ButtonFollowAccount address={id} className={styles.button} />
             </>}
-            action={<Options sx={{ml: 1}}/>}
+            action={<Options className={styles.option} />}
             about={content?.about}
             summary={content?.summary}
             //@ts-ignore

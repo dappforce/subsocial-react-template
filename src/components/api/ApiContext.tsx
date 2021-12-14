@@ -41,15 +41,16 @@ export const ApiProvider: FC = (props) => {
         })
     }, [])
 
-    return !api.subsocial ? <Snackbar
-        open={isLoader}
-        message={'Connecting to the network...'}
-        onClose={toggleLoader}
-    /> : (
-        <ApiContext.Provider value={{api}}>
-            {props.children}
-        </ApiContext.Provider>
-    )
+    return !api.subsocial
+        ? <Snackbar
+            open={isLoader}
+            message={'Connecting to the network...'}
+            onClose={toggleLoader}
+        /> : (
+            <ApiContext.Provider value={{api}}>
+                {props.children}
+            </ApiContext.Provider>
+        )
 }
 
 export function useApi () {

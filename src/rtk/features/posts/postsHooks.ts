@@ -1,9 +1,10 @@
 import { useAppSelector } from 'src/rtk/app/store'
-import { selectPostStructById } from './postsSlice'
+import { fetchPosts, SelectPostArgs, selectPostStructById, upsertPost } from './postsSlice'
 import { selectPostContentById } from '../contents/contentsSlice'
 import { useSelectSpace } from '../spaces/spacesHooks'
 import { PostId, PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
-import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners'
+import { asCommentStruct, PostStruct } from '@subsocial/api/flat-subsocial/flatteners'
+import { useActions } from '../../app/helpers'
 
 export const useSelectPost = (postId?: PostId): PostWithSomeDetails | undefined => {
     const struct = useAppSelector(state => postId
@@ -39,4 +40,14 @@ export const useSelectPost = (postId?: PostId): PostWithSomeDetails | undefined 
         post,
         space
     }
+}
+
+export const useCreateReloadPost = () => {
+    return useActions<SelectPostArgs>(({ dispatch, api, args: { id } }) =>
+        dispatch(fetchPosts({ api, ids: [ id ], reload: true })))
+}
+
+export const useCreateUpsertPost = () => {
+    return useActions<PostStruct>(({ dispatch, args }) =>
+        dispatch(upsertPost(args)))
 }

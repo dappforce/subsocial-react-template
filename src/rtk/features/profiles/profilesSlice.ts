@@ -8,7 +8,7 @@ import {
     selectManyByIds,
     selectOneById,
     ThunkApiConfig,
-    Content
+    Content, SelectOneArgs
 } from 'src/rtk/app/helpers'
 import { RootState } from 'src/rtk/app/rootReducer'
 import { asString } from '@subsocial/utils'
@@ -20,7 +20,6 @@ import { ProfileData } from '@subsocial/api/flat-subsocial/dto'
 import { ProfileStruct } from '@subsocial/api/flat-subsocial/flatteners'
 
 const profilesAdapter = createEntityAdapter<ProfileStruct>()
-
 const profilesSelectors = profilesAdapter.getSelectors<RootState>(state => state.profiles)
 
 export const {
@@ -37,7 +36,7 @@ type Args = {
     visibility?: ProfileVisibility
     withContent?: boolean
 }
-
+export type SelectProfileArgs = SelectOneArgs<Args>
 export type SelectProfilesArgs = SelectManyArgs<Args>
 
 type FetchProfilesArgs = FetchManyArgs<Args>
@@ -49,7 +48,6 @@ export const selectProfiles = (state: RootState, {ids}: SelectProfilesArgs): Pro
     selectManyByIds(state, ids, selectProfileStructById, selectProfileContentById)
 
 const selectUnknownProfileIds = createSelectUnknownIds(selectProfileIds)
-
 
 export const fetchProfiles = createAsyncThunk<ProfileStruct[], FetchProfilesArgs, ThunkApiConfig>(
     'profiles/fetchMany',

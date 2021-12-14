@@ -25,21 +25,35 @@ const SwitchAccountsExtensionItem: FC<Account> = (props) => {
 
     return (
         <ListItem
-            component={'button'}
             className={styles.item}
             onMouseEnter={() => setIsCopy(true)}
             onMouseLeave={() => setIsCopy(false)}
             onClick={() => chooseAccount(props.address)}
         >
             <ListItemAvatar>
-                <AvatarElement src={profile?.content?.avatar} size={AvatarSizes.SMALL} id={props.address}/>
+                <AvatarElement
+                    src={profile?.content?.avatar}
+                    size={AvatarSizes.SMALL}
+                    id={props.address}
+                />
             </ListItemAvatar>
 
             <div className={styles.info}>
-                <Title type={TitleSizes.PROFILE}>{profile?.content?.name || props.name}</Title>
-                <Address size={'sm'} label={props.address} isCopy={isCopy} className={styles.address}/>
+                <Title type={TitleSizes.PROFILE}>
+                    {profile?.content?.name || props.name}
+                </Title>
+                <Address
+                    size={'sm'}
+                    label={props.address}
+                    isCopy={isCopy}
+                    className={styles.address}
+                />
             </div>
-            <Balance address={props.address} isIcon={false} className={styles.balance}/>
+            <Balance
+                address={props.address}
+                isIcon={false}
+                className={styles.balance}
+            />
         </ListItem>
     )
 }
@@ -48,9 +62,9 @@ const SwitchAccountsExtension: FC<AccountsProps> = ({accounts = []}) => {
     const address = useMyAddress()
 
     return (
-        <List sx={{overflowY: 'scroll', pt: 0}} className={styles.accounts}>
+        <List className={styles.accounts}>
             {accounts.filter(account => account.address !== address).map(account => (
-                <SwitchAccountsExtensionItem {...account} key={account.address}/>
+                <SwitchAccountsExtensionItem {...account} key={account.address} />
             ))}
         </List>
     )

@@ -2,12 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AccountId } from '@subsocial/api/flat-subsocial/dto'
 import { Account } from 'src/models/account'
 import store from 'store'
-import { ACCOUNT_STATUS } from '../../../models/auth'
+import { ACCOUNT_STATUS } from 'src/models/auth'
 
 type MyAddressState = {
     address?: string,
     accounts?: Account[],
-    status: ACCOUNT_STATUS
+    status: ACCOUNT_STATUS,
+    signer?: any
 }
 
 type MyAccountState = MyAddressState
@@ -38,6 +39,9 @@ const myAccountSlice = createSlice({
         signOut (state) {
             store.remove(MY_ADDRESS)
             delete state.address
+        },
+        setSigner (state, action: PayloadAction<any>) {
+            state.signer = action.payload
         }
     }
 })
@@ -45,7 +49,8 @@ const myAccountSlice = createSlice({
 export const {
     setMyAddress,
     setAccounts,
-    signOut
+    signOut,
+    setSigner
 } = myAccountSlice.actions
 
 export default myAccountSlice.reducer

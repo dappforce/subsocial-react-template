@@ -5,9 +5,15 @@ import { FC } from 'react'
 import { IconButtonProps } from '@mui/material/IconButton/IconButton'
 
 const ButtonClose: FC<IconButtonProps> = ({onClick, ...props}) => {
-  return <IconButton className={styles.close} onClick={onClick} {...props}>
-      <CloseIcon/>
-  </IconButton>
+  return (
+      <IconButton
+          className={styles.close}
+          onClick={onClick}
+          {...props}
+      >
+          <CloseIcon/>
+      </IconButton>
+  )
 }
 
 export default ButtonClose

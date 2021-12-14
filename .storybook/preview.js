@@ -29,13 +29,15 @@ const OriginalNextImage = NextImage.default
 
 Object.defineProperty(NextImage, 'default', {
     configurable: true,
-    value: (props) => (
-        <OriginalNextImage
-            { ...props }
-            unoptimized
-            blurDataURL="data:image/jpeg/svg"
-        />
-    )
+    value: (props) => {
+        return (
+            <OriginalNextImage
+                { ...props }
+                unoptimized
+                blurDataURL="data:image/jpeg/svg"
+            />
+        )
+    }
 })
 
 export const parameters = {

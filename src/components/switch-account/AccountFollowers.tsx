@@ -15,7 +15,7 @@ const AccountFollowers: FC<AccountFollowersProps> = (
     }
 ) => {
     const classname = className ? `${className} ${styles.follow}` : styles.follow
-    const {isVisible, toggleModal} = useModal()
+    const { isVisible, toggleModal } = useModal()
     const [ activeTab, setActiveTab ] = useState<'following' | 'followers'>('following')
 
     const openModalWithTab = (tab: 'following' | 'followers') => {

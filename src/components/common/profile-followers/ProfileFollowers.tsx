@@ -9,13 +9,13 @@ import { ProfileFollowersProps } from 'src/models/common/profile-followers'
 
 const ProfileFollowers: FC<ProfileFollowersProps> = (
     {
-        className,
+        className: inputClassName,
         followers,
         following,
         accountId
     }
 ) => {
-    const classname = className ? `${className} ${styles.follow}` : styles.follow
+    const className = inputClassName ? `${inputClassName} ${styles.follow}` : styles.follow
     const {isVisible, toggleModal} = useModal()
     const [activeTab, setActiveTab] = useState<'following' | 'followers'>('following')
     const [followerCount, followerLabel] = pluralize(
@@ -28,7 +28,7 @@ const ProfileFollowers: FC<ProfileFollowersProps> = (
     }
 
     return (
-        <div className={classname}>
+        <div className={className}>
             <Modal open={isVisible} onClose={toggleModal}>
                 <ModalConnections
                     activeTab={activeTab}

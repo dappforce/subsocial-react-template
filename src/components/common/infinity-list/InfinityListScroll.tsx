@@ -1,26 +1,28 @@
 import React, { FC, useEffect, useState } from 'react'
-import styles from './PostList.module.sass'
-import Post from '../post-item/Post'
+import styles from './InfinityListScroll.module.sass'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { DEFAULT_PAGE_SIZE } from '../../../config/ListData.config'
 import { nonEmptyArr } from '@subsocial/utils'
-import { InnerLoadMoreFn } from './post-list'
 import Loader from '../../common/loader/Loader'
 import EmptyComponent from '../../common/empty/EmptyComponent'
+import { DataListItemProps, InnerLoadMoreFn, } from 'src/models/infinity-scroll'
 
-type InfinityPostList = {
+interface InfinityPostList extends DataListItemProps {
     dataSource: string[],
     loadMore: InnerLoadMoreFn,
     totalCount: number,
-    isEmpty?: boolean
+    isEmpty?: boolean,
+    emptyText: string,
 }
 
-const InfinityList: FC<InfinityPostList> = ({
-                                                dataSource,
-                                                loadMore,
-                                                totalCount,
-                                                isEmpty
-                                            }) => {
+const InfinityListScroll: FC<InfinityPostList> = ({
+                                                      dataSource,
+                                                      loadMore,
+                                                      totalCount,
+                                                      isEmpty,
+                                                      emptyText,
+                                                      renderItem
+                                                  }) => {
     const [ page, setPage ] = useState(1)
     const [ data, setData ] = useState(dataSource.length > 0 ? dataSource : [])
 
@@ -44,15 +46,15 @@ const InfinityList: FC<InfinityPostList> = ({
 
     return <InfiniteScroll
         dataLength={data.length}
-        loader={<Loader/>}
+        loader={<Loader label={'Loading...'}/>}
         next={() => handleInfiniteOnLoad(page)}
         hasMore={data.length < totalCount}
         className={styles.list}
     >
         {!isEmpty
-            ? data.map((id: string) => <Post key={id} postId={id} isShowActions/>)
-            : <EmptyComponent text={'No posts yet'}/>}
+            ? data.map((id: string) => renderItem(id))
+            : <EmptyComponent text={emptyText}/>}
     </InfiniteScroll>
 }
 
-export default InfinityList
+export default InfinityListScroll

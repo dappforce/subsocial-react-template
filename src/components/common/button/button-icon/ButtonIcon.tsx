@@ -4,10 +4,14 @@ import { ButtonProps } from '@mui/material/Button/Button'
 import Button from '@mui/material/Button'
 
 const ButtonIcon: FC<ButtonProps> = (props) => {
-    const classname = props.className ? `${styles.button} ${props.className}` : styles.button
+    const className = props.className ? `${styles.button} ${props.className}` : styles.button
 
     return (
-        <Button variant={'text'} onClick={props.onClick} className={classname}>
+        <Button
+            variant={'text'}
+            onClick={props.onClick}
+            className={className}
+        >
             {props.children}
         </Button>
     )

@@ -3,7 +3,7 @@ import ButtonIcon from './button-icon/ButtonIcon'
 import { FC } from 'react'
 import { ButtonReplyProps } from 'src/models/common/button'
 
-const ButtonReply: FC<ButtonReplyProps> = ({onClick}) => {
+const ButtonReply: FC<ButtonReplyProps> = ({ onClick }) => {
     return (
         <ButtonIcon onClick={onClick}>
             <ReplyIcon/>

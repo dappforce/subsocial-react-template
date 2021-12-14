@@ -12,9 +12,13 @@ import { TitleSizes } from '../../models/common/typography'
 const NotificationsPage: NextPage = () => {
   return (
       <Layout>
-          <Box sx={{width: '100%'}} className={styles.box}>
+          <Box className={styles.box}>
               <List
-                  subheader={<Title sx={{p: 2, pb: 1}} type={TitleSizes.DETAILS}>Notifications</Title>}
+                  subheader={
+                      <Title className={styles.subheader} type={TitleSizes.DETAILS}>
+                          Notifications
+                      </Title>
+                  }
               >
                   {
                       notifications.map(item => (

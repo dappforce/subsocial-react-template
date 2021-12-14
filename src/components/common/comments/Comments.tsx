@@ -17,16 +17,16 @@ import useLoader from '../../../hooks/useLoader'
 import Loader from '../loader/Loader'
 import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks'
 
-const Comments: FC<CommentsProps> = ({countOfComments, parentId, postUrl}) => {
+const Comments: FC<CommentsProps> = ({ countOfComments, parentId }) => {
     const dispatch = useAppDispatch()
-    const {replyIds = []} = useAppSelector(state => selectReplyIds(state, parentId), shallowEqual) || {}
-    const {api} = useApi()
+    const { replyIds = [] } = useAppSelector(state => selectReplyIds(state, parentId), shallowEqual) || {}
+    const { api } = useApi()
     const address = useMyAddress()
-    const {isLoader, toggleLoader} = useLoader()
+    const { isLoader, toggleLoader } = useLoader()
 
     useEffect(() => {
         toggleLoader()
-        dispatch(fetchPostReplyIds({api: api, id: parentId, myAddress: address})).then(() => toggleLoader())
+        dispatch(fetchPostReplyIds({ api: api, id: parentId, myAddress: address })).then(() => toggleLoader())
     }, [])
 
     return (
@@ -36,10 +36,10 @@ const Comments: FC<CommentsProps> = ({countOfComments, parentId, postUrl}) => {
                     {pluralize(countOfComments, 'comment', 'comments')}
                 </Title>
                 <NewComment placeholder={'Add a comment...'}/>
-                {isLoader ? <Loader/> : !!replyIds.length &&
-                <Box sx={{mt: 2}}>
-                    {replyIds.map(id => <Comment commentId={id} postUrl={postUrl} key={id}/>)}
-                </Box>
+                {isLoader ? <Loader label={'Loading...'} /> : !!replyIds.length &&
+                    <Box className={styles.commentsBox}>
+                        {replyIds.map(id => <Comment commentId={id} key={id} />)}
+                    </Box>
                 }
             </CardContent>
         </CardWrapper>

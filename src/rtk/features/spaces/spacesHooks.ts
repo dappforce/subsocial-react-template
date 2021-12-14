@@ -1,7 +1,8 @@
-import { selectSpaceStructById } from './spacesSlice'
+import { fetchSpaces, SelectSpaceArgs, selectSpaceStructById } from './spacesSlice'
 import { useAppSelector } from '../../app/store'
 import { selectSpaceContentById } from '../contents/contentsSlice'
 import { SpaceId, SpaceWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
+import { useActions } from '../../app/helpers'
 
 export const useSelectSpace = (spaceId?: SpaceId): SpaceWithSomeDetails | undefined => {
   const struct = useAppSelector(state => spaceId
@@ -22,4 +23,11 @@ export const useSelectSpace = (spaceId?: SpaceId): SpaceWithSomeDetails | undefi
     struct,
     content
   }
+}
+
+export const useCreateReloadSpace = () => {
+  return useActions<SelectSpaceArgs>(({ dispatch, api, args: { id } }) => {
+    const args = { api, ids: [ id ], reload: true }
+    dispatch(fetchSpaces(args))
+  })
 }

@@ -5,12 +5,12 @@ import { transformCount } from 'src/utils'
 import {  useApi } from '../../../api'
 import { asString } from '@subsocial/utils'
 import { fetchProfiles } from 'src/rtk/features/profiles/profilesSlice'
-import { InnerLoadMoreFn } from '../../../post/infinity-post-list/post-list'
 import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial'
 import { PostId } from '@subsocial/api/flat-subsocial/dto'
 import { getPageOfIds } from '../../../utils/getIds'
 import { DEFAULT_FIRST_PAGE, DEFAULT_PAGE_SIZE } from 'src/config/ListData.config'
 import { useAppDispatch } from 'src/rtk/app/store'
+import { InnerLoadMoreFn } from '../../../../models/infinity-scroll'
 
 export const getAccountsIdsByPage = (ids: PostId[], size: number, page: number) => getPageOfIds(ids, {page, size})
 
@@ -20,7 +20,7 @@ const loadSuggestedAccountIds = async (api: FlatSubsocialApi, spaceId: unknown) 
     return ids.map(asString)
 }
 
-const loadMoreAccountsFn = async (loadMoreValues: any & {api: FlatSubsocialApi}) => {
+const loadMoreAccountsFn = async (loadMoreValues: any & { api: FlatSubsocialApi }) => {
     const {
         size,
         page,
@@ -33,15 +33,15 @@ const loadMoreAccountsFn = async (loadMoreValues: any & {api: FlatSubsocialApi})
 
     accountIds = getAccountsIdsByPage(ids.map(asString), size, page)
 
-    await dispatch(fetchProfiles({api, ids: accountIds, reload: false}))
+    await dispatch(fetchProfiles({ api, ids: accountIds, reload: false }))
 
     return accountIds
 }
 
-const ModalFollow: FC<ModalFollowProps> = ({count = 0, id}) => {
-    const [data, setData] = useState<string[]>([])
+const ModalFollow: FC<ModalFollowProps> = ({ count = 0, id }) => {
+    const [ data, setData ] = useState<string[]>([])
     const dispatch = useAppDispatch()
-    const {api} = useApi()
+    const { api } = useApi()
     const [ totalCount, setTotalCount ] = useState(0)
 
     const loadMore: InnerLoadMoreFn = useCallback((page, size) => loadMoreAccountsFn({

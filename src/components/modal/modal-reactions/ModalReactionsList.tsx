@@ -2,16 +2,16 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { DEFAULT_PAGE_SIZE } from 'src/config/ListData.config'
 import Loader from '../../common/loader/Loader'
 import VoteUserItem from '../../common/vote-user-item/VoteUserItem'
-import styles from './modal-follow/ModalFollow.module.sass'
+import styles from './ModalReactions.module.sass'
 import { ModalReactionsListProps } from 'src/models/modal'
 
 const ModalReactionsList: FC<ModalReactionsListProps> = ({
-                                                             dataSource,
-                                                             loadMore,
-                                                             totalCount,
-                                                             isEmpty,
-                                                             onClose
-                                                         }) => {
+    dataSource,
+    loadMore,
+    totalCount,
+    isEmpty,
+    onClose
+}) => {
     const [ page, setPage ] = useState(1)
     const [ data, setData ] = useState<string[]>([])
     const [ fetching, setFetching ] = useState(true)
@@ -63,9 +63,9 @@ const ModalReactionsList: FC<ModalReactionsListProps> = ({
         }
     }, [ref, scrollHandler])
 
-    return <div ref={ref} style={{overflowY: 'auto', height: '60vh'}} className={styles.scroll}>
+    return <div ref={ref} className={styles.scroll}>
         {data.map((id: string) => <VoteUserItem id={id} key={id} onClose={onClose}/>)}
-        {fetching && <Loader/>}
+        {fetching && <Loader label={'Loading...'}/>}
     </div>
 
 }

@@ -20,11 +20,11 @@ const CardEdit: FC<CardEditProps> = (props) => {
     }>({name: '', description: ''})
 
     const [ tags, setTags ] = useState<string[]>([])
-    const [image, setImage] = useState('')
+    const [ image, setImage ] = useState('')
     const [ error, setError ] = useState(false)
 
     useEffect(() => {
-        setState({name: props?.content?.name || '', description: props?.content?.about || ''})
+        setState({ name: props?.content?.name || '', description: props?.content?.about || '' })
         setTags(props?.content?.tags || [])
         setImage(loadImgUrl(props?.content?.image || '') || '')
     }, [props.content])
@@ -41,11 +41,11 @@ const CardEdit: FC<CardEditProps> = (props) => {
 
     const handleName = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setError(false)
-        setState(current => ({...current, name: event.target.value}))
+        setState(current => ({ ...current, name: event.target.value }))
     }
 
     const handleDescription = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setState(current => ({...current, description: event.target.value}))
+        setState(current => ({ ...current, description: event.target.value }))
     }
 
     return (
@@ -56,7 +56,11 @@ const CardEdit: FC<CardEditProps> = (props) => {
 
             <File type={'avatar'} image={image}/>
 
-            <Box component="form" className={styles.form} onSubmit={onSubmit}>
+            <Box
+                component="form"
+                className={styles.form}
+                onSubmit={onSubmit}
+            >
                 <Input
                     isRequired={true}
                     label={'Space name'}
@@ -76,11 +80,18 @@ const CardEdit: FC<CardEditProps> = (props) => {
 
                 <TagsInput tags={tags} setTags={setTags}/>
 
-                <CardActions sx={{gap: 2, p: 0, justifyContent: 'flex-end'}}>
-                    <ButtonCancel className={styles.button} onClick={props.onCancel || reset}>
+                <CardActions className={styles.actions}>
+                    <ButtonCancel
+                        className={styles.button}
+                        onClick={props.onCancel || reset}
+                    >
                         {props.cancelButton}
                     </ButtonCancel>
-                    <ButtonComponent variant={'contained'} className={styles.button} type={'submit'}>
+                    <ButtonComponent
+                        variant={'contained'}
+                        className={styles.button}
+                        type={'submit'}
+                    >
                         {props.saveButton}
                     </ButtonComponent>
                 </CardActions>

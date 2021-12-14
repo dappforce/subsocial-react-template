@@ -10,7 +10,11 @@ const ButtonShare: FC<ButtonShareProps> = ({onClick, isShowLabel}) => {
     return (
         <ButtonIcon onClick={onClick}>
             <IosShareIcon/>
-            {isShowLabel && <Text type={TextSizes.SECONDARY} className={styles.label}>Share</Text>}
+            {isShowLabel &&
+                <Text type={TextSizes.SECONDARY} className={styles.label}>
+                    Share
+                </Text>
+            }
         </ButtonIcon>
     )
 }

@@ -1,7 +1,7 @@
 import { AppBar, IconButton, Toolbar } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
-import { FC, useContext, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import styles from './Header.module.sass'
 import Tabs from '../common/tabs/Tabs'
 import { TabProps } from '../../models/common/tabs'
@@ -20,16 +20,16 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import { useSelectProfile } from '../../rtk/features/profiles/profilesHooks'
 import Balance from '../common/balance/Balance'
 import Text from '../common/text/Text'
-import { AuthContext } from '../auth/AuthContext'
+import { useAuth } from '../auth/AuthContext'
 
-const Header: FC<HeaderProps> = ({label}) => {
-    const {value} = useAppSelector(state => state.main)
+const Header: FC<HeaderProps> = ({ label }) => {
+    const { value } = useAppSelector(state => state.main)
     const dispatch = useAppDispatch()
     const router = useRouter()
-    const {address, accounts} = useAppSelector(state => state.myAccount)
+    const { address, accounts } = useAppSelector(state => state.myAccount)
     const profile = useSelectProfile(address)
     const account = accounts?.find(acc => acc.address === address)
-    const {openSingInModal} = useContext(AuthContext)
+    const { openSingInModal } = useAuth()
 
     useEffect(() => {
         if (router) {
@@ -68,7 +68,6 @@ const Header: FC<HeaderProps> = ({label}) => {
                         edge="start"
                         aria-label="menu"
                         color="default"
-                        sx={{mr: 4.125, ml: 0}}
                     >
                         <MenuIcon/>
                     </IconButton>
@@ -90,12 +89,9 @@ const Header: FC<HeaderProps> = ({label}) => {
                 <Box className={styles.user}>
                     {
                         !address || (!profile && !account) ? (
-                            <>
-                                {/*<ModalSignIn onClose={toggleModal} open={isVisible}/>*/}
-                                <ButtonComponent variant={'outlined'} onClick={openSingInModal}>
+                                <ButtonComponent variant={'outlined'} onClick={() => openSingInModal()}>
                                     Sign in
                                 </ButtonComponent>
-                            </>
                         ) : (
                             <>
                                 <ButtonIcon onClick={() => router.push('/notifications')} className={styles.button}>

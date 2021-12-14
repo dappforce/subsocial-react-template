@@ -5,15 +5,15 @@ import MaterialTabs from '@mui/material/Tabs'
 import { Box } from '@mui/system'
 import { TabsProps } from 'src/models/common/tabs'
 
-const Tabs: FC<TabsProps> = ({className, tabs, setValue, value}) => {
-    const classnames = className ? `${className} ${styles.tabs}` : className
+const Tabs: FC<TabsProps> = ({ className: inputClassName, tabs, setValue, value }) => {
+    const className = inputClassName ? `${inputClassName} ${styles.tabs}` : inputClassName
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
     return (
         <>
-            <Box sx={{width: '100%'}} className={classnames}>
+            <Box className={className}>
                 <MaterialTabs
                     value={value}
                     onChange={handleChange}
@@ -24,7 +24,12 @@ const Tabs: FC<TabsProps> = ({className, tabs, setValue, value}) => {
                 >
                     {tabs.map(({label, tabValue}) => {
                         return (
-                            <Tab sx={{width: '100%'}} value={tabValue} label={label} key={tabValue}/>
+                            <Tab
+                                className={styles.tab}
+                                value={tabValue}
+                                label={label}
+                                key={tabValue}
+                            />
                         )
                     })}
                 </MaterialTabs>

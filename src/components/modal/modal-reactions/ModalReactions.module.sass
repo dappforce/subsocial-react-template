@@ -7,9 +7,11 @@
 
 .title
   display: inline-block
-  margin: 0.5rem 1rem
+  margin: $space_tiny $space_normal
 
 .scroll
+  overflow-y: auto
+  height: 60vh
   @include scroll
 
 .label
@@ -20,3 +22,6 @@
   :global(.MuiListItem-root)
     &:first-child
       padding-top: 0 !important
+
+.tab
+  width: 100%

@@ -10,14 +10,14 @@ import { FC } from 'react'
 import { NewArticleProps } from 'src/models/post'
 
 const NewArticle: FC<NewArticleProps> = ({
-                                             title,
-                                             tags,
-                                             setTags,
-                                             handleBody,
-                                             handleTitle,
-                                             body,
-                                             reset
-                                         }) => {
+    title,
+    tags,
+    setTags,
+    handleBody,
+    handleTitle,
+    body,
+    reset
+}) => {
     return (
         <>
             <File type={'image'}/>
@@ -40,11 +40,15 @@ const NewArticle: FC<NewArticleProps> = ({
 
                 <TagsInput tags={tags} setTags={setTags}/>
 
-                <CardActions sx={{gap: 2, p: 0, justifyContent: 'flex-end'}}>
+                <CardActions className={styles.buttons}>
                     <ButtonCancel className={styles.button} onClick={reset}>
                         {'Reset form'}
                     </ButtonCancel>
-                    <ButtonComponent variant={'contained'} className={styles.button} type={'submit'}>
+                    <ButtonComponent
+                        variant={'contained'}
+                        className={styles.button}
+                        type={'submit'}
+                    >
                         {'Create post'}
                     </ButtonComponent>
                 </CardActions>

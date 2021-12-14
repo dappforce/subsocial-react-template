@@ -6,10 +6,11 @@ import { useModal } from 'src/hooks/useModal'
 import Modal from '../../../modal/Modal'
 import ModalVotes from '../../../modal/modal-reactions/ModalVotes'
 import { ButtonOptionsProps } from 'src/models/common/button'
+import styles from './ButtonOptions.module.sass'
 
-const Options: FC<ButtonOptionsProps> = ({withReactions, withHidden, isHidden, postId, ...props}) => {
+const Options: FC<ButtonOptionsProps> = ({ withReactions, withHidden, isHidden, postId, ...props}) => {
     const [ anchorEl, setAnchorEl ] = useState<HTMLButtonElement | null>(null)
-    const {isVisible, toggleModal} = useModal()
+    const { isVisible, toggleModal } = useModal()
     const open = Boolean(anchorEl)
     const buttonRef = useRef(null)
 
@@ -31,7 +32,7 @@ const Options: FC<ButtonOptionsProps> = ({withReactions, withHidden, isHidden, p
             {postId && <Modal open={isVisible} onClose={toggleModal}>
                 <ModalVotes postId={postId}/>
             </Modal>}
-            <div style={{display: 'inline-block'}}>
+            <div className={styles.menu}>
                 <IconButton
                     {...props}
                     ref={buttonRef}
@@ -55,13 +56,13 @@ const Options: FC<ButtonOptionsProps> = ({withReactions, withHidden, isHidden, p
                     anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                     transformOrigin={{vertical: 'top', horizontal: 'right'}}
                 >
-                    {withReactions && <MenuItem onClick={openModal} sx={{fontSize: 14, pl: 1.5}}>
+                    {withReactions && <MenuItem onClick={openModal} className={styles.item}>
                         View reactions
                     </MenuItem>}
-                    {withHidden && <MenuItem onClick={openModal} sx={{fontSize: 14, pl: 1.5}}>
+                    {withHidden && <MenuItem className={styles.item}>
                         {isHidden ? 'Make visible' : 'Hide'}
                     </MenuItem>}
-                    <MenuItem onClick={handleClose} sx={{fontSize: 14, pl: 1.5}}>
+                    <MenuItem onClick={handleClose} className={styles.item}>
                         View on IPFS
                     </MenuItem>
                 </Menu>

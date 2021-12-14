@@ -1,10 +1,10 @@
 import { TabProps } from './common/tabs'
-import { SyntheticEvent } from 'react'
+import { ReactNode, SyntheticEvent } from 'react'
 import { AccountId, PostId, SpaceId } from '@subsocial/api/flat-subsocial/dto'
 import { ModalProps as ModalMaterialProps} from '@mui/material/Modal/Modal'
 import { Account } from './account'
-import { InnerLoadMoreFn } from '../components/post/infinity-post-list/post-list'
 import { ACCOUNT_STATUS } from './auth'
+import { InnerLoadMoreFn } from './infinity-scroll'
 
 export interface ModalProps extends ModalMaterialProps {
     onClose: () => void
@@ -40,7 +40,13 @@ export interface ModalQrProps extends Partial<ModalMaterialProps>{
     open: boolean
 }
 
-export type ModalSignInProps = Omit<ModalProps, 'children'> & {status: ACCOUNT_STATUS}
+export type ModalSignInProps = Omit<ModalProps, 'children'> & {status: ACCOUNT_STATUS, isAlert?: boolean}
+
+export interface ModalSignInContent {
+    title: string | null
+    body: ReactNode
+    text?: ReactNode
+}
 
 export interface ModalListUserItemProps extends Account {
     onClick: (T: string) => void

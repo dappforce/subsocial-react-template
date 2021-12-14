@@ -7,14 +7,14 @@ import ModalSignInInfo from './ModalSignInInfo'
 const NoAccount = () => {
     return (
         <>
-            <Alert severity="warning" icon={false}>
+            <Alert severity="warning" icon={false} className={styles.alert}>
                 No accounts found. Please open your <Link
-                href={'https://github.com/polkadot-js/extension'}
-                ext
-                className={`${styles.link} ${styles.black}`}
-            >
+                    href={'https://github.com/polkadot-js/extension'}
+                    ext
+                    className={`${styles.link} ${styles.black}`}
+                >
                 Polkadot Extension
-            </Link> and create a new account or
+                </Link> and create a new account or
                 import existing. Then reload this page.
             </Alert>
 

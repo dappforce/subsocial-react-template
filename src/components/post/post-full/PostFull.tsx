@@ -12,83 +12,55 @@ import { FC, useContext, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { TitleSizes } from 'src/models/common/typography'
 import Embed from '../../common/Embed'
-import ButtonUpvote from '../../common/button/buttons-vote/ButtonUpvote'
-import ButtonDownvote from '../../common/button/buttons-vote/ButtonDownvote'
 import ButtonShare from '../../common/button/button-share/ButtonShare'
-import { useSelectProfile } from '../../../rtk/features/profiles/profilesHooks'
-import { getSpaceUrl, getTime, getTitleUrl, loadImgUrl } from '../../../utils'
-import { PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
+import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks'
+import { getTime, getUrl, loadImgUrl, TypeUrl } from 'src/utils'
+import { PostWithSomeDetails, ReactionEnum } from '@subsocial/api/flat-subsocial/dto'
 import { toShortAddress } from 'src/components/utils/address'
 import { useAppDispatch } from 'src/rtk/app/store'
 import { ApiContext } from 'src/components/api'
 import { fetchPosts } from 'src/rtk/features/posts/postsSlice'
 import { useSelectPost } from 'src/rtk/app/hooks'
+import ButtonVotes from '../../common/button/buttons-vote/ButtonVotes'
+import { PostFullProps } from 'src/models/post'
 
-const PostFull: FC<PostWithSomeDetails> = (props) => {
-    const {post, space} = props
-    const { isComment } = post.struct
+const PostFull: FC<PostFullProps> = (props) => {
+    const { post, space } = props
 
-    const [isActiveUp, setIsActiveUp] = useState(false)
-    const [isActiveDown, setIsActiveDown] = useState(false)
-    const [countOfUpvotes, setCountOfUpvotes] = useState(post?.struct.upvotesCount || 0)
-    const [countOfDownvotes, setCountOfDownvotes] = useState(post?.struct.downvotesCount || 0)
-
-    const toUpvote = () => {
-        if (isActiveUp) {
-            setCountOfUpvotes(current => current - 1)
-        } else {
-            setCountOfUpvotes(current => current + 1)
-        }
-
-        setIsActiveUp(current => !current)
-
-        if (isActiveDown) {
-            setIsActiveDown(false)
-            setCountOfDownvotes(current => current - 1)
-        }
-    }
-
-    const toDownvote = () => {
-        if (isActiveDown) {
-            setCountOfDownvotes(current => current - 1)
-        } else {
-            setCountOfDownvotes(current => current + 1)
-        }
-
-        setIsActiveDown(current => !current)
-
-        if (isActiveUp) {
-            setIsActiveUp(false)
-            setCountOfUpvotes(current => current - 1)
-        }
-    }
     const profile = useSelectProfile(post.struct.ownerId.toString())
 
-    const [fetched, setFetched] = useState(false)
+    const [ fetched, setFetched ] = useState(false)
 
     const dispatch = useAppDispatch()
 
-    const {api} = useContext(ApiContext)
+    const { api } = useContext(ApiContext)
 
-    //@ts-ignore
     const { rootPostId } = post.struct
 
     const postData = useSelectPost(rootPostId) as PostWithSomeDetails
 
     useEffect(() => {
-      dispatch(fetchPosts({ids: [rootPostId], api}))
-      .then(() => setFetched(true))
+        if (rootPostId) {
+            dispatch(fetchPosts({ids: [rootPostId], api}))
+                .then(() => setFetched(true))
+        }
     }, [])
 
     if (!post) return null
 
     return (
         <CardWrapper className={styles.post}>
-            <CardContent sx={{pt: 0, pb: 0, display: 'flex', width: '100%'}}>
-                <CardContent sx={{p: 0, flexGrow: 1}}>
+            <CardContent className={styles.mainPostContent}>
+                <CardContent className={styles.postContent}>
                     <CardHeader
                         avatar={
-                            <Link href={`/accounts/${profile?.id || post.struct.ownerId}`} image>
+                            <Link
+                                href={getUrl({
+                                    type: TypeUrl.Account,
+                                    id: profile?.id || post.struct.ownerId,
+                                })}
+                                image
+                            >
                                 <AvatarElement
                                     src={profile?.content?.avatar}
                                     size={AvatarSizes.SMALL}
@@ -96,58 +68,99 @@ const PostFull: FC<PostWithSomeDetails> = (props) => {
                                 />
                             </Link>
                         }
-                        action={<Options sx={{mt: 0.5, ml: 0, mr: 0, mb: 0}} withHidden/>}
-                        title={<Link href={`/accounts/${profile?.id || post.struct.ownerId}`}>
-                            <Title type={TitleSizes.PROFILE}>{profile?.content?.name || toShortAddress(post.struct.ownerId)}</Title>
-                        </Link>}
-                        sx={{pr: 0, pl: 0}}
+                        action={<Options className={styles.postActions} withHidden />}
+                        title={
+                            <Link
+                                href={getUrl({
+                                    type: TypeUrl.Account,
+                                    id: profile?.id || post.struct.ownerId,
+                                })}
+                            >
+                                <Title type={TitleSizes.PROFILE}>{profile?.content?.name || toShortAddress(post.struct.ownerId)}</Title>
+                            </Link>
+                        }
+                        className={styles.accountContent}
                         subheader={
                             <>
                                 {/*@ts-ignore*/}
-                                <SmallLink href={`${getSpaceUrl(space?.content.handle, space?.struct.id)}`}>
-                                    {space?.content?.name}
+                                <SmallLink href={getUrl({
+                                    type: TypeUrl.Space,
+                                    //@ts-ignore
+                                    title: space?.content.handle || postData?.space?.content.handle,
+                                    id: space?.struct.id || postData?.space?.struct.id,
+                                })}>
+                                    {/*@ts-ignore*/}
+                                    {space?.content.name || postData?.space.content.name}
                                 </SmallLink>
-                                {space && ('\xA0 · \xA0')}
-                                {/*@ts-ignore*/}
-                                <SmallLink href={`${getSpaceUrl(space?.content?.handle, space?.struct.id, isComment)}/${getTitleUrl(post?.content.title, post.struct.id)}`}>
+                                {'\xA0 · \xA0'}
+                                <SmallLink href={getUrl({
+                                    type: TypeUrl.Post,
+                                    //@ts-ignore
+                                    title: space?.content.handle || postData?.space?.content.handle,
+                                    id: space?.struct.id || postData?.space?.struct.id,
+                                    //@ts-ignore
+                                    subTitle: post?.content.title,
+                                    subId: post.struct.id,
+                                })}>
                                     {getTime(post.struct.createdAtTime)}
                                 </SmallLink>
                             </>
                         }
                     />
-                    {fetched && <Title variant={'h1'} type={TitleSizes.DETAILS} className={styles.title}>
-                        {post?.content?.title}</Title>}
+                    {fetched &&
+                        <Title variant={'h1'} type={TitleSizes.DETAILS} className={styles.title}>
+                            {post?.content?.title}
+                        </Title>}
                     {fetched && postData?.post?.content?.title &&
                         <Title variant={'h1'} type={TitleSizes.DETAILS} className={styles.title}>
                             {`In response to `}
-                            {/*@ts-ignore*/}
-                            <Link href={`${getSpaceUrl(space?.content?.handle, space?.struct.id, isComment)}/${getTitleUrl(post?.content?.title, post.struct.id)}`}>
-                                    {postData?.post?.content?.title}
+                            <Link
+                                href={getUrl({
+                                    type: TypeUrl.Post,
+                                    //@ts-ignore
+                                    title: space?.content.handle || postData?.space?.content.handle,
+                                    id: space?.struct.id || postData?.space?.struct.id,
+                                    subTitle: postData?.post?.content.title,
+                                    subId: postData?.post.struct.id,
+                                })}
+                            >
+                                {postData?.post?.content?.title}
                             </Link>
                         </Title>
                     }
 
-                    {post.content?.image && <CardMedia
-                        component="img"
-                        sx={{width: '100%', mt: 2, mb: 2, borderRadius: 1}}
-                        image={loadImgUrl(post.content?.image)}
-                    />
+                    {post.content?.image &&
+                        <CardMedia
+                            component="img"
+                            className={styles.imgContent}
+                            image={loadImgUrl(post.content?.image)}
+                        />
                     }
 
                     {post.content?.link && <Embed link={post.content?.link}/>}
 
-                    {post.content?.body && <ReactMarkdown className={'markdown-body'}>
-                        {post.content.body}
-                    </ReactMarkdown>}
+                    {post.content?.body &&
+                        <ReactMarkdown className={'markdown-body'}>
+                            {post.content.body}
+                        </ReactMarkdown>
+                    }
                 </CardContent>
             </CardContent>
 
             <TagList tags={post.content?.tags} className={styles.tags}/>
 
             <Divider variant="middle"/>
-            <CardActions sx={{justifyContent: 'space-evenly'}}>
-                <ButtonUpvote isShowLabel isActive={isActiveUp} onClick={toUpvote} value={countOfUpvotes}/>
-                <ButtonDownvote isShowLabel isActive={isActiveDown} onClick={toDownvote} value={countOfDownvotes}/>
+            <CardActions className={styles.cardActions}>
+                <ButtonVotes
+                    post={post.struct}
+                    reactionEnum={ReactionEnum.Upvote}
+                    withLabel
+                />
+                <ButtonVotes
+                    post={post.struct}
+                    reactionEnum={ReactionEnum.Downvote}
+                    withLabel
+                />
                 <ButtonShare isShowLabel/>
             </CardActions>
         </CardWrapper>

@@ -1,10 +1,11 @@
-import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import Icon from '../common/icons/Icon'
-import { linkidIn, medium, reddit, telegram, youtube } from '../../assets'
-import LanguageIcon from '@mui/icons-material/Language';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import LanguageIcon from '@mui/icons-material/Language'
+import { GrMedium } from 'react-icons/gr'
+import { SiReddit, SiTelegram } from 'react-icons/si'
+import { BsLinkedin, BsGithub } from 'react-icons/bs'
+import { FiYoutube } from 'react-icons/fi'
 
 type SocialBrand =
     'facebook' |
@@ -19,35 +20,32 @@ type SocialBrand =
 
 export type LinkLabel = SocialBrand | 'website'
 
-const brandsWithProfiles: SocialBrand[] = [
-    'facebook',
-    'twitter',
-    'medium',
-    'linkedIn',
-    'gitHub',
-    'instagram',
-    'youTube',
-    'telegram',
-    'reddit'
-]
-
-export const hasSocialMediaProfiles = (brand: LinkLabel): boolean => {
-    return brandsWithProfiles.indexOf(brand as SocialBrand) >= 0
-}
-
 export const getLinkIcon = (brand?: LinkLabel) => {
+    const iconSize = 20
+
     switch (brand) {
-        case 'facebook': return <FacebookOutlinedIcon sx={{width: 22, height: 22, transform: 'scale(1.05)'}} />
-        case 'twitter': return <TwitterIcon sx={{width: 22, height: 22}} />
-        case 'medium': return <Icon src={medium}  height={20} width={20} alt={'medium'}  />
-        case 'linkedIn': return <Icon src={linkidIn}  height={20} width={20} alt={'linkidIn'}/>
-        case 'gitHub': return <GitHubIcon sx={{width: 22, height: 22}}/>
-        case 'instagram': return <InstagramIcon sx={{width: 21, height: 21}}/>
-        case 'youTube': return <Icon height={26} width={26} src={youtube} alt={'youtube'}/>
-        case 'telegram': return <Icon height={20} width={20} src={telegram} alt={'telegram'}/>
-        case 'reddit': return <Icon height={20} width={20} src={reddit} alt={'reddit'}/>
-        case 'website': return <LanguageIcon sx={{width: 22, height: 22}}/>
-        default: return <LanguageIcon sx={{width: 20, height: 20}}/>
+        case 'facebook':
+            return <FacebookOutlinedIcon sx={{fontSize: iconSize, transform: 'scale(1.2)'}}/>
+        case 'twitter':
+            return <TwitterIcon sx={{fontSize: iconSize}}/>
+        case 'medium':
+            return <GrMedium size={iconSize}/>
+        case 'linkedIn':
+            return <BsLinkedin size={iconSize}/>
+        case 'gitHub':
+            return <BsGithub size={iconSize}/>
+        case 'instagram':
+            return <InstagramIcon sx={{fontSize: iconSize}}/>
+        case 'youTube':
+            return <FiYoutube size={iconSize}/>
+        case 'telegram':
+            return <SiTelegram size={iconSize}/>
+        case 'reddit':
+            return <SiReddit size={iconSize}/>
+        case 'website':
+            return <LanguageIcon sx={{fontSize: iconSize}}/>
+        default:
+            return <LanguageIcon sx={{fontSize: iconSize}}/>
     }
 }
 

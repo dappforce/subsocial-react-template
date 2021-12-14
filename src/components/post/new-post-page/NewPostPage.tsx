@@ -20,13 +20,32 @@ const NewPostPage = () => {
     const content = () => {
         switch (activeTab) {
             case 'article':
-                return <NewArticle title={title} handleTitle={handleTitle} body={body} handleBody={handleBody}
-                                   reset={reset} tags={tags} setTags={setTags}/>
+                return (
+                    <NewArticle
+                        title={title}
+                        handleTitle={handleTitle}
+                        body={body}
+                        handleBody={handleBody}
+                        reset={reset}
+                        tags={tags}
+                        setTags={setTags}
+                    />
+                )
             case 'video':
             default:
-                return <NewVideo title={title} setUrl={handleUrl} handleTitle={handleTitle} body={body}
-                                 handleBody={handleBody}
-                                 reset={reset} tags={tags} setTags={setTags} url={url}/>
+                return (
+                    <NewVideo
+                        title={title}
+                        setUrl={handleUrl}
+                        handleTitle={handleTitle}
+                        body={body}
+                        handleBody={handleBody}
+                        reset={reset}
+                        tags={tags}
+                        setTags={setTags}
+                        url={url}
+                    />
+                )
         }
     }
 
@@ -62,11 +81,16 @@ const NewPostPage = () => {
     return (
         <Layout>
             <CardWrapper>
-                <CardContent sx={{pb: 0}}>
+                <CardContent className={styles.title}>
                     <Title type={TitleSizes.DETAILS}>{'New post'}</Title>
                 </CardContent>
 
-                <Tabs value={activeTab} tabs={tabs} setValue={setActiveTab} className={styles.tabs}/>
+                <Tabs
+                    value={activeTab}
+                    tabs={tabs}
+                    setValue={setActiveTab}
+                    className={styles.tabs}
+                />
                 {content()}
             </CardWrapper>
         </Layout>

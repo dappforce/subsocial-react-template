@@ -1,12 +1,12 @@
 @import src/styles/vars
 
 .title
-  margin-bottom: 1rem
+  margin-bottom: $space_normal
 
 .comment
-  padding: .625rem 1rem
+  padding: .625rem $space_normal
   text-align: left
-  background-color: #f2f2f2
+  background-color: $color_page_bg
   border-radius: .25rem
 
 .details
@@ -22,7 +22,7 @@
       height: 22px !important
 
 .options
-  margin-left: .5rem
+  margin-left: $space_tiny
   transform: rotate(-90deg)
 
 .group
@@ -31,10 +31,16 @@
   margin-top: 2px
 
 .button
-  margin-top: 1rem !important
+  margin-top: $space_normal !important
+
+  &:global(.MuiButton-root)[disabled]
+    background-color: $color_primary
+    border-color: $color_primary
+    color: $color_white
+    opacity: 0.5
 
 .new
-  margin-top: 1rem
+  margin-top: $space_normal
 
 .time
   color: $color_font_secondary
@@ -49,3 +55,23 @@
 
   svg
     padding-top: 2px
+
+.commentBox
+  display: flex
+  gap: 0.5rem
+  background: none
+  width: 100%
+  margin-top: 0.375rem
+
+.commentContent
+  width: 100%
+
+.commentsBox
+  margin-top: 1 rem
+
+.newCommentBox
+  display: flex
+  gap: 0.5rem
+  align-items: flex-start
+  background: transparent
+  margin-bottom: 0.5rem

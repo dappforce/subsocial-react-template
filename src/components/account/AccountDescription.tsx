@@ -16,11 +16,12 @@ export const AccountDescription: FC<AccountDescriptionProps> = (props) => {
     if (!props.about) return null
 
     return (
-        <CardContent sx={{pt: 0, pb: 2}}>
+        <CardContent className={styles.description}>
             <Text type={TextSizes.NORMAL} component={'div'} className={styles.content}>
                 {isShowMore || !props.isShowMore
                     ? <ReactMarkdown className={'markdown-body'}>{props.about}</ReactMarkdown>
-                    : props.summary} {' '}
+                    : props.summary}
+                    {' '}
                 {props.isShowMore &&
                 <button onClick={toggleText} className={styles.seemore}>{!isShowMore ? 'See More' : 'See Less'}</button>}
             </Text>

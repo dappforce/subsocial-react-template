@@ -5,17 +5,17 @@ import { Box } from '@mui/system'
 import ButtonClose from '../common/button/button-close/ButtonClose'
 import { ModalProps } from 'src/models/modal'
 
-const Modal: FC<ModalProps> = ({open, onClose, className, children, ...props}) => {
-    const classname = className ? `${className} ${styles.modal}` : styles.modal
+const Modal: FC<ModalProps> = ({ open, onClose, className: inputClassName, children, ...props }) => {
+    const className = inputClassName ? `${inputClassName} ${styles.modal}` : styles.modal
 
     return (
         <MaterialModal
             open={open}
             onClose={onClose}
-            className={classname}
+            className={className}
             {...props}
         >
-            <Box sx={{maxWidth: 500, width: '100%', position: 'relative', m: 2, borderRadius: 0.5, overflow: 'hidden'}}>
+            <Box className={styles.box}>
                 <ButtonClose onClick={onClose} className={styles.close}/>
                 {children}
             </Box>

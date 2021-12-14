@@ -21,16 +21,17 @@ export default {
     ],
 } as Meta
 
+const postId = '22940';
+const commentId = '22941';
+
 export const CommentsList = () => <Comments
     countOfComments={1}
-    postUrl={`/`}
-    parentId={'22940'}/>
+    parentId={postId}/>
 
 export const CommentItem = () =>
     <Box sx={{p: 2}}>
         <Comment
-            postUrl={`/`}
-            commentId={'22941'}
+            commentId={commentId}
         />
     </Box>
 

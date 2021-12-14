@@ -12,8 +12,8 @@ import { useModal } from '../../hooks/useModal'
 
 const SwitchAccountMenu: FC<SwitchAccountContentProps> = ({onClose}) => {
     const router = useRouter()
-    const {address} = useAppSelector(state => state.myAccount)
-    const {toggleModal, isVisible} = useModal()
+    const { address } = useAppSelector(state => state.myAccount)
+    const { toggleModal, isVisible } = useModal()
 
     const menu = [
         {label: 'My profile', icon: <PersonOutlineIcon/>, href: `/accounts/${address}`},
@@ -37,8 +37,8 @@ const SwitchAccountMenu: FC<SwitchAccountContentProps> = ({onClose}) => {
                 message={'Coming soon...'}
                 onClose={toggleModal}
             />
-            <List sx={{pb: 0}}>
-                <Divider variant="middle" sx={{mb: 1}}/>
+            <List className={styles.profileContainer}>
+                <Divider variant="middle" className={styles.firstDivider} />
                 {menu.map(item => (
                     <ListItem
                         button
@@ -50,7 +50,7 @@ const SwitchAccountMenu: FC<SwitchAccountContentProps> = ({onClose}) => {
                         <ListItemText primary={item.label}/>
                     </ListItem>
                 ))}
-                <Divider variant="middle" sx={{mt: 1}}/>
+                <Divider variant="middle" className={styles.lastDivider} />
             </List>
         </>
     )

@@ -5,9 +5,9 @@ import { BalanceProps, BalanceType } from 'src/models/common/balance'
 import { useApi } from '../../api'
 import { formatBalance } from '@polkadot/util'
 
-const Balance: FC<BalanceProps> = ({address, className, isIcon}) => {
-    const classname = className ? `${styles.balance} ${className}` : styles.balance
-    const {api} = useApi()
+const Balance: FC<BalanceProps> = ({address, className: inputClassName, isIcon}) => {
+    const className = inputClassName ? `${styles.balance} ${inputClassName}` : styles.balance
+    const { api } = useApi()
     const [ balance, setBalance ] = useState<string[]>([ '0', '0000' ])
 
     useEffect(() => {
@@ -46,7 +46,7 @@ const Balance: FC<BalanceProps> = ({address, className, isIcon}) => {
     }
 
     return (
-        <div className={classname}>
+        <div className={className}>
             {isIcon && <MonetizationOnOutlinedIcon/>}
             <p><span>{balance[0]}</span><span className={styles.gray}>.{balance[1].slice(0, 4)}</span> SUB</p>
         </div>

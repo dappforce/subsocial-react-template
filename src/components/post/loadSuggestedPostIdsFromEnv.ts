@@ -1,17 +1,16 @@
-import { recommendedSpaceIds } from 'src/config'
 import { getPageOfIds } from '../utils/getIds'
 import { AnySpaceId } from '@subsocial/types'
 import { bnsToIds } from '@subsocial/utils'
-import { PostId } from '@subsocial/api/flat-subsocial/dto'
+import { PostId, SpaceId } from '@subsocial/api/flat-subsocial/dto'
 import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial'
 
 let suggestedPostIds: string[] | undefined = undefined
 
-export const loadSuggestedPostIds = async (api: FlatSubsocialApi) => {
+export const loadSuggestedPostIds = async (api: FlatSubsocialApi, ids: SpaceId[]) => {
 
     if (!api.subsocial) return []
 
-    const suggestedPostIdsPromises = recommendedSpaceIds.map(spaceId =>
+    const suggestedPostIdsPromises = ids.map(spaceId =>
         api.subsocial.substrate.postIdsBySpaceId(spaceId as unknown as AnySpaceId))
 
     const suggestedPostIdsArray = await Promise.all(suggestedPostIdsPromises)
@@ -21,4 +20,4 @@ export const loadSuggestedPostIds = async (api: FlatSubsocialApi) => {
     return suggestedPostIds
 }
 
-export const getSuggestedPostIdsByPage = (ids: PostId[], size: number, page: number) => getPageOfIds(ids, {page, size})
+export const getSuggestedPostIdsByPage = (ids: PostId[], size: number, page: number) => getPageOfIds(ids, { page, size })
