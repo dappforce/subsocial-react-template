@@ -10,16 +10,16 @@ import Embed from '../../common/Embed'
 import { NewVideoProps } from 'src/models/post'
 
 const NewVideo: FC<NewVideoProps> = ({
-                                           title,
-                                           body,
-                                           setTags,
-                                           tags,
-                                           handleTitle,
-                                           url,
-                                           handleBody,
-                                           reset,
-                                           setUrl
-                                       }) => {
+    title,
+    body,
+    setTags,
+    tags,
+    handleTitle,
+    url,
+    handleBody,
+    reset,
+    setUrl
+}) => {
     return (
         <Box component="form" className={styles.form}>
             <Input
@@ -47,7 +47,7 @@ const NewVideo: FC<NewVideoProps> = ({
 
             <TagsInput tags={tags} setTags={setTags}/>
 
-            <CardActions sx={{gap: 2, p: 0, justifyContent: 'flex-end'}}>
+            <CardActions className={styles.buttons}>
                 <ButtonCancel className={styles.button} onClick={reset}>
                     {'Reset form'}
                 </ButtonCancel>

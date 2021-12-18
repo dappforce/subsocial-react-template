@@ -1,14 +1,13 @@
 import { PostId, PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
+import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners'
 
 export interface CommentsProps {
-    postUrl: string
     countOfComments: number
     parentId: string
 }
 
 export interface CommentProps {
     commentId: PostId,
-    postUrl: string,
     commentDetails: PostWithSomeDetails
 }
 
@@ -20,7 +19,5 @@ export interface NewCommentProps {
 
 export interface CommentActionProps {
     onReply: () => void
-    upvotes: number
-    downvotes: number
-    id: string
+    comment: PostStruct
 }

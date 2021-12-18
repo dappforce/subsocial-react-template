@@ -1,6 +1,4 @@
 import React, { FC, Fragment } from 'react'
-import Text from '../../common/text/Text'
-import { TextSizes } from 'src/models/common/typography'
 import { Divider, List } from '@mui/material'
 import styles from './ModalSignIn.module.sass'
 import ModalListUserItem from './ModalListUserItem'
@@ -14,6 +12,7 @@ import { useAppDispatch } from 'src/rtk/app/store'
 const Accounts: FC<AccountsModalProps> = (props) => {
     const dispatch = useAppDispatch()
     const {api} = useApi()
+
     const chooseAccount = async (address: string) => {
         await dispatch(fetchProfile({api, id: address, reload: true}))
         await dispatch(setMyAddress(address))
@@ -22,8 +21,7 @@ const Accounts: FC<AccountsModalProps> = (props) => {
 
     return (
         <>
-            <Text type={TextSizes.NORMAL}>Click on your account to sign in:</Text>
-            <List sx={{width: '100%', maxHeight: 240, p: 0, overflowY: 'scroll',}} className={styles.list}>
+            <List className={styles.list}>
                 {props.accounts.map((account) => (<Fragment key={account.address}>
                     <ModalListUserItem {...account} onClick={chooseAccount}/>
                     <Divider variant="middle"/>

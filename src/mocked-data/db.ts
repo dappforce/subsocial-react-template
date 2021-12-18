@@ -1,4 +1,3 @@
-import { avatar, img } from '../assets'
 import { NotificationsItemProps } from '../models/notifications'
 
 export const users = [
@@ -44,9 +43,9 @@ export const notifications: NotificationsItemProps[] = [
     {
         id: '1',
         ownerId: '3osmnRNnrcScHsgkTJH1xyBF5kGjpbWHsGrqM31BJpy4vwn8',
-        image: img,
+        image: '/img.jpg',
         ownerName: 'Jane Cooper',
-        ownerImg: avatar,
+        ownerImg: '/avatar.jpg',
         subject: 'First meme',
         action: 'commented on the post',
         spaceName: 'Subsocial',
@@ -56,7 +55,7 @@ export const notifications: NotificationsItemProps[] = [
         id: '2',
         ownerName: 'Young Beef',
         ownerId: '3osmnRNnrcScHsgkTJH1xyBF5kGjpbWHsGrqM31BJpy4vwn8',
-        ownerImg: avatar,
+        ownerImg: '/avatar.jpg',
         subject: 'Introducing Sub ID: The One Stop Shop For All Your Substack fdwaf awfa wfa wf a awfaw awd awffwf',
         action: 'shared the post',
         spaceName: 'Subsocial',
@@ -64,10 +63,10 @@ export const notifications: NotificationsItemProps[] = [
         link: '/'
     }, {
         id: '3',
-        image: img,
+        image: '/img.jpg',
         ownerName: 'Jane Cooper',
         ownerId: '3osmnRNnrcScHsgkTJH1xyBF5kGjpbWHsGrqM31BJpy4vwn8',
-        ownerImg: avatar,
+        ownerImg: '/avatar.jpg',
         subject: 'Young Beef',
         action: 'followed the account',
         spaceName: 'Subsocial',
@@ -75,10 +74,10 @@ export const notifications: NotificationsItemProps[] = [
         link: '/'
     }, {
         id: '4',
-        image: img,
+        image: '/img.jpg',
         ownerName: 'Jane Cooper',
         ownerId: '3osmnRNnrcScHsgkTJH1xyBF5kGjpbWHsGrqM31BJpy4vwn8',
-        ownerImg: avatar,
+        ownerImg: '/avatar.jpg',
         subject: 'PolkaWarriors',
         action: 'followed the space',
         spaceName: 'Subsocial',
@@ -86,11 +85,10 @@ export const notifications: NotificationsItemProps[] = [
         link: '/'
     }, {
         id: '5',
-        image: img,
+        image: '/img.jpg',
         ownerName: 'Jane Cooper',
         ownerId: '3osmnRNnrcScHsgkTJH1xyBF5kGjpbWHsGrqM31BJpy4vwn8',
-
-        ownerImg: avatar,
+        ownerImg: '/avatar.jpg',
         subject: 'PolkaWarriors',
         action: 'created the space',
         spaceName: 'Subsocial',
@@ -98,11 +96,10 @@ export const notifications: NotificationsItemProps[] = [
         link: '/'
     }, {
         id: '6',
-        image: img,
+        image: '/img.jpg',
         ownerName: 'Jane Cooper',
         ownerId: '3osmnRNnrcScHsgkTJH1xyBF5kGjpbWHsGrqM31BJpy4vwn8',
-
-        ownerImg: avatar,
+        ownerImg: '/avatar.jpg',
         subject: 'Post',
         action: 'created the post',
         spaceName: 'Subsocial',

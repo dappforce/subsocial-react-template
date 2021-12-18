@@ -11,9 +11,9 @@ import { SpaceWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
 const SpaceEditPage = () => {
     const router = useRouter()
     const idOrHandle = router.query.spaceId as string
-    const {api} = useApi()
+    const { api } = useApi()
     const dispatch = useAppDispatch()
-    const [id, setId] = useState('')
+    const [ id, setId ] = useState('')
 
     useEffect(() => {
         (async () => await dispatch(fetchSpace({ api, id })))()
@@ -38,7 +38,7 @@ const SpaceEditPage = () => {
     return (
         <Layout>
             <CardEdit
-                {...spaceData}
+                { ...spaceData }
                 title={'Edit Space'}
                 cancelButton={'Cancel'}
                 saveButton={'Save'}

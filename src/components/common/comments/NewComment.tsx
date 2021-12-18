@@ -9,12 +9,14 @@ import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks'
 import { useMyAddress } from '../../../rtk/features/myAccount/myAccountHooks'
 
 const NewComment: FC<NewCommentProps> = (props) => {
+    const { className: inputClassName, placeholder, autoFocus } = props
     const [ comment, setComment ] = useState('')
     const address = useMyAddress()
     const user = useSelectProfile(address)
 
     const [ isDisabledButton, setIsDisabledButton ] = useState(true)
     const [ isShowButton, setIsShowButton ] = useState(false)
+    const className = inputClassName ? `${inputClassName} ${styles.newCommentBox}` : styles.newCommentBox
 
     if (!user) return null
 
@@ -37,26 +39,30 @@ const NewComment: FC<NewCommentProps> = (props) => {
     }
 
     return (
-        <Box component={'form'} sx={{display: 'flex', gap: 1, alignItems: 'flex-start', background: 'transparent', mb: 1}} className={props.className || ''}>
-            <AvatarElement src={user?.content?.avatar} size={AvatarSizes.SMALLER} id={user?.id}/>
-            <div style={{'width': '100%'}}>
+        <Box component={'form'} className={className}>
+            <AvatarElement
+                src={user?.content?.avatar}
+                size={AvatarSizes.SMALLER}
+                id={user?.id}
+            />
+            <div className={styles.commentContent}>
                 <TextField
                     id="outlined-basic"
                     variant="outlined"
-                    placeholder={props.placeholder}
+                    placeholder={placeholder}
                     multiline
                     onChange={handleChange}
                     onFocus={showButton}
                     onBlur={hideButton}
                     value={comment}
-                    autoFocus={props.autoFocus}
+                    autoFocus={autoFocus}
                     fullWidth
                     className={styles.textarea}
                 />
                 {isShowButton &&
-                <ButtonComponent className={styles.button} variant={'contained'} disabled={isDisabledButton}>
-                    Send
-                </ButtonComponent>
+                    <ButtonComponent className={styles.button} variant={'contained'} disabled={isDisabledButton}>
+                        Send
+                    </ButtonComponent>
                 }
             </div>
         </Box>

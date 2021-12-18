@@ -7,7 +7,7 @@
 
 .title
     text-align: center
-    color: #a0a0a0
+    color: $color_font_secondary
 
 .button
     white-space: nowrap
@@ -41,15 +41,18 @@
 
 .list
     width: auto
-    margin-right: -1.5rem
-    margin-left: -1rem
+    margin-right: -$space_big
+    margin-left: -$space_normal
+    padding: 0
+    max-height: 240px
+    overflow-y: scroll
     @include scroll
 
     & button
-        padding: 0 1rem
+        padding: 0 $space_normal
         &:hover
 
-            background-color: #f5f5f5
+            background-color: $color_light_gray
 
 .address
     color: $color_font_secondary
@@ -61,3 +64,13 @@
         color: $color_font_secondary
         span:first-child
             color: $color_black
+
+.alert
+    font-size: $font_normal
+
+.box
+  margin: $space_normal
+  display: flex
+  flex-direction: column
+  row-gap: 1rem
+  text-align: center

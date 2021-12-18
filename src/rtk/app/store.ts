@@ -2,7 +2,6 @@ import { Action, configureStore } from '@reduxjs/toolkit'
 import { useMemo } from 'react'
 import { createSelectorHook, useDispatch } from 'react-redux'
 import { ThunkAction } from 'redux-thunk'
-import { isDevMode } from 'src/config/env'
 import rootReducer, { RootState } from '../app/rootReducer'
 
 // Do not use this store object.
@@ -32,16 +31,9 @@ function initStore (preloadedState?: RootState) {
     reducer: rootReducer,
     preloadedState,
     devTools: true,
-    // middleware: (getDefaultMiddleware) =>
-    //   getDefaultMiddleware({
-    //     thunk: {
-    //       // extraArgument: myCustomApiService,
-    //       extraArgument: { hello: 'world' }
-    //     },
-    //     // Setting immutableCheck to false can improve performance of Redux in development mode.
-    //     immutableCheck: false,
-    //     // serializableCheck: false,
-    //   }),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+      serializableCheck: false,
+    })
   })
 }
 
@@ -68,13 +60,6 @@ export const initializeStore = (preloadedState?: RootState) => {
 
   // Create the store once in the client
   if (!store) store = _store
-
-  if (isDevMode && (module as any).hot && store) {
-    // (module as any).hot.accept('./rootReducer', () => {
-    //   const newRootReducer = require('./rootReducer').default
-    //   store && store.replaceReducer(newRootReducer)
-    // })
-  }
 
   return _store
 }

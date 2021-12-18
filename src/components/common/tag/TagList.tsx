@@ -3,12 +3,12 @@ import styles from './Tag.module.sass'
 import { FC } from 'react'
 import { TagListProps } from 'src/models/common/tags'
 
-const TagList: FC<TagListProps> = ({tags, className}) => {
+const TagList: FC<TagListProps> = ({ tags, className: inputClassName }) => {
     if (!tags || !tags.length) return null
-    const classname = className ? `${styles.tags} ${className}` : styles.tags
+    const className = inputClassName ? `${styles.tags} ${inputClassName}` : styles.tags
 
     return (
-        <div className={classname}>
+        <div className={className}>
             {tags.map(tag => <Tag label={tag} key={tag}/>)}
         </div>
     )

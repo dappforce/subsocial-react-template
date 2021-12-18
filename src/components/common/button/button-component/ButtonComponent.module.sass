@@ -3,8 +3,10 @@
 .button
   display: inline-flex
   column-gap: 0.785rem
-  width: 99px
+  min-width: 99px
   height: 36px
+  padding-left: 0.5rem
+  padding-right: 0.5rem
   font-size: $font_normal
   font-weight: 500
   box-shadow: none
@@ -16,11 +18,6 @@
     background-color: $color_primary
     box-shadow: none
 
-    &[disabled]
-      background-color: $color_primary
-      opacity: 0.5
-      color: $color_white
-
     &:hover
       background-color: $color_primary
 
@@ -31,3 +28,11 @@
     &:hover
       background-color: rgba(244, 142, 198, .05)
       border-color: $color_primary
+
+  &:global(.MuiButton-root)[disabled]
+    background-color: $color_white
+    border: 1px solid $color_border
+    color: $color_font_secondary
+
+    svg
+      color: $color_font_secondary

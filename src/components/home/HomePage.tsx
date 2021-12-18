@@ -1,18 +1,19 @@
 import type { NextPage } from 'next'
 import { useAppSelector } from 'src/rtk/app/store'
-import SpaceList from '../space/infinity-space-list/space-list'
-import PostList from '../post/infinity-post-list/post-list'
+import SpaceList from '../space/space-list/space-list'
+import PostList from '../post/post-list/post-list'
 import styles from './HomePage.module.sass'
 import Layout from '../layout/Layout'
+import { recommendedSpaceIds } from '../../config'
 
 const Content = () => {
     const {value} = useAppSelector(state => state.main)
 
     switch (value) {
         case 'posts':
-            return <PostList />
+            return <PostList ids={recommendedSpaceIds} visibility={'onlyVisible'}/>
         case 'spaces':
-            return <SpaceList />
+            return <SpaceList ids={recommendedSpaceIds}/>
         default:
             return null
     }

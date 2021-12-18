@@ -4,30 +4,18 @@ import { TextSizes } from '../../../models/common/typography'
 import Link from '../../common/links/link/Link'
 import styles from './ModalSignIn.module.sass'
 import ButtonCancel from '../../common/button/button-cancel/ButtonCancel'
-import Icon from '../../common/icons/Icon'
-import { firefox, google } from '../../../assets'
+import Image from '../../common/image/Image'
 
 const NoExtension = () => {
     return (
         <>
-            <Text type={TextSizes.NORMAL}>
-                <Link
-                    href={'https://github.com/polkadot-js/extension'}
-                    ext
-                    className={styles.link}
-                >
-                    Polkadot Extension
-                </Link> was not found or disabled.
-                Install the extension with the button below.
-            </Text>
-
             <a
                 href="https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd"
                 target={'_blank'}
                 rel="noreferrer"
             >
                 <ButtonCancel className={styles.button}>
-                    <Icon src={google} width={20} height={20}/>
+                    <Image src={'/google.svg'} width={20} height={20} alt={'Chrome'}/>
                     Install for Chrome
                 </ButtonCancel>
             </a>
@@ -38,7 +26,7 @@ const NoExtension = () => {
                 rel="noreferrer"
             >
                 <ButtonCancel className={`${styles.button} ${styles.firefox}`}>
-                    <Icon src={firefox} width={20} height={20}/>
+                    <Image src={'/firefox.svg'} width={20} height={20} alt={'Firefox'}/>
                     Install for Firefox
                 </ButtonCancel>
             </a>
@@ -48,7 +36,9 @@ const NoExtension = () => {
                 href={'https://app.subsocial.network/docs/sign-up'}
                 ext
                 className={styles.link}
-            >Sign In Guide</Link>
+                >
+                    Sign In Guide
+                </Link>
             </Text>
         </>
     )

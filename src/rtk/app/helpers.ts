@@ -1,4 +1,4 @@
-import { AsyncThunk, EntityId } from '@reduxjs/toolkit'
+import { AsyncThunk, Dispatch, EntityId } from '@reduxjs/toolkit'
 import { getFirstOrUndefined, isEmptyArray, nonEmptyStr } from '@subsocial/utils'
 import { asString } from '@subsocial/utils'
 import { RootState } from './rootReducer'
@@ -6,6 +6,8 @@ import { AppDispatch, AppThunk } from './store'
 import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial'
 import { FlatSuperCommon, HasId } from '@subsocial/api/flat-subsocial/flatteners'
 import { CommonContent, DerivedContent, EntityData } from '@subsocial/api/flat-subsocial/dto'
+import { useDispatch } from 'react-redux'
+import { useApi } from '../../components/api'
 
 export type ThunkApiConfig = {
   state: RootState
@@ -129,4 +131,19 @@ export function selectOneById<
 ): EntityData<S, C> | undefined {
   const items = selectManyByIds(state, [ id ], selectStructById, selectContentById)
   return getFirstOrUndefined(items)
+}
+
+type CommonDispatchCallbackProps<T> = {
+  dispatch: Dispatch<any>,
+  api: FlatSubsocialApi,
+  args: T
+}
+
+type CommonDispatchCallbackFn<T> = (props: CommonDispatchCallbackProps<T>) => void
+
+export const useActions = <T = undefined>(cb: CommonDispatchCallbackFn<T>) => {
+  const dispatch = useDispatch()
+  const { api } = useApi()
+
+  return (args: T) => cb({ dispatch, api, args })
 }

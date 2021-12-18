@@ -3,12 +3,12 @@ import NextLink from 'next/link'
 import styles from './SmallLink.module.sass'
 import { SmallLinkProps } from '../../../../models/common/link'
 
-const SmallLink: FC<SmallLinkProps> = ({href, as, children, className, ...props}) => {
-    const classname = className ? `${styles.link} ${className}` : styles.link
+const SmallLink: FC<SmallLinkProps> = ({href, as, children, className: inputClassName, ...props}) => {
+    const className = inputClassName ? `${styles.link} ${inputClassName}` : styles.link
 
     return (
         <NextLink href={href} as={as}>
-            <a className={classname} {...props}>{children}</a>
+            <a className={className} {...props}>{children}</a>
         </NextLink>
     )
 }

@@ -16,7 +16,7 @@ const loadSuggestedConnectionsIds = async (api: FlatSubsocialApi, address: unkno
     const ids = await method[type](address) as unknown as string[]
     return ids.map(asString)
 }
-const getAccountsIdsByPage = (ids: PostId[], size: number, page: number) => getPageOfIds(ids, {page, size})
+const getAccountsIdsByPage = (ids: PostId[], size: number, page: number) => getPageOfIds(ids, { page, size })
 
 const loadMoreAccountsFn = async (loadMoreValues: any & {api: FlatSubsocialApi}) => {
     const {
@@ -38,20 +38,20 @@ const loadMoreAccountsFn = async (loadMoreValues: any & {api: FlatSubsocialApi})
 }
 
 const ModalConnections: FC<ModalConnectionsProps> = ({
-                                                         activeTab,
-                                                         accountId,
-                                                         countFollowing = 0,
-                                                         countFollowers = 0,
-                                                         onClose
-                                                     }) => {
+    activeTab,
+    accountId,
+    countFollowing = 0,
+    countFollowers = 0,
+    onClose
+}) => {
     const [ value, setValue ] = useState<string>(activeTab || 'following')
     const [ data, setData ] = useState<any[]>([])
 
     const tabs: Tab[] = useMemo(() => ([
-            {label: 'Following', tabValue: 'following', count: countFollowing},
-            {label: 'Followers', tabValue: 'followers', count: countFollowers},
+            { label: 'Following', tabValue: 'following', count: countFollowing },
+            { label: 'Followers', tabValue: 'followers', count: countFollowers },
         ]), [countFollowers, countFollowing])
-    const {api} = useApi()
+    const { api } = useApi()
     const dispatch = useAppDispatch()
 
     const loadMore = useCallback((page, size) => loadMoreAccountsFn({

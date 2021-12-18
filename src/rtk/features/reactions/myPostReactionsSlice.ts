@@ -1,11 +1,9 @@
-// @ts-nocheck
 import { createAsyncThunk, createEntityAdapter, createSlice, EntityId } from '@reduxjs/toolkit'
 import { getFirstOrUndefined, idToBn, isDef, isEmptyArray, isEmptyStr } from '@subsocial/utils'
 import {  FetchManyArgs, SelectManyArgs, ThunkApiConfig } from 'src/rtk/app/helpers'
 import { RootState } from 'src/rtk/app/rootReducer'
 import BN from 'bn.js'
-import { AccountId, ReactionId, ReactionType } from '@subsocial/api/flat-subsocial/dto'
-import { PostId } from '@subsocial/types/substrate/interfaces'
+import { AccountId, PostId, ReactionId, ReactionType } from '@subsocial/api/flat-subsocial/dto'
 
 const sliceName = 'reactions'
 
@@ -13,7 +11,7 @@ const idSeparator = '-'
 
 export type Reaction = {
     reactionId?: ReactionId
-    kind?: ReactionType
+    kind?: any
 }
 
 type AccountAndPostId = string
@@ -99,9 +97,9 @@ export const fetchMyReactionsByPostIds = createAsyncThunk<FetchManyResult, Fetch
             const entityId = prependPostIdWithMyAddress(postId, myAddress)
             reactionByPostId.set(postId, {id: entityId})
 
-            return [ myAddress, idToBn(postId) as PostId ]
+            return [ myAddress, idToBn(postId) as unknown as PostId ]
         })
-        //
+
         const readyApi = await api.subsocial.substrate.api
         const reactionIdsFromStorage = await readyApi.query.reactions.postReactionIdByAccount.multi(tuples)
 

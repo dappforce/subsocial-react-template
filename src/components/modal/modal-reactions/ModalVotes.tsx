@@ -48,7 +48,7 @@ const loadMoreReactionsFn = async (loadMoreValues: any & {api: FlatSubsocialApi}
     return reactionsIds.map(item => ({account: item.created.account.toString(), kind: item.kind.toString()}))
 }
 
-const ModalVotes: FC<ModalVotesProps> = ({postId}) => {
+const ModalVotes: FC<ModalVotesProps> = ({ postId }) => {
     const [ data, setData ] = useState<any[]>([])
     const [ upvotes, downvotes ] = partition(data, (x) => isUpvote(x))
     const [ downvotesCount, setDownvotesCount ] = useState(0)
@@ -60,10 +60,10 @@ const ModalVotes: FC<ModalVotesProps> = ({postId}) => {
     const dispatch = useAppDispatch()
 
     const tabs: Tab[] = [
-        {label: 'Upvotes', tabValue: 'upvotes', count: upvotesCount},
-        {label: 'Downvotes', tabValue: 'downvotes', count: downvotesCount},
+        { label: 'Upvotes', tabValue: 'upvotes', count: upvotesCount },
+        { label: 'Downvotes', tabValue: 'downvotes', count: downvotesCount },
     ]
-    const {api} = useApi()
+    const { api } = useApi()
 
     const loadMore = useCallback((page, size) => loadMoreReactionsFn({
         size,

@@ -1,6 +1,3 @@
-const path = require('path')
-const Dotenv = require('dotenv-webpack')
-
 /** @type {import('next').NextConfig} */
 module.exports = {
     reactStrictMode: true,
@@ -18,9 +15,6 @@ const regexEqual = (x, y) => {
 }
 
 module.exports = {
-    images: {
-        loader: 'custom'
-    },
     webpack: (config, {isServer}) => {
         const oneOf = config.module.rules.find(
             (rule) => typeof rule.oneOf === 'object'
@@ -29,7 +23,6 @@ module.exports = {
         if (oneOf) {
             const moduleCssRule = oneOf.oneOf.find(
                 (rule) => regexEqual(rule.test, /\.module\.css$/)
-                // regexEqual(rule.test, /\.module\.(scss|sass)$/)
             )
 
             if (moduleCssRule) {
@@ -40,30 +33,13 @@ module.exports = {
                     cssLoader.options.modules.mode = 'local'
                 }
             }
-        }
 
-        if (!isServer) {
-          config.resolve.fallback.fs = false
-        }
-
-        config.plugins = config.plugins || []
-
-        config.plugins = [
-            ...config.plugins,
-
-            // Read the .env file
-            new Dotenv({
-                path: path.join(__dirname, '.env'),
-            })
-        ]
-
-        const fixUse = (use) => {
-            if (use.loader.indexOf('css-loader') >= 0 && use.options.modules) {
-                use.options.modules.mode = 'local'
+            const fixUse = (use) => {
+                if (use.loader.indexOf('css-loader') >= 0 && use.options.modules) {
+                    use.options.modules.mode = 'local'
+                }
             }
-        }
 
-        if (oneOf) {
             oneOf.oneOf.forEach((rule) => {
                 if (Array.isArray(rule.use)) {
                     rule.use.map(fixUse)
@@ -72,6 +48,12 @@ module.exports = {
                 }
             })
         }
+
+        if (!isServer) {
+            config.resolve.fallback.fs = false
+        }
+
+        config.plugins = config.plugins || []
 
         return config
     },

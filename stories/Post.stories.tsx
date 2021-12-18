@@ -31,5 +31,5 @@ export const PostItem = () => {
          dispatch(fetchPosts({ids: ['97'],api, reload: false })).then(() => setIsFetching(false))
     }, [])
 
-    return isFetching ? <Loader/> : <Post postId={'97'}/>
+    return isFetching ? <Loader label={'Loading...'}/> : <Post postId={'97'}/>
 }

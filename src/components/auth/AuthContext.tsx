@@ -1,25 +1,31 @@
-import { createContext, FC, useEffect, useState } from 'react'
+import { createContext, FC, useContext, useEffect, useState } from 'react'
 import { asAccountId } from '@subsocial/api'
 import { fetchProfiles } from '../../rtk/features/profiles/profilesSlice'
-import { setAccounts } from '../../rtk/features/myAccount/myAccountSlice'
+import { MY_ADDRESS, setAccounts, setSigner } from '../../rtk/features/myAccount/myAccountSlice'
 import { ACCOUNT_STATUS } from '../../models/auth'
 import { useModal } from '../../hooks/useModal'
 import { useApi } from '../api'
 import { useAppDispatch, useAppSelector } from '../../rtk/app/store'
 import ModalSignIn from '../modal/modal-sign-in/ModalSignIn'
+import { reloadSpaceIdsFollowedByAccount } from '../space/reloadSpaceIdsFollowedByAccount'
+import { useCreateReloadAccountIdsByFollower } from '../../rtk/features/profiles/profilesHooks'
+import store from 'store'
 
-type ContextType = {openSingInModal: () => void}
+type ContextType = {openSingInModal: (isAlert?: boolean) => void, status: ACCOUNT_STATUS}
 
 export const AuthContext = createContext<ContextType>({
-    openSingInModal: () => {}
+    openSingInModal: () => {},
+    status: ACCOUNT_STATUS.INIT
 })
 
 export const AuthProvider: FC = (props) => {
     const [ status, setStatus ] = useState(ACCOUNT_STATUS.INIT)
+    const [ isAlert, setIsAlert ] = useState(false)
     const {isVisible, toggleModal} = useModal()
     const {api} = useApi()
     const {address, accounts} = useAppSelector(state => state.myAccount)
     const dispatch = useAppDispatch()
+    const reloadAccountIdsByFollower = useCreateReloadAccountIdsByFollower()
 
     useEffect(() => {
         (async () => {
@@ -31,15 +37,20 @@ export const AuthProvider: FC = (props) => {
 
             if (isWeb3Injected) {
                 const injectedExtensions = await web3Enable('Subsocial')
+
                 const polkadotJs = injectedExtensions.find(extension => extension.name === 'polkadot-js')
 
                 if (!polkadotJs) {
                     setStatus(ACCOUNT_STATUS.EXTENSION_NOT_FOUND)
+                    store.remove(MY_ADDRESS)
                     return
                 }
 
+                dispatch(setSigner(polkadotJs.signer))
+
                 unsub = polkadotJs.accounts.subscribe(async (accounts) => {
                     if (!accounts.length) {
+                        store.remove(MY_ADDRESS)
                         return setStatus(ACCOUNT_STATUS.ACCOUNTS_NOT_FOUND)
                     }
 
@@ -57,6 +68,17 @@ export const AuthProvider: FC = (props) => {
                     setStatus(ACCOUNT_STATUS.UNAUTHORIZED)
                     return
                 }
+
+                if (address) {
+                    setStatus(ACCOUNT_STATUS.AUTHORIZED)
+                    await reloadSpaceIdsFollowedByAccount({
+                        substrate: api.subsocial.substrate,
+                        dispatch: dispatch,
+                        account: address
+                    })
+
+                    await reloadAccountIdsByFollower(address)
+                }
             }
 
         })()
@@ -69,13 +91,31 @@ export const AuthProvider: FC = (props) => {
     }, [])
 
     useEffect(() => {
-        if (accounts?.length) {
+        if (accounts?.length && !address) {
             setStatus(ACCOUNT_STATUS.UNAUTHORIZED)
         }
-    }, [accounts])
+    }, [ accounts, address ])
 
-    return <AuthContext.Provider value={{openSingInModal: toggleModal}}>
-        <ModalSignIn onClose={toggleModal} open={isVisible} status={status}/>
-        {props.children}
-    </AuthContext.Provider>
+    useEffect(() => {
+        !isVisible && setIsAlert(false)
+    }, [ isVisible ])
+
+    const openSingInModal = (isAlert?: boolean) => {
+        if (isAlert) {
+            setIsAlert(true)
+        }
+
+        toggleModal()
+    }
+
+    return (
+        <AuthContext.Provider value={{openSingInModal, status}}>
+            <ModalSignIn onClose={openSingInModal} open={isVisible} status={status} isAlert={isAlert}/>
+            {props.children}
+        </AuthContext.Provider>
+    )
+}
+
+export function useAuth() {
+    return useContext(AuthContext)
 }

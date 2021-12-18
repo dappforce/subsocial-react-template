@@ -17,7 +17,7 @@ import { Divider } from '@mui/material'
 import ButtonComponent from '../common/button/button-component/ButtonComponent'
 
 const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
-    const {address, accounts = []} = useAppSelector(state => state.myAccount)
+    const { address, accounts = [] } = useAppSelector(state => state.myAccount)
     const profile = useSelectProfile(address)
     const dispatch = useAppDispatch()
     const account = accounts?.find(acc => acc.address === address)
@@ -57,10 +57,16 @@ const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
                     className={styles.address}
                     label={address}
                     size={'lg'}
-                    isCopy isQr isIcon
+                    isCopy
+                    isQr
+                    isIcon
                 />
 
-                <Balance address={address} isIcon className={styles.balance}/>
+                <Balance
+                    address={address}
+                    isIcon
+                    className={styles.balance}
+                />
             </div>
 
             <SwitchAccountMenu onClose={props.onClose}/>
@@ -70,7 +76,11 @@ const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
             <div className={styles.signout}>
                 <Divider/>
 
-                <ButtonComponent variant={'outlined'} className={styles.button} onClick={singOut}>
+                <ButtonComponent
+                    variant={'outlined'}
+                    className={styles.button}
+                    onClick={singOut}
+                >
                     Sign out
                 </ButtonComponent>
             </div>

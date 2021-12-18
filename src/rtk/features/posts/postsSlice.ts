@@ -14,7 +14,7 @@ import {
 import { RootState } from 'src/rtk/app/rootReducer'
 import { selectPostContentById, upsertManyContent } from '../contents/contentsSlice'
 import { selectSpaces, upsertManySpace } from '../spaces/spacesSlice'
-import {  upsertManyProfiles } from '../profiles/profilesSlice'
+import { upsertManyProfiles } from '../profiles/profilesSlice'
 import { AnyPostId} from '@subsocial/types'
 import {
     asCommentStruct,
@@ -212,5 +212,4 @@ export const {
     removePost
 } = posts.actions
 
-// @ts-ignore
 export default posts.reducer;

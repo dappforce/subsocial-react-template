@@ -1,5 +1,17 @@
 import { IconButtonProps } from '@mui/material/IconButton/IconButton'
-import { PostId } from '@subsocial/api/flat-subsocial/dto';
+import { EntityId, PostId, ReactionEnum } from '@subsocial/api/flat-subsocial/dto'
+import { SubmittableResult } from '@polkadot/api'
+import { AnyAccountId } from '@subsocial/types/substrate/interfaces/utils'
+import { ButtonProps } from '@mui/material/Button/Button'
+import { PostStruct, SpaceStruct } from '@subsocial/api/flat-subsocial/flatteners'
+import { ReactionStruct } from 'src/rtk/features/reactions/myPostReactionsSlice'
+import { FunctionComponent } from 'react'
+
+export type GetTxParamsFn = () => any[]
+export type GetTxParamsAsyncFn = () => Promise<any[]>
+
+export type TxCallback = (status: SubmittableResult) => void
+export type TxFailedCallback = (status: SubmittableResult | null) => void
 
 export interface ButtonCancelProps {
     onClick?: () => void
@@ -11,12 +23,10 @@ export interface ButtonCommentProps extends IconButtonProps {
     value?: number
 }
 
-export interface ButtonComponentProps {
-    variant: 'outlined' | 'contained'
+export interface ButtonComponentProps extends ButtonProps {
     onClick?: () => void
     disabled?: boolean
     className?: string
-    type?: 'submit'
 }
 
 export interface ButtonShareProps {
@@ -25,16 +35,44 @@ export interface ButtonShareProps {
 }
 
 export interface ButtonVoteProps {
-    isActive: boolean
+    isActive?: boolean
     value?: number
-    isShowLabel?: boolean
+    withLabel?: boolean
     onClick?: () => void
+    post: PostStruct
+    reactionEnum: ReactionEnum
 }
 
-export interface ButtonFollowProps {
-    isFollowing: boolean
+export interface InnerButtonVoteProps extends ButtonVoteProps {
+    accountId?: string
+    reaction?: ReactionStruct
+}
+
+
+export interface TxButtonProps extends ButtonProps {
     onClick?: () => void
     className?: string
+    accountId?: AnyAccountId
+    label?: string
+    tx?: string
+    params?: any[] | GetTxParamsFn | GetTxParamsAsyncFn
+    onSuccess?: TxCallback
+    onFailed?: TxFailedCallback
+    onValidate?: () => boolean | Promise<boolean>
+    unsigned?: boolean
+    isFreeTx?: boolean
+    loading?: boolean
+    filedMessage?: string
+    component?: FunctionComponent<{}>,
+    withLoader?: boolean
+}
+
+export interface ButtonFollowSpaceProps extends Omit<TxButtonProps, 'variant'> {
+    space: SpaceStruct
+}
+
+export interface ButtonFollowAccountProps extends Omit<TxButtonProps, 'variant'> {
+    address: EntityId
 }
 
 export interface ButtonReplyProps {

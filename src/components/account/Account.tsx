@@ -9,9 +9,7 @@ import FollowersBlock from './followers-block/FollowersBlock'
 import { CardActions, CardContent, CardHeader, Divider } from '@mui/material'
 import IconLink from '../common/links/icon-link/IconLink'
 import TagList from '../common/tag/TagList'
-import Image from 'next/image'
-import { walletIco } from '../../assets'
-import { myLoader } from 'src/utils'
+import Image from '../common/image/Image'
 import Address from '../common/address/Address'
 import Balance from '../common/balance/Balance'
 import { AccountProps } from '../../models/account'
@@ -26,7 +24,11 @@ const Account: FC<AccountProps> = (props) => {
                 action={props.action}
                 title={<Title type={TitleSizes.PREVIEW} className={styles.title}>{props.name}</Title>}
                 subheader={props.followingCount === undefined
-                    ? <FollowersBlock followers={props.followersCount} posts={props.posts} id={props.id}/>
+                    ? <FollowersBlock
+                        followers={props.followersCount}
+                        posts={props.posts}
+                        id={props.id}
+                    />
                     : <ProfileFollowers
                         className={styles.followers}
                         following={props.followingCount}
@@ -39,16 +41,30 @@ const Account: FC<AccountProps> = (props) => {
             <AccountDescription about={props.about} summary={props.summary} isShowMore={props.isShowMore}/>
 
             {props.links && props.links?.length > 0 &&
-            <CardActions sx={{pl: 2, pr: 2, pb: 2, pt: 0, flexWrap: 'wrap', gap: 1}}>
+            <CardActions
+                className={`${styles.cardAction} ${styles.spaceIcon}`}
+            >
                 {props.links.map(link => <IconLink link={link as string} key={link as string}/>)}
             </CardActions>
             }
 
             {props.withBalance &&
-            <CardContent sx={{pt: 0, display: 'flex', flexDirection: 'column', gap: 2}}>
-                <div style={{display: 'flex', gap: '0.25rem'}}>
-                    <Image src={walletIco} width={24} height={24} alt={'wallet'} loader={myLoader}/>
-                    <Address label={props.id} size={'lg'} isCopy isQr/>
+            <CardContent
+                className={styles.accountBalanceInfo}
+            >
+                <div className={styles.accountWallet}>
+                    <Image
+                        src={'/wallet.svg'}
+                        width={24}
+                        height={24}
+                        alt={'wallet'}
+                    />
+                    <Address
+                        label={props.id}
+                        size={'lg'}
+                        isCopy
+                        isQr
+                    />
                 </div>
 
                 <Balance address={props.id} isIcon className={styles.balance}/>
@@ -57,7 +73,9 @@ const Account: FC<AccountProps> = (props) => {
             {props.tags && <TagList tags={props.tags} className={styles.tags}/>}
 
             {props.buttons &&
-            <CardActions sx={{pl: 2, pr: 2, pb: 2, pt: 0, gap: 1.625}}>
+            <CardActions
+                className={`${styles.cardAction} ${styles.accountButtons}`}
+            >
                 {props.buttons}
             </CardActions>
             }

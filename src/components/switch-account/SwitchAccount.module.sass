@@ -4,7 +4,7 @@
   position: absolute !important
   right: 0
   top: 0
-  margin: 1rem !important
+  margin: $space_normal !important
   padding: 0
   z-index: 2
 
@@ -28,38 +28,45 @@
       overflow: hidden
 
 .title
-  margin-bottom: 0.25rem
+  margin-bottom: $space_mini
 
 .account
   row-gap: 0.5rem
-  padding: 1rem 1rem 0
+  padding: $space_normal $space_normal 0
 
 .header
   display: flex
   gap: 1rem
   align-items: center
-  padding-bottom: 1.25rem
+  padding-bottom: $space_large
 
 .followers
   button
     font-size: $font_small
 
 .item
-  padding-top: 0.25rem
-  padding-bottom: 0.25rem
-  padding-right: 1.5rem
+  padding-top: $space_mini
+  padding-bottom: $space_mini
+  padding-right: $space_big
   gap: 1rem
+  cursor: pointer
 
   .info
     width: 100%
     margin: 0.375rem 0
 
+    .address
+      > p
+        margin-left: 0 !important
+
   .address
     margin: 0 !important
     color: $color_font_secondary
+    > p
+      margin-left: 0 !important
 
   &:hover
-    background-color: #f5f5f5
+    background-color: $color_light_gray
 
   .balance
     font-size: $font_small
@@ -73,12 +80,14 @@
 
 
 .accounts
-  margin-right: -1rem
+  margin-right: -$space_normal
+  overflow-y: scroll
+  padding-top: 0
   @media screen and (min-width: 767px)
     @include scroll
 
 .icon
-  padding-left: 0.5rem
+  padding-left: $space_tiny
   svg
     fill: $color_black
 
@@ -88,7 +97,7 @@
   gap: 1.5rem
   position: relative
   width: 100%
-  padding: 0 1rem 1rem 1rem
+  padding: 0 $space_normal $space_normal $space_normal
   margin-top: auto
   box-shadow: 0 30px 22px 56px rgba(255, 255, 255, 1)
   background: $color_white
@@ -108,9 +117,19 @@
     margin: 0
 
 .address
-  > div
-    margin-right: .75rem !important
+  > p
+    margin-left: $space_small !important
 
 .balance,
 .address
-  margin: 0 0 .5rem .5rem !important
+  margin: 0 0 $space_tiny $space_tiny !important
+
+
+.firstDivider
+  margin-bottom: $space_tiny
+
+.lastDivider
+  margin-top: $space_tiny
+
+.profileContainer
+  padding-bottom: 0

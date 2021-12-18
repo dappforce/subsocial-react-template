@@ -10,12 +10,11 @@ import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks'
 import { ModalListUserItemProps } from 'src/models/modal'
 import { FC } from 'react'
 
-const ModalListUserItem: FC<ModalListUserItemProps> = ({address, name, onClick}) => {
+const ModalListUserItem: FC<ModalListUserItemProps> = ({ address, name, onClick }) => {
     const profile = useSelectProfile(address)
 
     return (
         <ListItem
-            sx={{p: 0}}
             component={'button'}
             onClick={() => onClick(address)}
         >
@@ -30,7 +29,12 @@ const ModalListUserItem: FC<ModalListUserItemProps> = ({address, name, onClick})
                 primary={<Title type={TitleSizes.PROFILE}>{profile?.content?.name || name}</Title>}
                 secondary={<Balance address={address} isIcon={false} className={styles.balance}/>}
             />
-            <Address size={'sm'} label={address} isCopy={false} className={styles.address}/>
+            <Address
+                size={'sm'}
+                label={address}
+                isCopy={false}
+                className={styles.address}
+            />
         </ListItem>
     )
 }

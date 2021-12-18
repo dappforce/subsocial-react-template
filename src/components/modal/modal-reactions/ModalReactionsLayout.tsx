@@ -7,7 +7,7 @@ import { ModalLabelTabProps, ModalReactionsProps } from 'src/models/modal'
 import { TitleSizes } from 'src/models/common/typography'
 import ModalReactionsList from './ModalReactionsList'
 
-const LabelTab: FC<ModalLabelTabProps> = ({label, count}) => {
+const LabelTab: FC<ModalLabelTabProps> = ({ label, count }) => {
     return <div>{label} <span className={styles.label}>{count}</span></div>
 }
 
@@ -21,24 +21,24 @@ const ModalReactionsLayout: FC<ModalReactionsProps> = (props) => {
                 </Title>
 
                 {props.isTabs &&
-                <MaterialTabs
-                    className={styles.tabs}
-                    value={props.valueTabs}
-                    onChange={props?.handleTabs}
-                    textColor="primary"
-                    indicatorColor="primary"
-                    variant="fullWidth"
-                    centered
-                >
-                    {props.tabs?.map(({label, tabValue, count = 0}) => (
-                        <Tab
-                            sx={{width: '100%'}}
-                            value={tabValue}
-                            label={<LabelTab label={label} count={count}/>}
-                            key={tabValue}
-                        />
-                    ))}
-                </MaterialTabs>
+                    <MaterialTabs
+                        className={styles.tabs}
+                        value={props.valueTabs}
+                        onChange={props?.handleTabs}
+                        textColor="primary"
+                        indicatorColor="primary"
+                        variant="fullWidth"
+                        centered
+                    >
+                        {props.tabs?.map(({ label, tabValue, count = 0 }) => (
+                            <Tab
+                                className={styles.tab}
+                                value={tabValue}
+                                label={<LabelTab label={label} count={count}/>}
+                                key={tabValue}
+                            />
+                        ))}
+                    </MaterialTabs>
                 }
             </div>
 

@@ -4,10 +4,14 @@ import ButtonComponent from '../button-component/ButtonComponent'
 import { ButtonCancelProps } from 'src/models/common/button'
 
 const ButtonCancel: FC<ButtonCancelProps> = (props) => {
-    const classname = props.className ? `${styles.button} ${props.className}` : styles.button
+    const className = props.className ? `${styles.button} ${props.className}` : styles.button
 
     return (
-        <ButtonComponent variant={'outlined'} onClick={props.onClick} className={classname}>
+        <ButtonComponent
+            variant={'outlined'}
+            onClick={props.onClick}
+            className={className}
+        >
             {props.children}
         </ButtonComponent>
     )

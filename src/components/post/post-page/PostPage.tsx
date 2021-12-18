@@ -3,31 +3,47 @@ import Layout from '../../layout/Layout'
 import SpaceView from '../../space/space-item/Space'
 import Comments from '../../common/comments/Comments'
 import PostFull from '../post-full/PostFull'
-import { getSpaceUrl, getTitleUrl } from 'src/utils'
 import { fetchPost, fetchPosts, selectPost } from 'src/rtk/features/posts/postsSlice'
 import { getInitialPropsWithRedux, NextContextWithRedux } from 'src/rtk/app'
 import { bnsToIds, idToBn } from '@subsocial/utils'
 import { asCommentStruct, PostStruct } from '@subsocial/api/flat-subsocial/flatteners'
 import { PostWithAllDetails } from '@subsocial/api/flat-subsocial/dto'
 import { PostWithSomeDetails } from '@subsocial/types'
-import { PostDetailsProps } from 'src/models/post'
+import { useContext, useEffect, useState } from 'react'
+import { ApiContext } from 'src/components/api'
+import { useAppDispatch } from 'src/rtk/app/store'
+import { useSelectPost } from 'src/rtk/app/hooks'
+
+export type PostDetailsProps = {
+    postData: PostWithAllDetails,
+}
 
 const PostPage: NextPage<PostDetailsProps> = (props) => {
-    const {postData} = props
-    const {post, space} = postData
-    const { isComment } = post.struct
+    const { postData } = props
+    const { post, space } = postData
+
+    //@ts-ignore
+    const { rootPostId } = post.struct
+    const dispatch = useAppDispatch()
+
+    const { api } = useContext(ApiContext)
+    //@ts-ignore
+    const rootPostData = useSelectPost(rootPostId) as PostWithSomeDetails
+
+    useEffect(() => {
+      dispatch(fetchPosts({ids: [rootPostId], api}))
+    }, [])
 
     if (!post.content) return null
 
     return (
         <Layout>
             <PostFull {...postData}/>
-
-            <SpaceView spaceData={space} />
-            <Comments countOfComments={post.struct.visibleRepliesCount}
-                      //@ts-ignore
-                      postUrl={`${getSpaceUrl(space?.content?.handle, space?.struct.id, isComment)}/${getTitleUrl(post?.content?.title, post.struct.id)}`}
-                      parentId={post.struct.id.toString()} />
+            <SpaceView spaceData={space || rootPostData?.space} />
+            <Comments
+                countOfComments={post.struct.visibleRepliesCount}
+                parentId={post.struct.id.toString()}
+            />
         </Layout>
     )
 }

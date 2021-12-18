@@ -30,5 +30,5 @@ export const Space = () => {
             dispatch(fetchSpaces({ids: ['1'],api, reload: false })).then(() => setIsFetching(false))
         }, [])
 
-        return isFetching ? <Loader/> : <SpaceComponent ids={'1'} />
+        return isFetching ? <Loader label={'Loading...'}/> : <SpaceComponent id={'1'} />
 }
