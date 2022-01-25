@@ -1,1 +1,1 @@
-export * from './nextHelpers'
+export * from './nextHelpers';

@@ -1,6 +1,13 @@
+export enum SnackbarType {
+  Info = 'info',
+  Error = 'error',
+}
+
 export interface SnackbarProps {
-    open: boolean
-    onClose: () => void
-    message: string
-    withAutoHide?: boolean
+  type: SnackbarType;
+  open: boolean;
+  onClose?: () => void;
+  message: string;
+  withAutoHide?: boolean;
+  withLoader?: boolean;
 }

@@ -1,3 +1,3 @@
 export interface IconVoteProps {
-    type: 'outline' | 'contained'
+  type: 'outline' | 'contained';
 }

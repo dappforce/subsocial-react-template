@@ -1,72 +1,149 @@
-import AvatarElement from '../avatar/AvatarElement'
-import { AvatarSizes } from 'src/models/common/avatar'
-import { Box, TextField } from '@mui/material'
-import ButtonComponent from '../button/button-component/ButtonComponent'
-import styles from './Comments.module.sass'
-import { ChangeEvent, FC, useState } from 'react'
-import { NewCommentProps } from 'src/models/comments'
-import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks'
-import { useMyAddress } from '../../../rtk/features/myAccount/myAccountHooks'
+import AvatarElement from '../avatar/AvatarElement';
+import { AvatarSizes } from 'src/models/common/avatar';
+import { Box } from '@mui/material';
+import styles from './Comments.module.sass';
+import { FC, useCallback, useState } from 'react';
+import { CommentExtension, NewCommentProps } from 'src/models/comments';
+import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
+import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import Editor from '../editor/Editor';
+import Router from 'next/router';
+import TxButton from '../button/TxButton';
+import { IpfsContent } from '@subsocial/types/substrate/classes';
+import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { IpfsCid } from '@subsocial/types';
+import { useApi } from 'src/components/api';
+import { getTxParams } from 'src/components/utils/getTxParams';
+import ButtonCancel from '../button/button-cancel/ButtonCancel';
+import classNames from 'classnames';
 
 const NewComment: FC<NewCommentProps> = (props) => {
-    const { className: inputClassName, placeholder, autoFocus } = props
-    const [ comment, setComment ] = useState('')
-    const address = useMyAddress()
-    const user = useSelectProfile(address)
+  const { parentStruct, className, placeholder, autofocus, onClickCancel } =
+    props;
+  const { id, isComment } = parentStruct;
+  const [comment, setComment] = useState('');
+  const address = useMyAddress();
+  const user = useSelectProfile(address);
+  const [isDisabledButton, setIsDisabledButton] = useState(true);
+  const [isExpandedInput, setIsExpandedInput] = useState(false);
+  const { api } = useApi();
+  const [ipfsCid, setIpfsCid] = useState<IpfsCid>();
+  let rootPostId = id;
+  let extension: CommentExtension;
 
-    const [ isDisabledButton, setIsDisabledButton ] = useState(true)
-    const [ isShowButton, setIsShowButton ] = useState(false)
-    const className = inputClassName ? `${inputClassName} ${styles.newCommentBox}` : styles.newCommentBox
+  if (isComment) {
+    const comment = asCommentStruct(parentStruct);
+    rootPostId = comment.rootPostId;
 
-    if (!user) return null
+    extension = {
+      parentId: id,
+      rootPostId,
+    };
+  } else {
+    extension = {
+      parentId: null,
+      rootPostId,
+    };
+  }
 
-    const showButton = () => {
-        setIsShowButton(true)
+  const newExtension = { Comment: extension };
+
+  const newTxParams = (cid: IpfsCid) => {
+    return [null, newExtension, IpfsContent(cid)];
+  };
+
+  const handleChange = useCallback((value: string) => {
+    setComment(value);
+
+    if (value.length) {
+      setIsDisabledButton(false);
+    } else {
+      setIsDisabledButton(true);
     }
+  }, []);
 
-    const hideButton = () => {
-        if (!comment) setIsShowButton(false)
-    }
+  const options = {
+    placeholder,
+    autofocus,
+  };
 
-    const handleChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setComment(event.target.value)
+  if (!user) return null;
 
-        if (event.target.value.length > 0) {
-            setIsDisabledButton(false)
-        } else {
-            setIsDisabledButton(true)
-        }
-    }
+  const expandForm = () => {
+    setIsExpandedInput(true);
+  };
 
-    return (
-        <Box component={'form'} className={className}>
-            <AvatarElement
-                src={user?.content?.avatar}
-                size={AvatarSizes.SMALLER}
-                id={user?.id}
+  const handelCancel = () => {
+    setComment('');
+    setIsExpandedInput((current) => !current);
+    setIsDisabledButton(true);
+    onClickCancel && onClickCancel();
+  };
+
+  const onTxSuccess = () => {
+    Router.reload();
+  };
+
+  return (
+    <Box
+      component={'form'}
+      className={classNames(styles.newCommentBox, {
+        [className as string]: className,
+      })}
+    >
+      <AvatarElement
+        src={user?.content?.avatar}
+        size={AvatarSizes.MEDIUM}
+        id={user?.id}
+      />
+      <div className={styles.commentContent}>
+        <Editor
+          options={options}
+          onFocus={expandForm}
+          toolbar={isExpandedInput}
+          onChange={handleChange}
+          value={comment}
+          className={classNames({
+            [styles.editor]: true,
+            [styles.editorActive]: isExpandedInput,
+          })}
+        />
+
+        {isExpandedInput && (
+          <>
+            <TxButton
+              {...props}
+              label={'Send'}
+              accountId={address}
+              tx={'posts.createPost'}
+              onSuccess={onTxSuccess}
+              disabled={isDisabledButton}
+              params={() =>
+                getTxParams({
+                  json: { body: comment },
+                  ipfs: api.subsocial.ipfs,
+                  setIpfsCid,
+                  buildTxParamsCallback: newTxParams,
+                })
+              }
+              className={classNames({
+                [styles.button]: true,
+                [styles.buttonWithoutText]: !comment,
+              })}
+              withLoader
+              variant={'contained'}
             />
-            <div className={styles.commentContent}>
-                <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    placeholder={placeholder}
-                    multiline
-                    onChange={handleChange}
-                    onFocus={showButton}
-                    onBlur={hideButton}
-                    value={comment}
-                    autoFocus={autoFocus}
-                    fullWidth
-                    className={styles.textarea}
-                />
-                {isShowButton &&
-                    <ButtonComponent className={styles.button} variant={'contained'} disabled={isDisabledButton}>
-                        Send
-                    </ButtonComponent>
-                }
-            </div>
-        </Box>
-    )
-}
+            <ButtonCancel
+              onClick={handelCancel}
+              className={styles.buttonCancel}
+            >
+              Cancel
+            </ButtonCancel>
+          </>
+        )}
+      </div>
+    </Box>
+  );
+};
 
-export default NewComment
+export default NewComment;

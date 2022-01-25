@@ -21,12 +21,34 @@ export default {
     ],
 } as Meta
 
-const postId = '22940';
+const parentStruct = {
+  contentId: "bafyreif7bvy4zzhbiex2aw2iszg24gaxjee6bj7zmsc5u7sdma7hjgwjzm",
+  createdAtBlock: 18586,
+  createdAtTime: 1640083680000,
+  createdByAccount: "3tDL8jNCZHyDesB3kjBAQB1wAwimrG5zNh7HJHARCgh54gFS",
+  downvotesCount: 1,
+  hidden: false,
+  hiddenRepliesCount: 2,
+  id: "1",
+  isComment: false,
+  isRegularPost: true,
+  isSharedPost: false,
+  isUpdated: true,
+  ownerId: "3tDL8jNCZHyDesB3kjBAQB1wAwimrG5zNh7HJHARCgh54gFS",
+  repliesCount: 8,
+  score: 0,
+  sharesCount: 0,
+  spaceId: "1003",
+  updatedAtBlock: 221836,
+  updatedAtTime: 1641303180000,
+  updatedByAccount: "3tDL8jNCZHyDesB3kjBAQB1wAwimrG5zNh7HJHARCgh54gFS",
+  upvotesCount: 0,
+  visibleRepliesCount: 6,
+}
 const commentId = '22941';
 
 export const CommentsList = () => <Comments
-    countOfComments={1}
-    parentId={postId}/>
+    parentStruct={parentStruct}/>
 
 export const CommentItem = () =>
     <Box sx={{p: 2}}>
@@ -36,5 +58,5 @@ export const CommentItem = () =>
     </Box>
 
 
-export const CommentInput = () => <Box sx={{p: 2}}><NewComment placeholder={'Add a comment'}/></Box>
+export const CommentInput = () => <Box sx={{p: 2}}><NewComment placeholder={'Add a comment'} parentStruct={parentStruct} /></Box>
 

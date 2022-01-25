@@ -1,16 +1,23 @@
-import Layout from '../../layout/Layout'
-import CardEdit from '../../common/card-edit/CardEdit'
+import Layout from '../../layout/Layout';
+import CardEdit from '../../common/card-edit/CardEdit';
+import { useRouter } from 'next/router';
 
 const SpaceNewPage = () => {
-    return (
-        <Layout>
-            <CardEdit
-                title={'New space'}
-                saveButton={'Create space'}
-                cancelButton={'Reset form'}
-            />
-        </Layout>
-    )
-}
+  const router = useRouter();
+  const onCancel = () => {
+    router.back();
+  };
 
-export default SpaceNewPage
+  return (
+    <Layout>
+      <CardEdit
+        title={'New Space'}
+        cancelButton={'Cancel'}
+        saveButton={'Save'}
+        onCancel={onCancel}
+      />
+    </Layout>
+  );
+};
+
+export default SpaceNewPage;

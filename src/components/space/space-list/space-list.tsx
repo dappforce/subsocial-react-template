@@ -15,19 +15,20 @@ const loadMoreSpacesFn = async (loadMoreValues: loadMoreValuesArgs) => {
         page,
         api,
         dispatch,
-        ids
+        ids,
+        withUnlisted
     } = loadMoreValues
 
     const spaceIds: string[] = getPageOfIds(ids, {page, size})
-    await dispatch(fetchSpaces({api, ids: spaceIds, reload: false}))
+    await dispatch(fetchSpaces({api, ids: spaceIds, reload: false, withUnlisted: withUnlisted}))
 
     return spaceIds
 }
 
-const SpaceList: FC<SpaceIds> = ({ids}) => {
+const SpaceList: FC<SpaceIds> = ({ ids, withUnlisted = false }) => {
     const [ spaceData, setSpaceData ] = useState<string[]>([])
     const dispatch = useAppDispatch()
-    const {api} = useApi()
+    const { api } = useApi()
     const [ isEmpty, setIsEmpty ] = useState(false)
 
     const loadMore: InnerLoadMoreFn = (page, size) => loadMoreSpacesFn({
@@ -35,7 +36,8 @@ const SpaceList: FC<SpaceIds> = ({ids}) => {
         page,
         api,
         dispatch,
-        ids
+        ids,
+        withUnlisted
     })
 
     useEffect(() => {
@@ -59,7 +61,7 @@ const SpaceList: FC<SpaceIds> = ({ids}) => {
         loadMore={loadMore}
         totalCount={ids.length}
         emptyText={'No spaces yet'}
-        renderItem={(id) => <Space id={id} />}
+        renderItem={(id) => <Space id={id} key={id} withUnlisted={withUnlisted} />}
         isEmpty={isEmpty}
     />
 }

@@ -1,14 +1,14 @@
-import { Action, configureStore } from '@reduxjs/toolkit'
-import { useMemo } from 'react'
-import { createSelectorHook, useDispatch } from 'react-redux'
-import { ThunkAction } from 'redux-thunk'
-import rootReducer, { RootState } from '../app/rootReducer'
+import { Action, configureStore } from '@reduxjs/toolkit';
+import { useMemo } from 'react';
+import { createSelectorHook, useDispatch } from 'react-redux';
+import { ThunkAction } from 'redux-thunk';
+import rootReducer, { RootState } from '../app/rootReducer';
 
 // Do not use this store object.
 // It is created just to help us get types fro TypeScript
-const emptyStore = initStore()
+const emptyStore = initStore();
 
-export type AppStore = typeof emptyStore
+export type AppStore = typeof emptyStore;
 
 // NEVER EXPORT THE STORE!
 //
@@ -16,25 +16,26 @@ export type AppStore = typeof emptyStore
 // We don’t recommend that because it makes it much harder to add server rendering to your app
 // because in most cases on the server you’ll want to have a separate store per request.
 
-let store: AppStore | undefined
+let store: AppStore | undefined;
 
-export type AppDispatch = typeof emptyStore.dispatch
+export type AppDispatch = typeof emptyStore.dispatch;
 
-export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
-export const useAppSelector = createSelectorHook<RootState>()
+export const useAppSelector = createSelectorHook<RootState>();
 
-export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>
+export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
 
-function initStore (preloadedState?: RootState) {
+function initStore(preloadedState?: RootState) {
   return configureStore({
     reducer: rootReducer,
     preloadedState,
     devTools: true,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-      serializableCheck: false,
-    })
-  })
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
+  });
 }
 
 /**
@@ -42,7 +43,7 @@ function initStore (preloadedState?: RootState) {
  * See https://github.com/vercel/next.js/blob/canary/examples/with-redux/store.js
  */
 export const initializeStore = (preloadedState?: RootState) => {
-  let _store = store ?? initStore(preloadedState)
+  let _store = store ?? initStore(preloadedState);
 
   // After navigating to a page with an initial Redux state, merge that state
   // with the current state in the store, and create a new store
@@ -50,26 +51,26 @@ export const initializeStore = (preloadedState?: RootState) => {
     _store = initStore({
       ...store.getState(),
       ...preloadedState,
-    })
+    });
     // Reset the current store
-    store = undefined
+    store = undefined;
   }
 
   // For SSG and SSR always create a new store
-  if (typeof window === 'undefined') return _store
+  if (typeof window === 'undefined') return _store;
 
   // Create the store once in the client
-  if (!store) store = _store
+  if (!store) store = _store;
 
-  return _store
-}
+  return _store;
+};
 
-export function useStore (initialState: RootState) {
-  const store = useMemo(() => initializeStore(initialState), [ initialState ])
-  return store
+export function useStore(initialState: RootState) {
+  const store = useMemo(() => initializeStore(initialState), [initialState]);
+  return store;
 }
 
 /** Used in props of Next.js pages. */
 export type HasInitialReduxState = {
-  initialReduxState?: RootState
-}
+  initialReduxState?: RootState;
+};

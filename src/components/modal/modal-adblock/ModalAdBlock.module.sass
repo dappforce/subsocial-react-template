@@ -1,0 +1,55 @@
+@import src/styles/vars
+
+$size_svg: 18px
+
+.modal
+  display: flex
+  justify-content: center
+  align-items: center
+
+.title
+  padding-top: $space_big
+  padding-bottom: $space_big
+  display: flex
+  align-items: center
+  justify-content: center
+  :first-child
+    margin-right: $space_small
+
+.content
+  display: flex
+  flex-direction: column
+  align-items: center
+  row-gap: 1.2rem
+
+.button
+  min-width: 384px
+
+.main_text
+  &:global(.MuiTypography-root)
+    width: 340px
+    text-align: center
+    font-weight: 500
+    word-break: break-all
+    font-size: $font_huge
+
+.secondary_text
+  &:global(.MuiTypography-root)
+    width: 387px
+    text-align: center
+    font-weight: 400
+    word-break: break-all
+    font-size: $font_normal
+
+.box
+  padding: 0.625rem $space_normal $space_normal
+  max-width: 432px
+  width: 100%
+  max-height: 303px
+  height: 100%
+  position: relative
+  margin: $space_normal
+  border-radius: 0.125rem
+  overflow: hidden
+
+

@@ -15,18 +15,23 @@ steps:
     versionSpec: '16.10'
   displayName: 'Install Node.js 16.10'
 
-- script: |
-    npm install 
+- script:
+    npm install yarn
+  displayName: 'npm install yarn'
+
+- script:
+    yarn install
   displayName: 'yarn install'
 
 - script: |
-    npm run build
+    yarn run build
+    yarn run build-storybook
   displayName: 'yarn build'
 
 - task: ArchiveFiles@2
   displayName: 'Archive files'
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/out'
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/'
     includeRootFolder: false
     archiveType: zip
     archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip

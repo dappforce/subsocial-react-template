@@ -1,32 +1,38 @@
-import React, { FC, useEffect } from 'react'
-import { Alert, Snackbar as SnackbarComponent } from '@mui/material'
-import styles from './Snackbar.module.sass'
-import { SnackbarProps } from 'src/models/common/snackbar'
+import React, { FC, useEffect } from 'react';
+import { Alert, Snackbar as SnackbarComponent } from '@mui/material';
+import styles from './Snackbar.module.sass';
+import { SnackbarProps } from 'src/models/common/snackbar';
+import Loader from '../loader/Loader';
 
 const Snackbar: FC<SnackbarProps> = ({
-                                         open,
-                                         onClose,
-                                         message,
-                                         withAutoHide = true,
-                                     }) => {
-    useEffect(() => () => onClose(), [])
+  type,
+  open,
+  onClose,
+  message,
+  withAutoHide = true,
+  withLoader = false,
+}) => {
+  const classNameSnackbar = `${styles.snackbar} ${styles[type]}`;
 
-    return (
-        <SnackbarComponent
-            className={styles.snackbar}
-            open={open}
-            autoHideDuration={withAutoHide ? 2000 : undefined}
-            onClose={onClose}
-        >
-            <Alert
-                onClose={onClose}
-                severity="info"
-                className={styles.alert}
-            >
-                {message}
-            </Alert>
-        </SnackbarComponent>
-    )
-}
+  useEffect(() => () => onClose && onClose(), []);
 
-export default Snackbar
+  return (
+    <SnackbarComponent
+      className={classNameSnackbar}
+      open={open}
+      autoHideDuration={withAutoHide ? 2000 : undefined}
+      onClose={onClose}
+    >
+      <Alert
+        onClose={onClose}
+        severity={type}
+        className={styles.alert}
+        icon={withLoader ? <Loader className={styles.loader} /> : undefined}
+      >
+        {message}
+      </Alert>
+    </SnackbarComponent>
+  );
+};
+
+export default Snackbar;

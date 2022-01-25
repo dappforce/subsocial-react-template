@@ -1,12 +1,21 @@
-@import ../../../../styles/vars
+@import src/styles/vars
 
 .option
   svg
-    fill: $color_dark
+    fill: $color_medium_gray
 
 .item
-  font-size: $font_small
-  padding-left: $space_small
+  padding: $space_normal 1.125rem $space_normal $space_small
+
+  & :global(.MuiListItemText-root)
+    margin-left: $space_small 
+    font-size: $font_normal
+    color: $color_medium_gray
+
+  & :global(.MuiListItemIcon-root)
+    min-width: 2rem
+    display: flex
+    justify-content: center
 
 .menu
   display: inline-block

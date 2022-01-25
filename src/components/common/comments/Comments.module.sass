@@ -33,11 +33,23 @@
 .button
   margin-top: $space_normal !important
 
-  &:global(.MuiButton-root)[disabled]
-    background-color: $color_primary
-    border-color: $color_primary
-    color: $color_white
-    opacity: 0.5
+  &:global(.MuiButton-root)
+    &:hover
+      background-color: $color_primary
+      color: $color_white !important
+
+.buttonWithoutText
+  &:global(.MuiButton-root)
+    background-color: $color_primary !important
+    border-color: $color_primary !important
+    color: $color_white !important
+    opacity: .5
+
+.buttonCancel
+  margin-top: $space_normal !important
+  margin-left: $space_normal
+  color: $color_black !important
+  border-color: #e0e0e0 !important
 
 .new
   margin-top: $space_normal
@@ -58,20 +70,31 @@
 
 .commentBox
   display: flex
-  gap: 0.5rem
+  gap: .5rem
   background: none
   width: 100%
-  margin-top: 0.375rem
+  margin-top: .375rem
 
 .commentContent
   width: 100%
 
 .commentsBox
-  margin-top: 1 rem
+  margin-top: $space_normal
 
 .newCommentBox
   display: flex
-  gap: 0.5rem
+  gap: .5rem
   align-items: flex-start
   background: transparent
-  margin-bottom: 0.5rem
+  margin-bottom: $space_tiny
+
+.editor
+  &:global(.MarkdownEditor .CodeMirror-scroll)
+    min-height: .5rem !important
+  & :global(.CodeMirror-wrap)
+    padding: $space_mini $space_normal
+    border-color: $color_primary
+    
+.editorActive
+  & :global(.CodeMirror-wrap)
+    padding: $space_small $space_normal

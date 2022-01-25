@@ -1,50 +1,33 @@
-import { PostData, PostWithAllDetails, PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
-import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners'
+import {
+  PostData,
+  PostWithAllDetails,
+  PostWithSomeDetails,
+} from '@subsocial/api/flat-subsocial/dto';
+import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners';
 
 export type PostActionsProps = {
-    toggleComments: () => void
-    post: PostData
-    reaction: any
-    isSharedPost?: boolean
-}
-
-export interface NewArticleProps {
-    title: string
-    handleTitle: any
-    body: string
-    handleBody: any
-    reset: any
-    tags: string[]
-    setTags: any
-}
-
-export interface NewVideoProps extends NewArticleProps {
-    url: string
-    setUrl: any
-}
+  toggleComments: () => void;
+  post: PostData;
+  reaction: any;
+  isSharedPost?: boolean;
+};
 
 export type PostDetailsProps = {
-    postData: PostWithAllDetails,
-}
+  postData: PostWithAllDetails;
+};
 
-export interface NewArticleProps {
-    title: string
-    handleTitle: any
-    body: string
-    handleBody: any
-    reset: any
-    tags: string[]
-    setTags: any
-}
-
-export interface NewVideoProps extends NewArticleProps {
-    url: string
-    setUrl: any
+export interface EditorPostProps {
+  postId: string | undefined;
+  isWithLink: boolean;
 }
 
 interface PostDataWithRootPostId extends PostData {
-    struct: PostStruct & {rootPostId?: string}
+  struct: PostStruct & { rootPostId?: string };
 }
 export interface PostFullProps extends PostWithSomeDetails {
-    post: PostDataWithRootPostId
+  post: PostDataWithRootPostId;
+}
+
+export interface PostStructWithHidden extends PostStruct {
+  hidden: boolean;
 }

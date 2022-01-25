@@ -18,30 +18,32 @@ import { getUrl, transformCount, TypeUrl } from '../../../utils'
 import { SpaceId } from '@subsocial/types/substrate/interfaces'
 import { useSelectSpace } from 'src/rtk/features/spaces/spacesHooks'
 import { pluralize } from '@subsocial/utils'
-import { useApi } from '../../api'
 import { useResponsiveSize } from '../../responsive/ResponsiveContext'
 import { SpaceWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks'
 import SeeMore from '../../common/links/see-more/SeeMore'
+import { TypeContent } from 'src/models/common/button'
+import HiddenComponent from 'src/components/common/hidden-component/HiddenComponent'
+import { toEdit } from '../toEdit'
 
-export const Space: FC<{id: SpaceId | string}> = (props) => {
-    const spaceData = useSelectSpace(props.id as string)
+export const Space: FC<{id: SpaceId | string, withUnlisted?: boolean }> = (props) => {
+    const { id, withUnlisted } = props
+    const spaceData = useSelectSpace(id as string)
 
     if (!spaceData) return null
 
-    return <SpaceView spaceData={spaceData}/>
+    return <SpaceView spaceData={spaceData} withUnlisted={withUnlisted} />
 }
 
 const Subheader: FC<{spaceData: SpaceWithSomeDetails}> = (props) => {
     const { isMobile } = useResponsiveSize()
     const { isVisible, toggleModal } = useModal()
-    const [ postCount, postLabel ] = pluralize(
-        props.spaceData.struct.postsCount, 'Post', 'Posts'
-    ).split(' ')
+    const [ postCount, postLabel ] = pluralize({
+      count: props.spaceData.struct.postsCount, singularText: 'Post', pluralText: 'Posts'
+    }).split(' ')
 
-    const [ followerCount, followerLabel ] = pluralize(
-        props.spaceData.struct.followersCount, 'Follower', 'Followers'
-    ).split(' ')
+    const [ followerCount, followerLabel ] = pluralize({
+      count: props.spaceData.struct.followersCount, singularText: 'Follower', pluralText: 'Followers'
+    }).split(' ')
 
     return <>
         <Modal open={isVisible} onClose={toggleModal}>
@@ -62,13 +64,14 @@ const Subheader: FC<{spaceData: SpaceWithSomeDetails}> = (props) => {
     </>
 }
 
-const SpaceView: FC<{spaceData: SpaceWithSomeDetails}> = (props) => {
-    const { spaceData } = props
+const SpaceView: FC<{spaceData: SpaceWithSomeDetails, withUnlisted?: boolean }> = (props) => {
+    const { spaceData, withUnlisted } = props
 
-    if (!spaceData?.content) return null
+    if (!spaceData?.content || (!withUnlisted && spaceData.struct.hidden)) return null
 
     return (
         <CardWrapper>
+            {spaceData.struct.hidden&& <HiddenComponent data={spaceData} typeContent={TypeContent.Space} />}
             <CardHeader
                 className={styles.header}
                 avatar={
@@ -83,7 +86,7 @@ const SpaceView: FC<{spaceData: SpaceWithSomeDetails}> = (props) => {
                     >
                         <AvatarElement
                             src={spaceData.content.image}
-                            size={AvatarSizes.SMALL}
+                            size={AvatarSizes.LARGE}
                             id={spaceData.id}
                         />
                     </Link>
@@ -91,7 +94,13 @@ const SpaceView: FC<{spaceData: SpaceWithSomeDetails}> = (props) => {
                 action={
                     <>
                         <ButtonFollowSpace space={spaceData.struct} />
-                        <Options className={styles.options} withHidden/>
+                        <Options
+                            className={styles.options}
+                            contentStruct={spaceData?.struct}
+                            typeContent={TypeContent.Space}
+                            withHidden
+                            onClickEdit={() => toEdit(spaceData.id)}
+                        />
                     </>
                 }
                 title={

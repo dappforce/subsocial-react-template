@@ -1,9 +1,9 @@
-import BN from 'bn.js'
+import BN from 'bn.js';
 
-export type BalanceType =  BN | string | number
+export type BalanceType = BN | string | number;
 
 export interface BalanceProps {
-    address?: string
-    isIcon: boolean
-    className?: string
+  address?: string;
+  isIcon: boolean;
+  className?: string;
 }

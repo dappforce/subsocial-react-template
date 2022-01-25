@@ -1,67 +1,77 @@
-import { FC } from 'react'
-import { ButtonFollowAccountProps } from 'src/models/common/button'
-import { useAppSelector } from 'src/rtk/app/store'
-import TxButton from '../TxButton'
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks'
-import { SpaceId } from '@subsocial/api/flat-subsocial/dto'
-import { selectSpaceIdsByFollower } from 'src/rtk/features/spaceIds/followedSpaceIdsSlice'
-import { shallowEqual } from 'react-redux'
-import { useCreateReloadAccountIdsByFollower, useCreateReloadProfile } from 'src/rtk/app/hooks'
-import styles from './ButtonFollow.module.sass'
-import { selectAccountIdsByFollower } from 'src/rtk/features/profiles/followedAccountIdsSlice'
-import { useIsMyAddress } from 'src/hooks/useIsMySpace'
+import { FC } from 'react';
+import { ButtonFollowAccountProps } from 'src/models/common/button';
+import { useAppSelector } from 'src/rtk/app/store';
+import TxButton from '../TxButton';
+import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { shallowEqual } from 'react-redux';
+import {
+  useCreateReloadAccountIdsByFollower,
+  useCreateReloadProfile,
+} from 'src/rtk/app/hooks';
+import { selectAccountIdsByFollower } from 'src/rtk/features/profiles/followedAccountIdsSlice';
+import { useIsMyAddress } from 'src/hooks/useIsMySpace';
+import { MenuItem } from '@mui/material';
+import labelForMenuItem from 'src/components/utils/labelForMenuItem';
 
-export const useAmISpaceFollower = (spaceId: SpaceId = '0') => {
-    const myAddress = useMyAddress()
+const ButtonFollowAccount: FC<ButtonFollowAccountProps> = ({
+  address,
+  ...props
+}) => {
+  const myAddress = useMyAddress();
+  const followedAccountIds =
+    useAppSelector(
+      (state) =>
+        myAddress ? selectAccountIdsByFollower(state, myAddress) : [],
+      shallowEqual
+    ) || [];
+  const reloadAccountIdsByFollower = useCreateReloadAccountIdsByFollower();
+  const isMyAddress = useIsMyAddress(address);
+  const isFollower = followedAccountIds.indexOf(address.toString()) >= 0;
+  const reloadProfile = useCreateReloadProfile();
 
-    const followedSpaceIds = useAppSelector(state => {
-        return myAddress
-            ? selectSpaceIdsByFollower(state, myAddress)
-            : []
-    }, shallowEqual) || []
+  if (myAddress && isMyAddress) return null;
 
+  const variant = isFollower ? 'outlined' : 'contained';
 
-    return followedSpaceIds.indexOf(spaceId) >= 0
-}
+  let label: string | React.ReactNode;
 
-const ButtonFollowSpace: FC<ButtonFollowAccountProps> = ({address, ...props}) => {
-    const myAddress = useMyAddress()
-    const followedAccountIds = useAppSelector(state => myAddress ? selectAccountIdsByFollower(state, myAddress) : [], shallowEqual) || []
-    const reloadAccountIdsByFollower = useCreateReloadAccountIdsByFollower()
-    const isMyAddress = useIsMyAddress(address)
-    const isFollower = followedAccountIds.indexOf(address.toString()) >= 0
-    const reloadProfile = useCreateReloadProfile()
+  if (props.component === MenuItem) {
+    label = labelForMenuItem(
+      isFollower ? 'Following' : 'Follow',
+      'following',
+      22,
+      16
+    );
+  } else {
+    label = isFollower ? 'Following' : 'Follow';
+  }
 
-    if (myAddress && isMyAddress) return null
+  const buildTxParams = () => [address];
 
-    const variant = isFollower ? 'outlined' : 'contained'
-    const label = isFollower ? 'Unfollow' : 'Follow'
-
-    const buildTxParams = () => [ address ]
-
-    const onTxSuccess = () => {
-        if (myAddress) {
-            reloadAccountIdsByFollower(myAddress)
-            reloadProfile({ id: myAddress  })
-            reloadProfile({ id: address })
-        }
+  const onTxSuccess = () => {
+    if (myAddress) {
+      reloadAccountIdsByFollower(myAddress);
+      reloadProfile({ id: myAddress });
+      reloadProfile({ id: address });
     }
+  };
 
-    return (
-        <TxButton
-            accountId={myAddress}
-            variant={variant}
-            tx={isFollower
-                ? 'profileFollows.unfollowAccount'
-                : 'profileFollows.followAccount'}
-            onSuccess={onTxSuccess}
-            params={buildTxParams}
-            label={label}
-            className={styles.disabled}
-            {...props}
-            withLoader
-        />
-    )
-}
+  return (
+    <TxButton
+      accountId={myAddress}
+      variant={variant}
+      tx={
+        isFollower
+          ? 'profileFollows.unfollowAccount'
+          : 'profileFollows.followAccount'
+      }
+      onSuccess={onTxSuccess}
+      params={buildTxParams}
+      label={label}
+      withLoader
+      {...props}
+    />
+  );
+};
 
-export default ButtonFollowSpace
+export default ButtonFollowAccount;

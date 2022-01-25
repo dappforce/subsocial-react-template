@@ -1,14 +1,14 @@
 export enum AvatarSizes {
-    SMALLEST = 30,
-    SMALLER = 38,
-    SMALL = 40,
-    MEDIUM = 46,
-    LARGE = 80,
-    HUGE = 100
+  SMALLEST = 22,
+  SMALLER = 30,
+  SMALL = 36,
+  MEDIUM = 38,
+  LARGE = 40,
+  HUGE = 46,
 }
 
 export interface AvatarProps {
-    src?: any
-    size: AvatarSizes
-    id: string
+  src?: any;
+  size: AvatarSizes;
+  id: string;
 }

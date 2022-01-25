@@ -7,4 +7,10 @@
 
 .Tab
   width: 100%
-  
+
+.unselected
+  & :global(.Mui-selected)
+    color: $color_gray !important
+
+  & :global(.MuiTabs-indicator)
+    display: none

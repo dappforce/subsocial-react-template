@@ -1,11 +1,14 @@
 @import src/styles/vars
 
+$size_button: 2.25rem
+$size_svg: 20px
+
 .button
   &:global(.MuiButton-root)
     display: inline-flex
-    max-width: 2.25rem
-    min-width: 2.25rem
-    height: 2.25rem
+    max-width: $size_button
+    min-width: $size_button
+    height: $size_button
     border-radius: 50%
     border: 1px solid $color_border
 
@@ -13,6 +16,6 @@
       border-color: $color_primary
 
     svg
-      width: 20px
-      height: 20px
+      width: $size_svg
+      height: $size_svg
       fill: $color_primary

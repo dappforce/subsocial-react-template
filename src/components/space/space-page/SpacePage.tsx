@@ -38,7 +38,7 @@ const PostList: FC<Omit<ViewSpaceProps, 'spaceData'>> = ({posts, postIds}) => {
         loadMore={loadMore}
         totalCount={totalCount}
         emptyText={'No posts yet'}
-        renderItem={(id) => <Post postId={id} />}
+        renderItem={(id) => <Post postId={id} key={id} />}
     />
 }
 
