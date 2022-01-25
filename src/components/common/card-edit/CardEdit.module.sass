@@ -1,5 +1,9 @@
-@import ../../../styles/common
-
+@import src/styles/vars
+.warningText
+  display: flex
+  justify-content: center
+  font-size: $font_huge
+  color: $color_error
 .form
   display: flex
   flex-direction: column
@@ -7,11 +11,20 @@
   padding: $space_normal
 
 .button
-  letter-spacing: 0.15px
   width: auto
-  min-width: 103px
+  min-width: 110px
+  letter-spacing: .15px
+  font-size: $font_normal
+  padding: 0px 28px
 
 .actions
+  justify-content: flex-end
   gap: 1rem
   padding: 0
-  justify-content: flex-end
+
+.editor
+  &:global(.MarkdownEditor .CodeMirror-scroll)
+    min-height: 8.625rem !important
+
+  & :global(.CodeMirror-focused)
+    border: $border_focused_input

@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
-    reactStrictMode: true,
-}
+const { i18n } = require('./next-i18next.config');
 
 const regexEqual = (x, y) => {
     return (
@@ -15,6 +13,8 @@ const regexEqual = (x, y) => {
 }
 
 module.exports = {
+    reactStrictMode: true,
+    i18n,
     webpack: (config, {isServer}) => {
         const oneOf = config.module.rules.find(
             (rule) => typeof rule.oneOf === 'object'

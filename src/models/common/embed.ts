@@ -1,4 +1,4 @@
 export interface EmbedProps {
-    link: string
-    className?: string
+  link: string;
+  className?: string;
 }

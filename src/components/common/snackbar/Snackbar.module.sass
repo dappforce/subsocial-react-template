@@ -4,8 +4,23 @@
   max-width: 384px
   width: 100%
 
-  svg
+  & :global(.MuiAlert-action)
+    svg
+      fill: $color_font_secondary
+
+.info
+  & :global(MuiAlert-icon)
     fill: $color_primary
+
+  & :global(.MuiAlert-message)
+    color: $color_black
+
+.error
+  & :global(MuiAlert-icon)
+    fill: $color_error
+
+  & :global(.MuiAlert-message)
+    color: $color_error
 
 .alert
   align-items: center

@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 const useLoader = () => {
-    const [ isLoader, setIsLoader ] = useState(false)
+  const [isLoader, setIsLoader] = useState(false);
 
-    const toggleLoader = () => {
-        setIsLoader(current => !current)
-    }
+  const toggleLoader = () => {
+    setIsLoader((current) => !current);
+  };
 
-    return {
-        isLoader,
-        toggleLoader,
-    }
-}
+  return {
+    isLoader,
+    toggleLoader,
+  };
+};
 
-export default useLoader
+export default useLoader;

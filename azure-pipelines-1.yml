@@ -15,13 +15,17 @@ steps:
     versionSpec: '16.10'
   displayName: 'Install Node.js 16.10'
 
-- script: |
-    npm install 
+- script:
+    npm install yarn
+  displayName: 'npm install yarn'
+
+- script:
+    yarn install
   displayName: 'yarn install'
 
 - script: |
-    npm run build
-    npm run build-storybook
+    yarn run build
+    yarn run build-storybook
   displayName: 'yarn build'
 
 - task: ArchiveFiles@2

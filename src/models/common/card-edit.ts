@@ -1,8 +1,10 @@
-import { SpaceWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
+import { SpaceData, ProfileData } from '@subsocial/api/flat-subsocial/dto';
 
-export interface CardEditProps extends Partial<SpaceWithSomeDetails> {
-    title: string
-    cancelButton: string
-    saveButton: string
-    onCancel?: () => void
+export interface CardEditProps {
+  spaceData?: SpaceData;
+  profileData?: ProfileData;
+  title: string;
+  cancelButton: string;
+  saveButton: string;
+  onCancel?: () => void;
 }

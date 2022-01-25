@@ -1,3 +1,3 @@
-import PostPage from '../../components/post/post-page/PostPage'
+import PostPage from '../../components/post/post-page/PostPage';
 
-export default PostPage
+export default PostPage;

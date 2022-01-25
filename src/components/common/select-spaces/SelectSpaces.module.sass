@@ -1,0 +1,25 @@
+@import src/styles/common
+
+.form
+  width: 100%
+
+.select
+  & :global(.MuiSelect-select)
+    display: flex
+    gap: $space_small
+    justify-content: flex-start
+    align-items: center
+    padding: 0 $space_normal 0 $space_small !important
+    height: 40px
+
+  & :global(.MuiAvatar-root)
+    margin-right: 0
+
+.menu
+  display: flex
+  gap: $space_small
+  justify-content: flex-start
+  padding-left: $space_small
+
+.item
+  min-width: auto

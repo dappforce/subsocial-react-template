@@ -9,7 +9,7 @@ export default {
 
     args: {
         id: '3oGmzsdeGToQxtNbNrNYVP1mYVza5J2k9foBXav6WdbQTZqF',
-        size: AvatarSizes.MEDIUM,
+        size: AvatarSizes.HUGE,
     }
 } as Meta
 
@@ -28,12 +28,12 @@ Avatar.argTypes = {
             control: {
             type: 'select',
         },
-        defaultValue: AvatarSizes.SMALL
+        defaultValue: AvatarSizes.LARGE
     },
 }
 
 const TemplateWithoutImage: Story<ComponentProps<typeof AvatarElement>> = (args) => {
-    return <AvatarElement {...args} size={AvatarSizes.MEDIUM}/>
+    return <AvatarElement {...args} size={AvatarSizes.HUGE}/>
 }
 
 export const AvatarWithoutImage = TemplateWithoutImage.bind({})

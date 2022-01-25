@@ -1,0 +1,15 @@
+@import '../../../styles/_vars.sass'
+
+.listItem
+  img
+    margin-right: $space_tiny
+    margin-top: 0.3125rem
+    margin-bottom: 0.3125rem
+  .itemText
+    white-space: nowrap
+    overflow: hidden
+    color: $color_semi_gray
+    & :global(.MuiTypography-root)
+      font-size: $font_small !important
+  .itemText:hover
+    overflow: hidden

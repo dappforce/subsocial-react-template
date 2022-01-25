@@ -1,11 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-const Page: React.FunctionComponent = ({ children }) => <>
-    {children}
-</>
+const Page: React.FunctionComponent = ({ children }) => <>{children}</>;
 
 const NextLayout: React.FunctionComponent = (props) => {
-    return <Page {...props} />
-}
+  return <Page {...props} />;
+};
 
-export default NextLayout
+export default NextLayout;

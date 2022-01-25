@@ -1,3 +1,3 @@
-import SpaceNewPage from '../components/space/space-new-page/SpaceNewPage'
+import SpaceNewPage from '../components/space/space-new-page/SpaceNewPage';
 
-export default SpaceNewPage
+export default SpaceNewPage;

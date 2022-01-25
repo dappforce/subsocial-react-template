@@ -1,5 +1,5 @@
-import { useAppSelector } from '../../app/store'
+import { useAppSelector } from '../../app/store';
 
-export function useMyAddress () {
-    return useAppSelector(state => state.myAccount.address)
+export function useMyAddress() {
+  return useAppSelector((state) => state.myAccount.address);
 }

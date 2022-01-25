@@ -1,60 +1,74 @@
-import styles from './NotificationsPage.module.sass'
-import { ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
-import AvatarElement from '../common/avatar/AvatarElement'
-import { AvatarSizes } from '../../models/common/avatar'
-import { FC } from 'react'
-import Image from '../common/image/Image'
-import { NotificationsItemProps } from '../../models/notifications'
-import { getUrl, TypeUrl } from 'src/utils'
-import Title from '../common/title/Title'
-import { TitleSizes } from '../../models/common/typography'
-import Link from '../common/links/link/Link'
-import SmallLink from '../common/links/small-link/SmallLink'
+import styles from './NotificationsPage.module.sass';
+import {
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from '@mui/material';
+import AvatarElement from '../common/avatar/AvatarElement';
+import { AvatarSizes } from '../../models/common/avatar';
+import { FC } from 'react';
+import Image from '../common/image/Image';
+import { NotificationsItemProps } from '../../models/notifications';
+import { getUrl, TypeUrl } from 'src/utils';
+import Title from '../common/title/Title';
+import { TitleSizes } from '../../models/common/typography';
+import Link from '../common/links/link/Link';
+import SmallLink from '../common/links/small-link/SmallLink';
 
-const NotificationsMessage: FC<NotificationsItemProps> = ({ ownerName,ownerId, subject, action }) => (
-    <Typography className={styles.message}>
-        <Link
-            href={getUrl({
-                type: TypeUrl.Account,
-                id: ownerId,
-            })}
-        >
-            <Title type={TitleSizes.PROFILE} className={styles.title}>
-                {ownerName}
-            </Title>
-        </Link>
-        {' '}
-        {action}
-        <Link href={'/'}>
-            <span className={styles.bold}>{subject}</span>
-        </Link>
-    </Typography>
-)
+const NotificationsMessage: FC<NotificationsItemProps> = ({
+  ownerName,
+  ownerId,
+  subject,
+  action,
+}) => (
+  <Typography className={styles.message}>
+    <Link
+      href={getUrl({
+        type: TypeUrl.Account,
+        id: ownerId,
+      })}
+    >
+      <Title type={TitleSizes.PROFILE} className={styles.title}>
+        {ownerName}
+      </Title>
+    </Link>{' '}
+    {action}
+    <Link href={'/'}>
+      <span className={styles.bold}>{subject}</span>
+    </Link>
+  </Typography>
+);
 
 const NotificationsItem: FC<NotificationsItemProps> = (props) => {
-    return (
-        <ListItem>
-            <ListItemAvatar>
-                <Link
-                    href={getUrl({
-                        type: TypeUrl.Account,
-                        id: props.ownerId,
-                    })}
-                    image
-                >
-                    <AvatarElement src={props.ownerImg} size={AvatarSizes.SMALL} id={props.id}/>
-                </Link>
-            </ListItemAvatar>
-            <ListItemText
-                primary={<NotificationsMessage {...props} />}
-                secondary={<SmallLink href={'/'}>{props.date}</SmallLink>}
-            />
-            {props.image &&
-                <Link href={'/'} image>
-                    <Image src={props.image} width={46} height={46} alt={""} />
-                </Link>}
-        </ListItem>
-    )
-}
+  return (
+    <ListItem>
+      <ListItemAvatar>
+        <Link
+          href={getUrl({
+            type: TypeUrl.Account,
+            id: props.ownerId,
+          })}
+          image
+        >
+          <AvatarElement
+            src={props.ownerImg}
+            size={AvatarSizes.LARGE}
+            id={props.id}
+          />
+        </Link>
+      </ListItemAvatar>
+      <ListItemText
+        primary={<NotificationsMessage {...props} />}
+        secondary={<SmallLink href={'/'}>{props.date}</SmallLink>}
+      />
+      {props.image && (
+        <Link href={'/'} image>
+          <Image src={props.image} width={46} height={46} alt={''} />
+        </Link>
+      )}
+    </ListItem>
+  );
+};
 
-export default NotificationsItem
+export default NotificationsItem;

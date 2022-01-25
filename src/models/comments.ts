@@ -1,23 +1,40 @@
-import { PostId, PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
-import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners'
+import { PostId, PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto';
+import {
+  CommentStruct,
+  PostStruct,
+} from '@subsocial/api/flat-subsocial/flatteners';
+import { CommentContent, PostData } from '@subsocial/types';
 
 export interface CommentsProps {
-    countOfComments: number
-    parentId: string
+  parentStruct: PostStruct;
 }
 
 export interface CommentProps {
-    commentId: PostId,
-    commentDetails: PostWithSomeDetails
+  commentId: PostId;
+  commentDetails: PostWithSomeDetails;
 }
 
 export interface NewCommentProps {
-    placeholder: string
-    className?: string
-    autoFocus?: boolean
+  parentStruct: PostStruct;
+  placeholder: string;
+  className?: string;
+  autofocus?: boolean;
+  onClickCancel?: () => void;
+}
+
+export interface EditCommentProps {
+  comment: PostData;
+  onClickCancel: () => void;
+  className?: string;
+  autofocus?: boolean;
 }
 
 export interface CommentActionProps {
-    onReply: () => void
-    comment: PostStruct
+  onReply: () => void;
+  comment: PostStruct;
+}
+
+export interface CommentExtension {
+  parentId: PostId | null;
+  rootPostId: PostId;
 }

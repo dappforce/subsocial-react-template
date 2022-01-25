@@ -1,16 +1,17 @@
-import { LinkProps as NextLinkProps } from 'next/dist/client/link'
-import { HTMLAttributes } from 'react'
+import { LinkProps as NextLinkProps } from 'next/dist/client/link';
+import { HTMLAttributes } from 'react';
 
 export interface IconLinkProps {
-    link: string
+  link: string;
 }
 
 interface Link extends NextLinkProps {
-    image?: boolean
+  image?: boolean;
 }
 
-export type LinkProps = Link & HTMLAttributes<HTMLAnchorElement> & {ext?: boolean}
+export type LinkProps = Link &
+  HTMLAttributes<HTMLAnchorElement> & { ext?: boolean };
 
-export type SeeMoreProps = HTMLAttributes<HTMLAnchorElement> & NextLinkProps
+export type SeeMoreProps = HTMLAttributes<HTMLAnchorElement> & NextLinkProps;
 
-export type SmallLinkProps = HTMLAttributes<HTMLAnchorElement> & NextLinkProps
+export type SmallLinkProps = HTMLAttributes<HTMLAnchorElement> & NextLinkProps;

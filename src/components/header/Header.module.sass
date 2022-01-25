@@ -4,7 +4,7 @@
   box-shadow: 0 3px 10px rgba(153, 153, 153, 0.12), 0 3px 9px rgba(153, 153, 153, 0.12), 0 1px 20px rgba(153, 153, 153, 0.2)
 
 .header
-  display: grid !important
+  display: flex
   justify-content: space-between
   width: 100%
   grid-template-columns: 1fr minmax(0, 765px) 1fr
@@ -28,11 +28,6 @@
   a
     white-space: nowrap
 
-.tabs
-  max-width: 765px
-  width: 100%
-  background-color: transparent
-
   @media (max-width: 1100px)
     grid-area: 2 / 1 / 2 / 3
     justify-self: center
@@ -51,9 +46,25 @@
     margin-right: 1px
 
 .user
-  justify-self: flex-end
   display: flex
+  align-items: center
+  justify-self: flex-end
+  column-gap: $space_normal
   cursor: pointer
+
+  .spaceButton
+    height: 36px
+    font-size: $font_normal
+    letter-spacing: 0
+    padding: 0 $space_normal
+
+    span
+      padding-right: 0.5rem
+
+  .postButton
+    color: $color_black
+    border-color: $color_light_border
+
 
   @media (max-width: 1100px)
     padding-right: 1.1875rem
@@ -61,7 +72,8 @@
 .account
   display: flex
   align-items: center
-  gap: 10px
+  column-gap: $space_tiny
+  padding: 0
   cursor: pointer
 
 .menu
@@ -72,15 +84,23 @@
     padding-left: 1.1875rem
 
 .name
+  display: block
   text-align: left
   white-space: nowrap
   color: $color_dark
   font-weight: 500
+  line-height: 1.065rem !important
 
 .button
   min-width: auto
+  padding-left: 0
+  padding-right: 0
+
+  svg
+    fill: $color_font_secondary !important
 
 .balance
   font-size: $font_small !important
   *
     color: $color_font_secondary !important
+    line-height: 1.065rem !important

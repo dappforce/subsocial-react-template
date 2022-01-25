@@ -1,0 +1,66 @@
+@import '../../styles/_vars.sass'
+
+.drawer
+  & :global(.MuiDrawer-paper)
+    margin: 57px 0px 0px 0px
+    max-width: $sidebar_max_width !important
+    width: $sidebar_min_width !important
+    transition: all 500ms ease-in-out
+    display: flex
+    height: calc(100vh - 57px) !important
+    justify-content: space-between
+  .topBox
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    transition: all 500ms ease-in-out
+    padding-left: $space_big
+    width: 100%
+  .divider
+    width: 100%
+    margin-left: -$space_small
+  .bottomBox
+    margin-left: $space_normal
+    transition: all 500ms ease-in-out
+    .bottomList
+      display: flex
+      align-item: center
+      .listItemHide
+        justify-content: flex-start
+      .bottomBlock
+        display: flex
+        flex-direction: column
+        align-items: center
+        .itemText
+          color: $color_semi_gray
+        & :global(.MuiTypography-root)
+          font-size: $font_small
+        .bottom
+          display: flex
+          align-items: flex-start
+  & :global(.MuiDrawer-paper):hover
+    max-width: $sidebar_max_width !important
+    width: $sidebar_max_width !important
+    transition: all 500ms ease-in-out
+    .topBox
+      align-items: flex-start
+      transition: all 500ms ease-in-out
+      width: 200px
+       margin-left: $space_big
+    .bottomBox
+      transition: all 500ms ease-in-out
+      width: 200px
+      bottomList
+        display: flex
+        flex-direction: column
+    .divider
+      width:115%
+      margin-left: -$space_small
+
+@media (max-width: 1100px)
+  .drawer
+    & :global(.MuiDrawer-paper)
+      margin: 97px 0px 0px 0px !important
+      height: calc(100vh - 97px) !important
+
+

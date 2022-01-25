@@ -1,5 +1,7 @@
 @import src/styles/vars
 
+$size_img_content: 174px
+
 .post
   &:global(.MuiPaper-root-MuiCard-root)
     box-shadow: none
@@ -21,6 +23,24 @@
 .sharedPost
   margin-top: -$space_small
 
+.titleSharedPost
+  margin-bottom: $space_large
+
+.notFound
+  display: flex
+  justify-content: center
+  align-items: center
+  padding: $space_large 0
+  border: $border_grey_color
+  box-shadow: none
+
+.notFoundText
+  color: $color_medium_gray
+
+.sharedPostContent
+  border: $border_grey_color
+  box-shadow: none
+
 .mainPostContent
   display: flex
   width: 100%
@@ -36,6 +56,9 @@
 .action
   margin: $space_mini 0 0
 
+  & :global(.MuiSvgIcon-root)
+    fill: $color_black
+
 .header
   padding-right: 0
   padding-left: 0
@@ -47,7 +70,7 @@
   border-radius: 0.25rem
 
 .imgContentDesktop
-  width: 174px
-  height: 174px
+  width: $size_img_content
+  height: $size_img_content
   margin: $space_normal 0 $space_normal $space_normal
   border-radius: 0.25rem

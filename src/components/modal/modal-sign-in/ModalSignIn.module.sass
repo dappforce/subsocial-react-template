@@ -2,6 +2,7 @@
 
 .modal
     border-radius: 5px
+
     & > :global(.MuiBox-root)
         max-width: 435px
 
@@ -14,6 +15,7 @@
     width: 209px !important
 
 .firefox
+
     & > div
         margin-left: -7px !important
 
@@ -49,9 +51,10 @@
     @include scroll
 
     & button
-        padding: 0 $space_normal
-        &:hover
 
+        padding: 0 $space_normal
+
+        &:hover
             background-color: $color_light_gray
 
 .address
@@ -74,3 +77,8 @@
   flex-direction: column
   row-gap: 1rem
   text-align: center
+
+.token
+    max-width: 138px
+    width: 100%
+    margin: 0 auto

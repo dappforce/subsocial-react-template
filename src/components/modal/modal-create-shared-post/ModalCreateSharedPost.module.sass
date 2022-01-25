@@ -1,0 +1,50 @@
+@import src/styles/common
+
+.modal
+  display: flex
+  justify-content: center
+  align-items: center
+
+.box
+  display: flex
+  flex-direction: column
+  gap: $space_big
+  max-width: 780px
+  max-height: 90%
+  width: 100%
+  position: relative
+  padding: $space_normal
+  border-radius: 0.25rem
+  overflow: auto
+
+.header
+  display: flex
+  justify-content: space-between
+
+.title
+  line-height: 1.25rem
+
+.buttonClose
+  padding: 0
+
+.form
+  display: flex
+  flex-direction: column
+  gap: $space_normal
+
+.post
+  border: $border_grey_color
+
+  & :global(.MuiCardContent-root)
+    padding-bottom: $space_tiny
+
+.select
+  padding: 0
+
+.buttons
+  display: flex
+  justify-content: flex-end
+  gap: $space_normal
+
+.button
+  padding: $space_tiny $space_large

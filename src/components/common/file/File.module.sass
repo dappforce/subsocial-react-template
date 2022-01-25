@@ -1,5 +1,8 @@
 @import src/styles/common
 
+$size_button: 80px
+$position_settings: .625rem
+
 .file
   position: relative
   display: flex
@@ -14,8 +17,8 @@
       margin-top: $space_normal
 
     .button
-      width: 80px
-      height: 80px
+      width: $size_button
+      height: $size_button
       border-radius: 50%
 
     .example
@@ -24,7 +27,7 @@
       height: 100%
 
   &.image
-    padding-bottom: $space_tiny
+    padding: $space_normal 0 0
 
     .button
       width: 100%
@@ -49,7 +52,7 @@
   font-size: $font_small
 
   @media screen and (max-width: 767px)
-    font-size: 12px
+    font-size: .75rem
 
 .input
   display: none !important
@@ -100,8 +103,8 @@
 
 .settings
   position: absolute
-  top: 0.625rem
-  right: 0.625rem
+  top: $position_settings
+  right: $position_settings
   display: flex
   padding: 0 $space_tiny
   animation-name: appear

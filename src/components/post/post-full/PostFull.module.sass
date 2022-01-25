@@ -19,6 +19,16 @@
   padding-top: 0
   padding-bottom: 0
 
+.mainSharedPostContent
+  &:global(.MuiCardContent-root)
+    padding-bottom: 0
+
+.sharedPostContent
+  padding: 0 !important
+
+.sharedPostActions
+  margin-top: -$space_small
+
 .postContent
   padding: 0
   flex-grow: 1
@@ -35,6 +45,9 @@
   margin-top: $space_normal
   margin-bottom: $space_normal
   border-radius: 0.25rem
+
+.video
+  margin-bottom: $space_normal
 
 .cardActions
   justify-content: space-evenly

@@ -1,31 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface MainState {
-    value: string
-    isOpenAccount: boolean,
+  value: string;
+  isOpenAccount: boolean;
 }
 
 const initialState: MainState = {
-    value: 'posts',
-    isOpenAccount: false,
-}
+  value: 'posts',
+  isOpenAccount: false,
+};
 
 export const mainSlice = createSlice({
-    name: 'mainOld',
-    initialState,
-    reducers: {
-        changeTab(state, action) {
-            state.value = action.payload
-        },
-        toggleAccount(state) {
-            state.isOpenAccount = !state.isOpenAccount
-        }
-    }
-})
+  name: 'mainOld',
+  initialState,
+  reducers: {
+    changeTab(state, action) {
+      state.value = action.payload;
+    },
+    toggleAccount(state) {
+      state.isOpenAccount = !state.isOpenAccount;
+    },
+  },
+});
 
-export const {
-    changeTab,
-    toggleAccount,
-} = mainSlice.actions
+export const { changeTab, toggleAccount } = mainSlice.actions;
 
-export default mainSlice.reducer
+export default mainSlice.reducer;
