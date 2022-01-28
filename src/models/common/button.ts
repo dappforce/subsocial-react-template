@@ -83,9 +83,9 @@ export interface ButtonReplyProps {
 }
 
 export enum TypeContent {
-  Space = 'space',
-  Post = 'post',
-  Comment = 'comment',
+  Space = 'Space',
+  Post = 'Post',
+  Comment = 'Comment',
 }
 
 export interface ButtonOptionsProps extends IconButtonProps {

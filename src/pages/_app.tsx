@@ -16,10 +16,10 @@ import MainPage from '../components/layout/MainPage';
 import { ApiProvider } from '../components/api';
 import { ResponsiveProvider } from '../components/responsive/ResponsiveContext';
 import { AuthProvider } from '../components/auth/AuthContext';
-import { appWithTranslation } from 'next-i18next';
-
 import { useDetectAdBlock } from 'adblock-detect-react';
 import ModalAdBlock from 'src/components/modal/modal-adblock/ModalAdBlock';
+
+import '../i18n'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const store = useStore(pageProps.initialReduxState);
@@ -52,4 +52,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default appWithTranslation(MyApp);
+export default MyApp;

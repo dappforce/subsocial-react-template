@@ -12,6 +12,7 @@ import { useCreateReloadSpace } from 'src/rtk/app/hooks';
 import { reloadSpaceIdsFollowedByAccount } from 'src/components/space/reloadSpaceIdsFollowedByAccount';
 import { MenuItem } from '@mui/material';
 import labelForMenuItem from 'src/components/utils/labelForMenuItem';
+import { useTranslation } from 'react-i18next';
 
 export const useAmISpaceFollower = (spaceId: SpaceId = '0') => {
   const myAddress = useMyAddress();
@@ -33,19 +34,20 @@ const ButtonFollowSpace: FC<ButtonFollowSpaceProps> = ({ space, ...props }) => {
   const dispatch = useAppDispatch();
   const { api } = useApi();
   const isFollower = useAmISpaceFollower(spaceId);
+  const { t } = useTranslation();
 
   const variant = isFollower ? 'outlined' : 'contained';
   let label: string | React.ReactNode;
 
   if (props.component === MenuItem) {
     label = labelForMenuItem(
-      isFollower ? 'Following' : 'Follow',
+      isFollower ? t('buttons.following') : t('buttons.follow'),
       'following',
       22,
       16
     );
   } else {
-    label = isFollower ? 'Following' : 'Follow';
+    label = isFollower ? t('buttons.following') : t('buttons.follow');
   }
   const reloadSpace = useCreateReloadSpace();
   const loading = notDef(isFollower);

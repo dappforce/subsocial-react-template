@@ -8,6 +8,7 @@ import styles from './ButtonsTogglerVisibility.module.sass';
 import Router from 'next/router';
 import { MenuItem } from '@mui/material';
 import labelForMenuItem from 'src/components/utils/labelForMenuItem';
+import { useTranslation } from 'react-i18next';
 
 export const ButtonTogglerVisibility = ({
   contentStruct,
@@ -17,17 +18,18 @@ export const ButtonTogglerVisibility = ({
 }: ButtonTogglerVisibilityProps) => {
   const myAddress = useMyAddress();
   const { hidden } = contentStruct;
+  const { t } = useTranslation();
   let label: string | React.ReactNode;
 
   if (props.component === MenuItem) {
     label = labelForMenuItem(
-      hidden ? 'Make visible' : `Hide ${typeContent}`,
+      hidden ? t('buttons.makeVisible') : t(`buttons.hide${typeContent}`),
       'hide',
       22,
       20
     );
   } else {
-    label = hidden ? 'Make visible' : `Hide ${typeContent}`;
+    label = hidden ? t('buttons.makeVisible') : t(`buttons.hide${typeContent}`);
   }
 
   const tx =

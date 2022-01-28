@@ -15,6 +15,8 @@ import classNames from 'classnames';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
 import { Tooltip } from '@mui/material';
 import ButtonEdit from 'src/components/common/button/button-edit/ButtonEdit';
+import { useAuth } from 'src/components/auth/AuthContext';
+import { ACCOUNT_STATUS } from 'src/models/auth';
 
 const ProfileAccount: FC<ProfileAccountProps> = (props) => {
   const { content, struct, id } = props;
@@ -24,6 +26,8 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
   const isMy = useIsMyAddress(router.query.address as string);
   const [hasSpace, setHasSpace] = useState(false);
   const [spaceId, setSpaceId] = useLocalStorage<string>('spaceId', '');
+  const { status } = useAuth();
+  const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
   const tabs = [
     { label: 'Posts', tabValue: 'userPosts' },
     { label: 'Spaces', tabValue: 'userSpaces' },
@@ -92,6 +96,7 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
             <ButtonComponent
               variant={'outlined'}
               className={`${styles.button} ${styles.buttonGrey}`}
+              disabled={isAuthRequired}
             >
               Send tips
             </ButtonComponent>

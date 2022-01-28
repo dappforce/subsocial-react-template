@@ -6,10 +6,12 @@ import Text from '../common/text/Text';
 import { TextSizes } from '../../models/common/typography';
 import { AccountDescriptionProps } from '../../models/account';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 export const AccountDescription: FC<AccountDescriptionProps> = (props) => {
   const router = useRouter();
   const [isShowMore, setIsShowMore] = useState(!!router?.query.isAutoExpand);
+  const { t } = useTranslation();
 
   const toggleText = useCallback(
     () => setIsShowMore((current) => !current),
@@ -34,7 +36,7 @@ export const AccountDescription: FC<AccountDescriptionProps> = (props) => {
         )}{' '}
         {props.isShowMore && (
           <button onClick={toggleText} className={styles.seemore}>
-            {!isShowMore ? 'See More' : 'See Less'}
+            {!isShowMore ? t('general.seeMore') : t('general.seeLess')}
           </button>
         )}
       </Text>

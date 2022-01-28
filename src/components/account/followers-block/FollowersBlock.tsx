@@ -6,6 +6,7 @@ import ModalFollow from '../../modal/modal-reactions/modal-follow/ModalFollow';
 import Modal from '../../modal/Modal';
 import { useModal } from 'src/hooks/useModal';
 import { pluralize } from '@subsocial/utils';
+import { useTranslation } from 'react-i18next';
 
 const FollowersBlock: FC<FollowersBlockProps> = ({
   className,
@@ -17,15 +18,16 @@ const FollowersBlock: FC<FollowersBlockProps> = ({
     ? `${className} ${styles.followers}`
     : styles.followers;
   const { isVisible, toggleModal } = useModal();
+  const { t } = useTranslation();
   const [postCount, postLabel] = pluralize({
     count: posts,
-    singularText: 'Post',
-    pluralText: 'Posts',
+    singularText: t('general.post'),
+    pluralText: t('general.Post'),
   }).split(' ');
   const [followerCount, followerLabel] = pluralize({
     count: followers,
-    singularText: 'Follower',
-    pluralText: 'Followers',
+    singularText: t('general.follower'),
+    pluralText: t('general.followers'),
   }).split(' ');
 
   return (

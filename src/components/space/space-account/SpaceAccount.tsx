@@ -10,12 +10,16 @@ import { useIsMySpace } from 'src/hooks/useIsMySpace';
 import { TypeContent } from 'src/models/common/button';
 import { toEdit } from '../toEdit';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
+import { useAuth } from 'src/components/auth/AuthContext';
+import { ACCOUNT_STATUS } from 'src/models/auth';
 
 const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
   const router = useRouter();
   const { content, struct, id } = props;
   const isMy = useIsMySpace(struct);
   const [spaceId, setSpaceId] = useLocalStorage<string>('spaceId', id);
+  const { status } = useAuth();
+  const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
 
   if (!content) return null;
 
@@ -42,6 +46,7 @@ const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
             <ButtonComponent
               variant={'outlined'}
               className={`${styles.button} ${styles.buttonGrey}`}
+              disabled={isAuthRequired}
             >
               Send tips
             </ButtonComponent>

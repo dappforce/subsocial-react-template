@@ -8,7 +8,7 @@ import {
 import { useAuth } from '../../auth/AuthContext';
 import { useAppSelector } from 'src/rtk/app/store';
 import { useApi } from '../../api';
-import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
+import { useTranslation } from 'react-i18next';
 import { isFunction } from '@polkadot/util';
 import { AddressOrPair, VoidFn } from '@polkadot/api/types';
 import { ACCOUNT_STATUS } from 'src/models/auth';
@@ -43,6 +43,7 @@ const TxButton: FC<TxButtonProps> = ({
   const [showSnackbar, setShowSnackbar] = useState(false);
   const { openSingInModal, status, hasToken } = useAuth();
   const { signer } = useAppSelector((state) => state.myAccount);
+  const { t } = useTranslation();
   const { type, message, isLoader, setSnackConfig, removeSnackbar } =
     useSnackbar();
 
@@ -192,7 +193,7 @@ const TxButton: FC<TxButtonProps> = ({
       unsub = await tx.send(onSuccessHandler);
       setShowSnackbar(true);
       setSnackConfig({
-        message: 'Waiting for transaction to complete.',
+        message: t('waitingForTx'),
         isLoader: true,
       });
     } catch (err: any) {
