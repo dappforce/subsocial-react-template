@@ -67,8 +67,6 @@ const NewComment: FC<NewCommentProps> = (props) => {
     autofocus,
   };
 
-  if (!user) return null;
-
   const expandForm = () => {
     setIsExpandedInput(true);
   };
@@ -94,7 +92,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
       <AvatarElement
         src={user?.content?.avatar}
         size={AvatarSizes.MEDIUM}
-        id={user?.id}
+        id={user?.id || ''}
       />
       <div className={styles.commentContent}>
         <Editor

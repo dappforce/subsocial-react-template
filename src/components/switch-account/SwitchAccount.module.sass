@@ -52,6 +52,7 @@
   padding-right: $space_big
   gap: 1rem
   cursor: pointer
+  color: $color_medium_gray
 
   .info
     width: 100%
@@ -91,7 +92,7 @@
 .icon
   padding-left: $space_tiny
   svg
-    fill: $color_black
+    fill: $color_medium_gray
 
 .signout
   display: flex
@@ -135,3 +136,29 @@
 
 .profileContainer
   padding-bottom: 0
+
+.popper
+  z-index: 100000
+
+.language
+  & :global(.MuiTypography-root)
+    display: flex
+    justify-content: space-between
+
+.cardLanguage
+  padding: $space_normal 0
+  min-width: 165px
+  transform: translateX(-$space_normal)
+
+.itemLanguage
+  padding: 0 $space_normal
+  color: $color_medium_gray
+
+.iconLanguage
+  padding-right: $space_normal
+
+.selectedLanguage
+  color: $color_primary
+
+.unselectedLanguage
+  padding-left: 2.5rem

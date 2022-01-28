@@ -38,6 +38,8 @@ import { useModal } from 'src/hooks/useModal';
 import ModalCreateSharedPost from 'src/components/modal/modal-create-shared-post/ModalCreateSharedPost';
 import SharedPost from '../shared-post/SharedPost';
 import classNames from 'classnames';
+import { useAuth } from 'src/components/auth/AuthContext';
+import { ACCOUNT_STATUS } from 'src/models/auth';
 
 const PostFull: FC<PostFullProps> = (props) => {
   const { post, space } = props;
@@ -55,6 +57,19 @@ const PostFull: FC<PostFullProps> = (props) => {
   const postData = useSelectPost(rootPostId) as PostWithSomeDetails;
 
   const { isVisible, toggleModal } = useModal();
+  
+  const { openSingInModal, status } = useAuth();
+  
+  const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
+
+  const onClickShare = () => {
+    if (isAuthRequired) {
+      openSingInModal(true);
+      return openSingInModal(false);
+    } else {
+      toggleModal();
+    }
+  }
 
   const onClickEdit = () => {
     Router.push(`/${post.struct.spaceId}/${post.id}/edit`);
@@ -135,9 +150,10 @@ const PostFull: FC<PostFullProps> = (props) => {
                   <SmallLink
                     href={getUrl({
                       type: TypeUrl.Space,
-                      //@ts-ignore
                       title:
-                        space?.content?.handle ||
+                      //@ts-ignore
+                      space?.content?.handle ||
+                      //@ts-ignore
                         postData?.space?.content?.handle,
                       id: space?.struct.id || postData?.space?.struct.id,
                     })}
@@ -149,9 +165,10 @@ const PostFull: FC<PostFullProps> = (props) => {
                   <SmallLink
                     href={getUrl({
                       type: TypeUrl.Post,
-                      //@ts-ignore
                       title:
-                        space?.content.handle ||
+                      //@ts-ignore
+                      space?.content.handle ||
+                      //@ts-ignore
                         postData?.space?.content.handle,
                       id: space?.struct.id || postData?.space?.struct.id,
                       //@ts-ignore
@@ -184,8 +201,8 @@ const PostFull: FC<PostFullProps> = (props) => {
               <Link
                 href={getUrl({
                   type: TypeUrl.Post,
-                  //@ts-ignore
                   title:
+                  //@ts-ignore
                     space?.content.handle || postData?.space?.content.handle,
                   id: space?.struct.id || postData?.space?.struct.id,
                   subTitle: postData?.post?.content.title,
@@ -242,7 +259,7 @@ const PostFull: FC<PostFullProps> = (props) => {
           reactionEnum={ReactionEnum.Downvote}
           withLabel
         />
-        <ButtonShare onClick={toggleModal} isShowLabel />
+        <ButtonShare onClick={onClickShare} isShowLabel />
       </CardActions>
     </CardWrapper>
   );

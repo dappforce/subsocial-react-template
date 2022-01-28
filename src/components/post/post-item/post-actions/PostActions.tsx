@@ -8,10 +8,26 @@ import ButtonVotes from '../../../common/button/buttons-vote/ButtonVotes';
 import { ReactionEnum } from '@subsocial/api/flat-subsocial/dto';
 import { useModal } from 'src/hooks/useModal';
 import ModalCreateSharedPost from 'src/components/modal/modal-create-shared-post/ModalCreateSharedPost';
+import { useAuth } from 'src/components/auth/AuthContext';
+import { ACCOUNT_STATUS } from 'src/models/auth';
 
 const PostActions: FC<PostActionsProps> = (props) => {
   const { post, isSharedPost = 0 } = props;
+
   const { isVisible, toggleModal } = useModal();
+
+  const { openSingInModal, status } = useAuth();
+  
+  const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
+
+  const onClickShare = () => {
+    if (isAuthRequired) {
+      openSingInModal(true);
+      return openSingInModal(false);
+    } else {
+      toggleModal();
+    }
+  }
 
   const className = isSharedPost
     ? `${styles.sharedPost} ${styles.actions}`
@@ -31,7 +47,7 @@ const PostActions: FC<PostActionsProps> = (props) => {
           onClick={props.toggleComments}
           value={post.struct.visibleRepliesCount}
         />
-        <ButtonShare onClick={toggleModal} />
+        <ButtonShare onClick={onClickShare} />
       </CardActions>
     </>
   );

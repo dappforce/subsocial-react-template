@@ -11,6 +11,7 @@ import {
 } from '../../rtk/features/myAccount/myAccountSlice';
 import { useAppDispatch } from '../../rtk/app/store';
 import { useSnackbar } from 'src/hooks/useSnackbar';
+import { useTranslation } from 'react-i18next';
 
 type ContextType = { api: FlatSubsocialApi };
 export const ApiContext = createContext<ContextType>({
@@ -35,11 +36,12 @@ export const ApiProvider: FC = (props) => {
   const { isLoader, toggleLoader } = useLoader();
   const dispatch = useAppDispatch();
   const { type, message, setSnackConfig, removeSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (store.get(MY_ADDRESS)) {
       dispatch(setMyAddress(store.get(MY_ADDRESS)));
-      setSnackConfig({ message: 'Connecting to the network...' });
+      setSnackConfig({ message: t('connectingToNetwork') });
     }
 
     toggleLoader();

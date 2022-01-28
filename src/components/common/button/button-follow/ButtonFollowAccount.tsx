@@ -12,6 +12,7 @@ import { selectAccountIdsByFollower } from 'src/rtk/features/profiles/followedAc
 import { useIsMyAddress } from 'src/hooks/useIsMySpace';
 import { MenuItem } from '@mui/material';
 import labelForMenuItem from 'src/components/utils/labelForMenuItem';
+import { useTranslation } from 'react-i18next';
 
 const ButtonFollowAccount: FC<ButtonFollowAccountProps> = ({
   address,
@@ -28,6 +29,7 @@ const ButtonFollowAccount: FC<ButtonFollowAccountProps> = ({
   const isMyAddress = useIsMyAddress(address);
   const isFollower = followedAccountIds.indexOf(address.toString()) >= 0;
   const reloadProfile = useCreateReloadProfile();
+  const { t } = useTranslation();
 
   if (myAddress && isMyAddress) return null;
 
@@ -37,13 +39,13 @@ const ButtonFollowAccount: FC<ButtonFollowAccountProps> = ({
 
   if (props.component === MenuItem) {
     label = labelForMenuItem(
-      isFollower ? 'Following' : 'Follow',
+      isFollower ? t('buttons.following') : t('buttons.follow'),
       'following',
       22,
       16
     );
   } else {
-    label = isFollower ? 'Following' : 'Follow';
+    label = isFollower ? t('buttons.following') : t('buttons.follow');
   }
 
   const buildTxParams = () => [address];

@@ -12,8 +12,8 @@ import { TextSizes } from 'src/models/common/typography';
 import { useModal } from 'src/hooks/useModal';
 import ModalQr from '../../modal/modal-qr/ModalQr';
 import { useResponsiveSize } from '../../responsive/ResponsiveContext';
-import { SnackbarType } from 'src/models/common/snackbar';
 import { useSnackbar } from 'src/hooks/useSnackbar';
+import { useTranslation } from 'react-i18next';
 
 const Address: FC<AddressProps> = ({
   isQr,
@@ -37,6 +37,7 @@ const Address: FC<AddressProps> = ({
     sm: { type: TextSizes.SECONDARY, size: 16 },
     lg: { type: TextSizes.NORMAL, size: 24 },
   };
+  const { t } = useTranslation();
 
   return (
     <div className={className}>
@@ -59,7 +60,7 @@ const Address: FC<AddressProps> = ({
                 e.stopPropagation();
                 copyText(label);
                 setIsCopied(true);
-                setSnackConfig({ message: 'Address copied!' });
+                setSnackConfig({ message: t('snackbars.addressCopied') });
               }}
             >
               <Image
