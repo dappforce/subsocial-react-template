@@ -5,16 +5,16 @@
 
 .buttonGrey
   &:global(.MuiButton-root)
-    color: $color_black
-    border: 1px solid #DDDDDD
+    color: $color_text_secondary
+    border: 1px solid $color_button_outline
 
   &[disabled]
-    color: $color_shadow
-    background-color: $color_shadow
-    border-color: $color_shadow
+    color: $color_text_dark_gray
+    background-color: $color_button_inactive_bg
+    border-color: $color_button_outline
 
 .option
   margin-left: $space_tiny
 
   svg
-    fill: $color_black
+    fill: $color_icon_black

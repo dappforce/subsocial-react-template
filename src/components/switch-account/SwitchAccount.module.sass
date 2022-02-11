@@ -12,6 +12,11 @@
   display: flex
   flex-direction: column
 
+  & :global(.MuiDrawer-paper)
+    max-width: 425px
+    width: 100%
+    overflow: hidden
+
   @media screen and (min-width: 767px)
     & :global(.MuiBackdrop-root)
       background: none
@@ -47,29 +52,39 @@
     font-size: $font_small
 
 .item
-  padding-top: $space_mini
-  padding-bottom: $space_mini
-  padding-right: $space_big
-  gap: 1rem
-  cursor: pointer
-  color: $color_medium_gray
+  &:global(.MuiListItem-root)
+    padding: $space_mini $space_big $space_mini $space_normal
+    gap: 1rem
+    cursor: pointer
+    color: $color_text_dark_gray
 
-  .info
-    width: 100%
-    margin: 0.375rem 0
+    .info
+      width: 100%
+      margin: 0.375rem 0
+      color: $color_text_secondary
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
 
-    .address
-      > p
-        margin-left: 0 !important
+      .address
+        & :global(.MuiTypography-root)
+          margin-left: 0
 
   .address
     margin: 0 !important
-    color: $color_font_secondary
-    > p
+    color: $color_text_dark_gray
+    & :global(.MuiTypography-root)
       margin-left: 0 !important
 
   &:hover
-    background-color: $color_light_gray
+    background-color: $color_menu-item_bg_hover
+    color: $color_text_primary
+
+    .icon,
+    .iconLanguage
+      fill: $color_icon_primary
+      svg
+        fill: $color_icon_primary
 
   .balance
     font-size: $font_small
@@ -92,7 +107,7 @@
 .icon
   padding-left: $space_tiny
   svg
-    fill: $color_medium_gray
+    fill: $color_icon_dark_gray
 
 .signout
   display: flex
@@ -103,7 +118,7 @@
   padding: 0 $space_normal $space_normal $space_normal
   margin-top: auto
   box-shadow: 0 30px 22px 56px rgba(255, 255, 255, 1)
-  background: $color_white
+  background: $color_button_basic_bg
 
 .button
   width: 100% !important
@@ -119,8 +134,11 @@
   p
     margin: 0
 
+.bold
+  font-weight: 500
+
 .address
-  > p
+  & :global(.MuiTypography-root)
     margin-left: $space_small !important
 
 .balance,
@@ -152,13 +170,13 @@
 
 .itemLanguage
   padding: 0 $space_normal
-  color: $color_medium_gray
+  color: $color_text_dark_gray
 
 .iconLanguage
   padding-right: $space_normal
 
 .selectedLanguage
-  color: $color_primary
+  color: $color_text_primary
 
 .unselectedLanguage
   padding-left: 2.5rem

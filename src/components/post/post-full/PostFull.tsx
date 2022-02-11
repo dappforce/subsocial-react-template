@@ -40,6 +40,7 @@ import SharedPost from '../shared-post/SharedPost';
 import classNames from 'classnames';
 import { useAuth } from 'src/components/auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';
+import { useTranslation } from 'react-i18next';
 
 const PostFull: FC<PostFullProps> = (props) => {
   const { post, space } = props;
@@ -61,6 +62,8 @@ const PostFull: FC<PostFullProps> = (props) => {
   const { openSingInModal, status } = useAuth();
   
   const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
+
+  const { t } = useTranslation();
 
   const onClickShare = () => {
     if (isAuthRequired) {
@@ -197,7 +200,7 @@ const PostFull: FC<PostFullProps> = (props) => {
               type={TitleSizes.DETAILS}
               className={styles.title}
             >
-              {`In response to `}
+              {t('post.inResponseTo')}
               <Link
                 href={getUrl({
                   type: TypeUrl.Post,
@@ -259,7 +262,11 @@ const PostFull: FC<PostFullProps> = (props) => {
           reactionEnum={ReactionEnum.Downvote}
           withLabel
         />
-        <ButtonShare onClick={onClickShare} isShowLabel />
+        <ButtonShare
+          onClick={onClickShare}
+          isShowLabel
+          value={post.struct.sharesCount}
+        />
       </CardActions>
     </CardWrapper>
   );

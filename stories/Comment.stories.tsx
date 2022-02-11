@@ -47,6 +47,10 @@ const parentStruct = {
 }
 const commentId = '22941';
 
+const addNewComment = (id: string) => {
+  console.log(id)
+}
+
 export const CommentsList = () => <Comments
     parentStruct={parentStruct}/>
 
@@ -58,5 +62,12 @@ export const CommentItem = () =>
     </Box>
 
 
-export const CommentInput = () => <Box sx={{p: 2}}><NewComment placeholder={'Add a comment'} parentStruct={parentStruct} /></Box>
+export const CommentInput = () =>
+  <Box sx={{p: 2}}>
+    <NewComment
+      placeholder={'Add a comment'}
+      parentStruct={parentStruct}
+      addNewComment={addNewComment}
+    />
+  </Box>
 

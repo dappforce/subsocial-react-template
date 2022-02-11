@@ -46,13 +46,15 @@ const ButtonBar = () => {
     { label: t('tabs.spaces'), tabValue: 'spaces' },
   ];
   return (
-    <Tabs
-      className={styles.tabs}
-      tabs={tabs}
-      value={value}
-      setValue={handleChange}
-      unselected={router.pathname !== '/'}
-    />
+    <div className={styles.box}>
+      <Tabs
+        className={styles.tabs}
+        tabs={tabs}
+        value={value}
+        setValue={handleChange}
+        unselected={router.pathname !== '/'}
+      />
+    </div>
   );
 };
 

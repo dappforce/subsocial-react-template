@@ -10,5 +10,5 @@ export enum AvatarSizes {
 export interface AvatarProps {
   src?: any;
   size: AvatarSizes;
-  id: string;
+  id: string | undefined;
 }

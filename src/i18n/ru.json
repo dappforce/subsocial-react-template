@@ -1,21 +1,34 @@
 {
   "imageShouldBeLessThan": "Image should be less than {{limit}} MB",
   "general": {
-    "title": "Subsocial Angular",
-    "post": "post",
+    "title": "Subsocial React",
+    "post": "пост",
     "Post": "Post",
-    "space": "space",
+    "space": "спейс",
     "comment": "comment",
     "edit": "Edit",
     "new": "New",
-    "follower": "Follower",
-    "followers": "Followers",
-    "following": "Following",
     "profile": "profile",
-    "reply": "reply",
     "seeMore": "See More",
     "seeLess": "See Less",
     "create": "Create"
+  },
+  "plural": {
+    "comment_one": "Комментарий",
+    "comment_few": "Комментария",
+    "comment_many": "Комментариев",
+    "follower_one": "Подписчик",
+    "follower_few": "Подписчика",
+    "follower_many": "Подписчиков",
+    "following_one": "Подписка",
+    "following_few": "Подписки",
+    "following_many": "Подписок",
+    "reply_one": "ответ",
+    "reply_few": "ответа",
+    "reply_many": "ответов",
+    "post_one": "Пост",
+    "post_few": "Поста",
+    "post_many": "Постов"
   },
   "tabs": {
     "following": "following",
@@ -23,14 +36,14 @@
     "upvotes": "upvotes",
     "downvotes": "downvotes",
     "posts": "посты",
-    "spaces": "сообщества",
+    "spaces": "спейсы",
     "article": "article",
     "video": "video",
     "feed": "мои фиды"
   },
   "buttons": {
-    "cancel": "Отмена",
-    "save": "Сохранить",
+    "cancel": "Cancel",
+    "save": "Save",
     "close": "Close",
     "copy": "Copy",
     "newPost": "New post",
@@ -51,10 +64,11 @@
     "signIn": "Sign In",
     "hide": "Hide",
     "show": "Show",
+    "view": "View",
     "makeVisible": "Make visible",
-    "hideComment": "Hide Comment",
-    "hidePost": "Hide Post",
-    "hideSpace": "Hide Space",
+    "hideComment": "Hide comment",
+    "hidePost": "Hide post",
+    "hideSpace": "Hide space",
     "upvote": "Upvote",
     "downvote": "Downvote",
     "writePost": "Write post",
@@ -69,13 +83,22 @@
     "uploadImage": "Upload cover image",
     "myProfile": "My profile",
     "editMyProfile": "Edit my profile",
-    "settings": "Settings"
+    "settings": "Settings",
+    "Language": "Language",
+    "createMyFirstSpace": "Create my first space",
+    "getTokens": "Get tokens",
+    "landingPage": "Landing page",
+    "legalDocuments": "Legal Documents",
+    "github": "Github",
+    "whatIsSubsocial": "What is Subsocial?"
   },
   "modals": {
     "tips": {
       "title": "Send tips to",
       "availableBalance": "Available Balance",
-      "inputPlaceholder": "Enter amount"
+      "inputPlaceholder": "Enter amount",
+      "recipient": "Recipient",
+      "error": "The amount must be less than the available balance"
     },
     "adblock": {
       "title": "Uh oh, it looks like you are using an ad blocker.",
@@ -94,6 +117,7 @@
     },
     "login": {
       "title": "Sign In",
+      "title-wait": "Wait a sec...",
       "accountScreen": {
         "message": "Click on your account to sign in:"
       },
@@ -111,7 +135,9 @@
         "installForChrome": "Install for Chrome",
         "installForFirefox": "Install for Firefox",
         "needHelp": "Need help? Read our",
-        "signInGuide": "Sign In Guide"
+        "signInGuide": "Sign In Guide",
+        "toContinueConnectWith": "To continue connect with ",
+        "EnableExtension": ". Enable extension with the button below."
       }
     }
   },
@@ -120,11 +146,19 @@
     "cannotCopy": "Cannot copy"
   },
   "post": {
-    "sharePost": "Share post"
+    "sharePost": "Share post",
+    "inResponseTo": "In response to "
+  },
+  "serverApp": {
+    "social": "Our social links:"
   },
   "forms": {
     "titles": {
-      "chooseSpace": "Choose a space for a new post"
+      "chooseSpace": "Choose a space for a new post",
+      "newSpace": "New Space",
+      "editSpace": "Edit Space",
+      "newProfile": "New Profile",
+      "editProfile": "Edit Profile"
     },
     "validations": {
       "required": "This field is required",
@@ -139,7 +173,7 @@
       "tags": "Press 'Enter' or 'Tab' key to add tags",
       "profileName": "Profile name",
       "about": "About",
-      "vireoUrl": "Video URL",
+      "videoUrl": "Video URL",
       "postTitle": "Post title",
       "spaceName": "Space name",
       "description": "Description",
@@ -241,6 +275,7 @@
     "morePost": "Loading more posts...",
     "moreSpaces": "Loading more spaces...",
     "moreProfiles": "Loading more profiles...",
-    "loadingSpace": "Loading spaces..."
+    "loadingSpace": "Loading spaces...",
+    "loading": "Loading..."
   }
 }

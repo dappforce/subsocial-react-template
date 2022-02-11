@@ -4,6 +4,7 @@ import {
   TxButtonProps,
   TxCallback,
   TxFailedCallback,
+  TxSuccessCallback,
 } from 'src/models/common/button';
 import { useAuth } from '../../auth/AuthContext';
 import { useAppSelector } from 'src/rtk/app/store';
@@ -18,6 +19,8 @@ import Loader from '../loader/Loader';
 import Snackbar from '../snackbar/Snackbar';
 import { useSnackbar } from 'src/hooks/useSnackbar';
 import { SnackbarType } from 'src/models/common/snackbar';
+import { IpfsCid } from '@subsocial/types';
+import { CardEditType } from 'src/models/common/card-edit';
 
 const TxButton: FC<TxButtonProps> = ({
   accountId,
@@ -36,11 +39,14 @@ const TxButton: FC<TxButtonProps> = ({
   isFreeTx = false,
   component,
   withLoader = false,
+  cardType,
   ...props
 }) => {
   const { api: subsocialApi } = useApi();
   const [isSending, setIsSending] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [newCid, setNewCid] = useState<IpfsCid>();
+
   const { openSingInModal, status, hasToken } = useAuth();
   const { signer } = useAppSelector((state) => state.myAccount);
   const { t } = useTranslation();
@@ -82,12 +88,46 @@ const TxButton: FC<TxButtonProps> = ({
     return api.tx[pallet][method](...resultParams);
   };
 
-  const doOnSuccess: TxCallback = (result) => {
-    isFunction(onSuccess) && onSuccess(result);
+  const getIPFS = async (): Promise<any> => {
+    const [pallet, method] = (tx || '').split('.');
+
+    const api = await subsocialApi.subsocial.substrate.api;
+
+    if (!api.tx[pallet]) {
+      throw new Error(`Unable to find api.tx.${pallet}`);
+    } else if (!api.tx[pallet][method]) {
+      throw new Error(`Unable to find api.tx.${pallet}.${method}`);
+    }
+
+    let resultParams = (params || []) as any[];
+
+    if (isFunction(params)) {
+      resultParams = await params();
+    }
+
+    if (cardType === CardEditType.Space || cardType === CardEditType.Post) {
+      setNewCid(resultParams[1].content.IPFS);
+    } else if (cardType === CardEditType.Profile) {
+      setNewCid(resultParams[0].content.IPFS);
+    }
+
+    return cardType === CardEditType.Space || cardType === CardEditType.Post
+      ? resultParams[1].content.IPFS
+      : cardType === CardEditType.Profile
+      ? resultParams[0].content.IPFS
+      : '';
   };
 
-  const doOnFailed: TxFailedCallback = (result) => {
-    isFunction(onFailed) && onFailed(result);
+  const doOnSuccess: TxSuccessCallback = async (result) => {
+    const newCid = await getIPFS();
+
+    isFunction(onSuccess) && onSuccess(result, newCid);
+  };
+
+  const doOnFailed: TxFailedCallback = async (result) => {
+    const newCid = await getIPFS();
+
+    isFunction(onFailed) && onFailed(result, newCid);
     if (result) {
       setShowSnackbar(true);
       setSnackConfig({
@@ -106,7 +146,7 @@ const TxButton: FC<TxButtonProps> = ({
 
     if (status.isFinalized || status.isInBlock) {
       setIsSending(false);
-      await unsubscribe();
+      unsubscribe();
 
       const blockHash = status.isFinalized
         ? status.asFinalized
@@ -120,11 +160,11 @@ const TxButton: FC<TxButtonProps> = ({
           if (method === 'ExtrinsicSuccess') {
             doOnSuccess(result);
           } else if (method === 'ExtrinsicFailed') {
-            doOnFailed(result);
+            newCid && doOnFailed(result, newCid);
           }
         });
     } else if (result.isError) {
-      doOnFailed(result);
+      newCid && doOnFailed(result, newCid);
     } else {
       console.warn(`⏱ Current tx status: ${status.type}`);
     }
@@ -140,7 +180,7 @@ const TxButton: FC<TxButtonProps> = ({
 
       console.warn(`❌ ${errMsg}`);
     }
-
+    //@ts-ignore
     doOnFailed(null);
   };
 

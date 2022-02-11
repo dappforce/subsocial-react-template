@@ -13,7 +13,7 @@ import { CommentContent } from '@subsocial/api/flat-subsocial/dto';
 import { useSelectPost } from 'src/rtk/features/posts/postsHooks';
 import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
 import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
-import { getTime, getUrl, TypeUrl } from 'src/utils';
+import { getTime, getUrl, transformCount, TypeUrl } from 'src/utils';
 import Text from '../text/Text';
 import { CommentProps } from 'src/models/comments';
 import {
@@ -23,7 +23,6 @@ import {
 import { useApi } from '../../api';
 import { shallowEqual } from 'react-redux';
 import { useAppDispatch, useAppSelector } from 'src/rtk/app/store';
-import { pluralize } from '@subsocial/utils';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import KeyboardArrowUpRounded from '@mui/icons-material/KeyboardArrowUpRounded';
 import { toShortAddress } from '../../utils/address';
@@ -36,6 +35,8 @@ import ReactMarkdown from 'react-markdown';
 import { TypeContent } from 'src/models/common/button';
 import EditComment from './EditComment';
 import { PostData } from '@subsocial/types';
+import { useTranslation } from 'react-i18next';
+import { fetchPosts } from "../../../rtk/features/posts/postsSlice";
 
 const Comment: FC<Omit<CommentProps, 'commentDetails'>> = ({ commentId }) => {
   const commentDetails = useSelectPost(commentId);
@@ -56,6 +57,12 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
   const { post: comment } = commentDetails;
   const hasReplies = comment?.struct.visibleRepliesCount > 0;
   const profile = useSelectProfile(comment.struct.ownerId.toString());
+  const { t } = useTranslation();
+  const [newCommentId, setNewCommentId] = useState('');
+
+  const addNewComment = (id: string) => {
+    setNewCommentId(id)
+  }
 
   useEffect(() => {
     toggleLoader();
@@ -65,6 +72,10 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
       ).then(() => toggleLoader());
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchPosts({ ids: [newCommentId], api }))
+  }, [newCommentId]);
 
   const { replyIds = [] } =
     useAppSelector(
@@ -88,7 +99,7 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
   const toggleEdit = () => setIsShowEditComment((current) => !current);
 
   return isLoader && isShowAllReplies ? (
-    <Loader label={'Loading...'} />
+    <Loader label={t('content.loading')} />
   ) : isShowEditComment ? (
     <EditComment
       comment={comment as unknown as PostData}
@@ -163,10 +174,11 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
         {isShowReply && (
           <NewComment
             parentStruct={comment.struct}
-            placeholder={'Add a reply...'}
+            placeholder={t('forms.placeholder.addReply')}
             className={styles.new}
             autofocus
             onClickCancel={handleCancel}
+            addNewComment={addNewComment}
           />
         )}
         {hasReplies && (
@@ -177,12 +189,11 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
               onClick={toggleReplies}
               component={'button'}
             >
-              {isShowAllReplies ? 'Hide ' : 'View '}
-              {pluralize({
-                count: comment?.struct.visibleRepliesCount,
-                singularText: 'reply',
-                pluralText: 'replies',
-              })}
+              {isShowAllReplies ? t('buttons.hide') : t('buttons.view')}
+              {' '}
+              {transformCount(comment?.struct.visibleRepliesCount + (newCommentId ? 1 : 0))}
+              {' '}
+              {t('plural.reply', { count: comment?.struct.visibleRepliesCount || 0  + (newCommentId ? 1 : 0)})}
               {isShowAllReplies ? (
                 <KeyboardArrowUpRounded />
               ) : (
@@ -190,8 +201,10 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
               )}
             </Text>
 
-            {isShowAllReplies &&
-              replyIds.map((id) => <Comment commentId={id} key={id} />)}
+            {isShowAllReplies && <>
+              <Comment commentId={newCommentId} key={newCommentId} />
+              {replyIds.map((id) => <Comment commentId={id} key={id}/>)}
+            </>}
           </Box>
         )}
       </div>

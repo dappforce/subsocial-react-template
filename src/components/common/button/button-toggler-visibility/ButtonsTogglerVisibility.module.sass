@@ -2,13 +2,13 @@
 
 .button
   &:global(.MuiButton-outlinedPrimary)
-    min-width: 100px
-    height: 24px
-    padding: 0
+    min-height: 24px
+    height: max-content
+    padding: $space_mini 0.625rem
     font-size: $font_small
     font-weight: 500
-    color: $color_black
-    border-color: #d9d9d9
+    color: $color_text_secondary
+    border-color: $color_button_outline
 
     &:disabled
-      padding: 0 $space_tiny
+      padding: $space_mini $space_tiny

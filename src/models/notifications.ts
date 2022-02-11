@@ -1,14 +1,18 @@
 export interface NotificationsItemProps {
-  id: string;
-  image?: any;
-  ownerName: string;
-  ownerImg: any;
-  subject: string;
-  action: string;
-  spaceName: string;
+  image?: string;
+  ownerName: string | undefined;
+  ownerImage: any;
+  ownerId: string | undefined;
+  subject: string | undefined;
+  spaceName?: string;
   date: string | Date;
-  link: string;
-  ownerId: string;
+  link?: string;
+  msg: string;
+  msgType: string;
+  aggregationCount: number;
+  spaceId: string | undefined;
+  postId?: string;
+  subjectLink: any;
 }
 
 export interface INotificationsMessage {

@@ -7,7 +7,6 @@ import { CommentExtension, NewCommentProps } from 'src/models/comments';
 import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
 import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
 import Editor from '../editor/Editor';
-import Router from 'next/router';
 import TxButton from '../button/TxButton';
 import { IpfsContent } from '@subsocial/types/substrate/classes';
 import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
@@ -16,9 +15,12 @@ import { useApi } from 'src/components/api';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import ButtonCancel from '../button/button-cancel/ButtonCancel';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+import { TxCallback } from "../../../models/common/button";
+import { getNewIdsFromEvent } from "../button/buttons-vote/voting";
 
 const NewComment: FC<NewCommentProps> = (props) => {
-  const { parentStruct, className, placeholder, autofocus, onClickCancel } =
+  const { parentStruct, className, placeholder, autofocus, onClickCancel, addNewComment } =
     props;
   const { id, isComment } = parentStruct;
   const [comment, setComment] = useState('');
@@ -28,6 +30,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
   const [isExpandedInput, setIsExpandedInput] = useState(false);
   const { api } = useApi();
   const [ipfsCid, setIpfsCid] = useState<IpfsCid>();
+  const { t } = useTranslation();
   let rootPostId = id;
   let extension: CommentExtension;
 
@@ -78,8 +81,9 @@ const NewComment: FC<NewCommentProps> = (props) => {
     onClickCancel && onClickCancel();
   };
 
-  const onTxSuccess = () => {
-    Router.reload();
+  const onTxSuccess: TxCallback = (txResult) => {
+    addNewComment(getNewIdsFromEvent(txResult)?.toString());
+    handelCancel();
   };
 
   return (
@@ -111,7 +115,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
           <>
             <TxButton
               {...props}
-              label={'Send'}
+              label={t('buttons.send')}
               accountId={address}
               tx={'posts.createPost'}
               onSuccess={onTxSuccess}
@@ -135,7 +139,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
               onClick={handelCancel}
               className={styles.buttonCancel}
             >
-              Cancel
+              {t('buttons.cancel')}
             </ButtonCancel>
           </>
         )}

@@ -1,3 +1,5 @@
+import { ChangeEvent } from "react";
+
 export interface InputProps {
   label?: string;
   placeholder?: string;
@@ -19,4 +21,13 @@ export interface TagsInputProps {
   tags: string[];
   setTags: any;
   className?: string;
+}
+
+export interface InputMoneyProps {
+  amount: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  currency: string;
+  placeholder: string;
+  onClose: () => void;
+  className?: string
 }

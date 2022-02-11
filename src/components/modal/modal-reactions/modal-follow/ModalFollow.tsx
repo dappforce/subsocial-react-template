@@ -14,6 +14,7 @@ import {
 } from 'src/config/ListData.config';
 import { useAppDispatch } from 'src/rtk/app/store';
 import { InnerLoadMoreFn } from '../../../../models/infinity-scroll';
+import { useTranslation } from 'react-i18next';
 
 export const getAccountsIdsByPage = (
   ids: PostId[],
@@ -49,6 +50,7 @@ const ModalFollow: FC<ModalFollowProps> = ({ count = 0, id }) => {
   const dispatch = useAppDispatch();
   const { api } = useApi();
   const [totalCount, setTotalCount] = useState(0);
+  const { t } = useTranslation();
 
   const loadMore: InnerLoadMoreFn = useCallback(
     (page, size) =>
@@ -73,7 +75,7 @@ const ModalFollow: FC<ModalFollowProps> = ({ count = 0, id }) => {
 
   return (
     <ModalReactionsLayout
-      title={`${transformCount(count) || ''} Followers`}
+      title={`${transformCount(count) || ''} ${t('plural.follower', { count: count || 0 })}`}
       dataSource={data}
       loadMore={loadMore}
       totalCount={totalCount}

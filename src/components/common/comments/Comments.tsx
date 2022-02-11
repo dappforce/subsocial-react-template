@@ -3,7 +3,7 @@ import styles from './Comments.module.sass';
 import Comment from './Comment';
 import CardWrapper from '../card-wrapper/CardWrapper';
 import NewComment from './NewComment';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'src/rtk/app/store';
 import {
   fetchPostReplyIds,
@@ -12,13 +12,15 @@ import {
 import { shallowEqual } from 'react-redux';
 import Title from '../title/Title';
 import { TitleSizes } from 'src/models/common/typography';
-import { pluralize } from '@subsocial/utils';
 import { useApi } from '../../api';
 import { CommentsProps } from 'src/models/comments';
 import { Box } from '@mui/system';
 import useLoader from '../../../hooks/useLoader';
 import Loader from '../loader/Loader';
 import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useTranslation } from 'react-i18next';
+import { transformCount } from "../../../utils";
+import { fetchPosts } from "../../../rtk/features/posts/postsSlice";
 
 const Comments: FC<CommentsProps> = ({ parentStruct }) => {
   const { id: parentId, visibleRepliesCount } = parentStruct;
@@ -29,6 +31,12 @@ const Comments: FC<CommentsProps> = ({ parentStruct }) => {
   const { api } = useApi();
   const address = useMyAddress();
   const { isLoader, toggleLoader } = useLoader();
+  const { t } = useTranslation();
+  const [newCommentId, setNewCommentId] = useState('');
+
+  const addNewComment = (id: string) => {
+    setNewCommentId(id)
+  }
 
   useEffect(() => {
     toggleLoader();
@@ -37,30 +45,36 @@ const Comments: FC<CommentsProps> = ({ parentStruct }) => {
     ).then(() => toggleLoader());
   }, []);
 
+  useEffect(() => {
+    dispatch(fetchPosts({ ids: [newCommentId], api }))
+  }, [newCommentId]);
+
   return (
-    <CardWrapper>
+    <CardWrapper className={styles.wrapper}>
       <CardContent>
         <Title type={TitleSizes.PREVIEW} className={styles.title}>
-          {pluralize({
-            count: visibleRepliesCount,
-            singularText: 'comment',
-            pluralText: 'comments',
-          })}
+          {transformCount(visibleRepliesCount + (newCommentId ? 1 : 0))}
+          {' '}
+          {t('plural.comment', { count: visibleRepliesCount + (newCommentId ? 1 : 0) })}
         </Title>
         <NewComment
           parentStruct={parentStruct}
-          placeholder={'Add a comment...'}
+          placeholder={t('forms.placeholder.addComment')}
+          addNewComment={addNewComment}
         />
         {isLoader ? (
-          <Loader label={'Loading...'} />
+          <Loader label={t('content.loading')} />
         ) : (
-          !!replyIds.length && (
-            <Box className={styles.commentsBox}>
-              {replyIds.map((id) => (
-                <Comment commentId={id} key={id} />
-              ))}
-            </Box>
-          )
+          <>
+            {newCommentId && <Comment commentId={newCommentId} key={newCommentId} /> }
+            {!!replyIds.length && (
+              <Box className={styles.commentsBox}>
+                {replyIds.map((id) => (
+                  <Comment commentId={id} key={id}/>
+                ))}
+              </Box>
+            )}
+          </>
         )}
       </CardContent>
     </CardWrapper>

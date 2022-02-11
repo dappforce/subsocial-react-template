@@ -28,7 +28,7 @@ const ModalListUserItem: FC<ModalListUserItemProps> = ({
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Title type={TitleSizes.PROFILE}>
+          <Title type={TitleSizes.PROFILE} className={styles.name}>
             {profile?.content?.name || name}
           </Title>
         }

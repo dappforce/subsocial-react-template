@@ -13,17 +13,19 @@ import { useAppDispatch } from '../../../rtk/app/store'
 import EmptyComponent from '../../common/empty/EmptyComponent'
 import InfinityListScroll from '../../common/infinity-list/InfinityListScroll'
 import { InnerLoadMoreFn } from '../../../models/infinity-scroll'
+import { useTranslation } from 'react-i18next';
 
 const PostList: FC<Omit<ViewSpaceProps, 'spaceData'>> = ({posts, postIds}) => {
     const dispatch = useAppDispatch()
     const { api } = useApi()
     const [ totalCount, setTotalCount ] = useState(0)
+    const { t } = useTranslation();
 
     useEffect(() => {
         setTotalCount(postIds?.length || 0)
     }, [])
 
-    if (!posts || !postIds) return <EmptyComponent text={'No posts yet'}/>
+    if (!posts || !postIds) return <EmptyComponent text={t('content.noPosts')}/>
 
     const initialPostIds = posts.map((post) => post.id)
 
@@ -37,7 +39,7 @@ const PostList: FC<Omit<ViewSpaceProps, 'spaceData'>> = ({posts, postIds}) => {
         dataSource={initialPostIds}
         loadMore={loadMore}
         totalCount={totalCount}
-        emptyText={'No posts yet'}
+        emptyText={t('content.noPosts')}
         renderItem={(id) => <Post postId={id} key={id} />}
     />
 }

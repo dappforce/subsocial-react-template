@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from 'src/rtk/app/store';
 import { toggleAccount } from 'src/rtk/features/mainSlice';
 import SwitchAccountContent from './SwitchAccountContent';
 import { useResponsiveSize } from '../responsive/ResponsiveContext';
+
 export const SwitchAccount = () => {
   const { isOpenAccount } = useAppSelector((state) => state.main);
   const dispatch = useAppDispatch();

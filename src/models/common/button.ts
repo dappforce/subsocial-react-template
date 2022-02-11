@@ -8,13 +8,18 @@ import {
 } from '@subsocial/api/flat-subsocial/flatteners';
 import { ReactionStruct } from 'src/rtk/features/reactions/myPostReactionsSlice';
 import React, { FunctionComponent } from 'react';
-import { AnyAccountId } from '@subsocial/types';
+import { AnyAccountId, IpfsCid } from '@subsocial/types';
+import { CardEditType } from './card-edit';
 
 export type GetTxParamsFn = () => any[];
 export type GetTxParamsAsyncFn = () => Promise<any[]>;
 
-export type TxCallback = (status: SubmittableResult) => void;
-export type TxFailedCallback = (status: SubmittableResult | null) => void;
+export type TxCallback = (status: SubmittableResult, newCid: IpfsCid) => void;
+export type TxSuccessCallback = (status: SubmittableResult) => void;
+export type TxFailedCallback = (
+  status: SubmittableResult | null,
+  newCid: IpfsCid
+) => void;
 
 export interface ButtonCancelProps {
   onClick?: () => void;
@@ -35,6 +40,7 @@ export interface ButtonComponentProps extends ButtonProps {
 export interface ButtonShareProps {
   onClick?: () => void;
   isShowLabel?: boolean;
+  value?: number;
 }
 
 export interface ButtonVoteProps {
@@ -67,6 +73,7 @@ export interface TxButtonProps extends ButtonProps {
   filedMessage?: string;
   component?: FunctionComponent<{}>;
   withLoader?: boolean;
+  cardType?: CardEditType;
 }
 
 export interface ButtonFollowSpaceProps extends Omit<TxButtonProps, 'variant'> {
@@ -80,18 +87,20 @@ export interface ButtonFollowAccountProps
 
 export interface ButtonReplyProps {
   onClick?: () => void;
+  withLabel?: boolean;
 }
 
 export enum TypeContent {
   Space = 'Space',
   Post = 'Post',
   Comment = 'Comment',
+  Profile = 'MyProfile',
 }
 
 export interface ButtonOptionsProps extends IconButtonProps {
   withReactions?: boolean;
-  withHidden?: boolean;
   withFollowing?: boolean;
+  withHidden?: boolean;
   typeContent?: TypeContent;
   contentStruct?: PostStruct | SpaceStruct;
   onClickEdit?: () => void;

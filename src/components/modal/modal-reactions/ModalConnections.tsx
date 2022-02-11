@@ -23,6 +23,7 @@ import {
 import { Tab } from 'src/models/common/tabs';
 import { PostId } from '@subsocial/api/flat-subsocial/dto';
 import { getPageOfIds } from '../../utils/getIds';
+import { useTranslation } from 'react-i18next';
 
 const loadSuggestedConnectionsIds = async (
   api: FlatSubsocialApi,
@@ -57,15 +58,16 @@ const ModalConnections: FC<ModalConnectionsProps> = ({
   countFollowers = 0,
   onClose,
 }) => {
+  const { t } =useTranslation();
   const [value, setValue] = useState<string>(activeTab || 'following');
   const [data, setData] = useState<any[]>([]);
 
   const tabs: Tab[] = useMemo(
     () => [
-      { label: 'Following', tabValue: 'following', count: countFollowing },
-      { label: 'Followers', tabValue: 'followers', count: countFollowers },
+      { label: t('tabs.following'), tabValue: 'following', count: countFollowing },
+      { label: t('tabs.followers'), tabValue: 'followers', count: countFollowers },
     ],
-    [countFollowers, countFollowing]
+    [countFollowers, countFollowing, t]
   );
   const { api } = useApi();
   const dispatch = useAppDispatch();
@@ -97,7 +99,7 @@ const ModalConnections: FC<ModalConnectionsProps> = ({
 
   return (
     <ModalReactionsLayout
-      title={`Connections`}
+      title={t('modals.connections.connections')}
       valueTabs={value}
       handleTabs={handleChange}
       isTabs={true}

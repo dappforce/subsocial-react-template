@@ -20,6 +20,7 @@ export const getTxParams = async <C extends CommonContent>({
 }: Params<C>) => {
   try {
     const cid = await ipfs.saveContent(json);
+
     if (cid) {
       setIpfsCid(cid);
       return buildTxParamsCallback(cid);

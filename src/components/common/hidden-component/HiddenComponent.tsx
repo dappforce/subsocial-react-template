@@ -5,6 +5,7 @@ import { ButtonTogglerVisibility } from '../button/button-toggler-visibility/But
 import { TypeContent } from 'src/models/common/button';
 import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners';
 import { PostData, SpaceData } from '@subsocial/api/flat-subsocial/dto';
+import { useTranslation } from 'react-i18next';
 
 const HiddenComponent = ({
   data,
@@ -12,7 +13,10 @@ const HiddenComponent = ({
 }: {
   data: PostData | SpaceData;
   typeContent: TypeContent;
-}) => (
+}) => {
+  const { t } = useTranslation();
+
+  return (
   <Alert
     className={styles.warning}
     severity={'warning'}
@@ -23,10 +27,10 @@ const HiddenComponent = ({
         withLoader
       />
     }
-    icon={<ErrorIcon />}
+    icon={<ErrorIcon/>}
   >
-    {`This ${typeContent} is unlisted and only you can see it`}
+    {t('generalMessages.hiddenMessage', {type: t(`general.${typeContent.toLowerCase()}`)})}
   </Alert>
-);
+)};
 
 export default HiddenComponent;

@@ -6,7 +6,7 @@
 .comment
   padding: .625rem $space_normal
   text-align: left
-  background-color: $color_page_bg
+  background-color: $color_comment_bg
   border-radius: .25rem
 
 .details
@@ -30,38 +30,44 @@
   gap: .375rem
   margin-top: 2px
 
+  @include mobile
+    justify-content: space-between
+
+  & :global(.MuiTypography-root)
+    font-size: $font_small
+
 .button
   margin-top: $space_normal !important
 
   &:global(.MuiButton-root)
     &:hover
-      background-color: $color_primary
-      color: $color_white !important
+      background-color: $color_button_primary_bg
+      color: $color_text_white !important
 
 .buttonWithoutText
   &:global(.MuiButton-root)
-    background-color: $color_primary !important
-    border-color: $color_primary !important
-    color: $color_white !important
+    background-color: $color_button_primary_bg !important
+    border-color: $color_button_outline_primary !important
+    color: $color_text_white !important
     opacity: .5
 
 .buttonCancel
   margin-top: $space_normal !important
   margin-left: $space_normal
-  color: $color_black !important
-  border-color: #e0e0e0 !important
+  color: $color_text_secondary !important
+  border-color: $color_button_outline !important
 
 .new
   margin-top: $space_normal
 
 .time
-  color: $color_font_secondary
+  color: $color_text_dark_gray
 
 .replies
   display: flex
   align-items: center
   margin-bottom: 1.0625rem
-  color: $color_link_hover
+  color: $color_text_primary
   &:global(.MuiTypography-root)
     font-weight: 500
 
@@ -93,7 +99,7 @@
     min-height: .5rem !important
   & :global(.CodeMirror-wrap)
     padding: $space_mini $space_normal
-    border-color: $color_primary
+    border-color: $color_button_outline_primary
     
 .editorActive
   & :global(.CodeMirror-wrap)

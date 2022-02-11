@@ -5,8 +5,11 @@ import Link from '../../common/links/link/Link';
 import styles from './ModalSignIn.module.sass';
 import ButtonCancel from '../../common/button/button-cancel/ButtonCancel';
 import Image from '../../common/image/Image';
+import { useTranslation } from 'react-i18next';
 
 const NoExtension = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <a
@@ -16,7 +19,7 @@ const NoExtension = () => {
       >
         <ButtonCancel className={styles.button}>
           <Image src={'/google.svg'} width={20} height={20} alt={'Chrome'} />
-          Install for Chrome
+          {t('modals.login.noExtension.installForChrome')}
         </ButtonCancel>
       </a>
 
@@ -27,18 +30,18 @@ const NoExtension = () => {
       >
         <ButtonCancel className={`${styles.button} ${styles.firefox}`}>
           <Image src={'/firefox.svg'} width={20} height={20} alt={'Firefox'} />
-          Install for Firefox
+          {t('modals.login.noExtension.installForFirefox')}
         </ButtonCancel>
       </a>
 
       <Text type={TextSizes.SECONDARY} className={styles.hint}>
-        Need help? Read our{' '}
+        {t('modals.login.noExtension.needHelp')}{' '}
         <Link
           href={'https://app.subsocial.network/docs/sign-up'}
           ext
           className={styles.link}
         >
-          Sign In Guide
+          {t('modals.login.noExtension.signInGuide')}
         </Link>
       </Text>
     </>

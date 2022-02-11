@@ -13,11 +13,11 @@ import { ACCOUNT_STATUS } from 'src/models/auth';
 
 const PostActions: FC<PostActionsProps> = (props) => {
   const { post, isSharedPost = 0 } = props;
-
+  const { visibleRepliesCount, sharesCount } = post.struct
   const { isVisible, toggleModal } = useModal();
 
   const { openSingInModal, status } = useAuth();
-  
+
   const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
 
   const onClickShare = () => {
@@ -45,9 +45,12 @@ const PostActions: FC<PostActionsProps> = (props) => {
         <ButtonVotes post={post.struct} reactionEnum={ReactionEnum.Downvote} />
         <ButtonComment
           onClick={props.toggleComments}
-          value={post.struct.visibleRepliesCount}
+          value={visibleRepliesCount}
         />
-        <ButtonShare onClick={onClickShare} />
+        <ButtonShare
+          onClick={onClickShare}
+          value={sharesCount}
+        />
       </CardActions>
     </>
   );

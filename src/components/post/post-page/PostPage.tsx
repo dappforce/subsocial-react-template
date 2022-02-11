@@ -20,7 +20,6 @@ import { useContext, useEffect } from 'react';
 import { ApiContext } from 'src/components/api';
 import { useAppDispatch } from 'src/rtk/app/store';
 import { useSelectPost } from 'src/rtk/app/hooks';
-import SharedPost from '../shared-post/SharedPost';
 
 export type PostDetailsProps = {
   postData: PostWithAllDetails;

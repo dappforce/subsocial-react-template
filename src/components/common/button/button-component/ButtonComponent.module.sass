@@ -1,14 +1,12 @@
 @import src/styles/vars
 
-$padding_button: 0.5rem
-
 .button
   display: inline-flex
   column-gap: 0.785rem
   min-width: 99px
   height: 36px
-  padding-left: $padding_button
-  padding-right: $padding_button
+  padding-left: $space_tiny
+  padding-right: $space_tiny
   font-size: $font_normal
   font-weight: 500
   box-shadow: none
@@ -17,24 +15,23 @@ $padding_button: 0.5rem
     width: 90px
 
   &:global(.MuiButton-containedPrimary)
-    background-color: $color_primary
+    background-color: $color_button_primary_bg
     box-shadow: none
 
     &:hover
-      background-color: $color_primary
+      background-color: $color_button_primary_bg
 
   &:global(.MuiButton-outlinedPrimary)
-    border-color: $color_primary
-    color: $color-primary
+    border-color: $color_button_outline_primary
+    color: $color_text_primary
 
     &:hover
-      background-color: rgba(244, 142, 198, .05)
-      border-color: $color_primary
+      border-color: $color_button_outline_primary
 
   &:global(.MuiButton-root)[disabled]
-    background-color: $color_white
-    border: 1px solid $color_border
-    color: $color_font_secondary
+    background-color: $color_button_inactive_bg
+    border: 1px solid $color_button_outline
+    color: $color_text_dark_gray
 
     svg
-      color: $color_font_secondary
+      color: $color_icon_dark_gray

@@ -36,7 +36,7 @@ $position_settings: .625rem
       border-style: solid
 
       &:hover
-        border-color: $color_light_border
+        border-color: $color_button_outline
         filter: none
 
     .wrapper
@@ -48,7 +48,7 @@ $position_settings: .625rem
       object-fit: contain
 
 .hint
-  color: $color_font_secondary
+  color: $color_text_dark_gray
   font-size: $font_small
 
   @media screen and (max-width: 767px)
@@ -63,13 +63,13 @@ $position_settings: .625rem
     display: flex
     flex-direction: column
     font-weight: 400
-    border: 1px $color_light_border dashed
+    border: 1px $color_button_outline dashed
     padding: 0
     overflow: hidden
 
     &:hover
-      border-color: $color_primary
-      filter: brightness(0.8)
+      border-color: $color_button_outline_primary
+      background-color: $color_icon_bg_hover
 
     &:hover .hover
       opacity: 1
@@ -83,8 +83,8 @@ $position_settings: .625rem
 .hover
   position: absolute !important
   left: 50% !important
-  transform: translateX(-50%) !important
-  filter: brightness(0) invert(1)
+  transform: translateX(-50%) translateY(-50%) !important
+  fill: $color_icon_white
   z-index: 1
   transition: opacity 300ms
   opacity: 0
@@ -117,7 +117,7 @@ $position_settings: .625rem
     min-width: min-content
     border-radius: 50%
     svg
-      fill: $color_white
+      fill: $color_icon_white
     img
       filter: brightness(0) invert(1)
 

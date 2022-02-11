@@ -11,15 +11,20 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      'en': {
+      en: {
         translation: translation_en
       },
-      'ru': {
+      ru: {
         translation: translation_ru
       }
     },
   })
 
-  if (!Object.keys(languages).includes(i18n.language)) {
-    i18n.changeLanguage(Object.keys(languages)[0]);
-  }
+const lng = i18n.language.replace(/"/g, '')
+i18n.changeLanguage(lng)
+
+if (!Object.keys(languages).includes(i18n.language)) {
+  i18n.changeLanguage(Object.keys(languages)[0]);
+}
+
+export default i18n

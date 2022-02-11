@@ -1,0 +1,74 @@
+@import src/styles/common
+
+.modal
+  display: flex
+  justify-content: center
+  align-items: center
+
+.box
+  display: flex
+  flex-direction: column
+  width: 500px
+  position: relative
+  padding: $space_normal
+  border-radius: 0.25rem
+  overflow: auto
+
+.header
+  display: flex
+  justify-content: space-between
+  padding-bottom: $space_normal
+
+.title
+  line-height: 1.25rem
+
+.buttonClose
+  padding: 0
+
+.recipient
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+  padding-bottom: $space_normal
+
+.profile
+  display: flex
+  flex-direction: row
+  align-items: center
+  gap: $space_tiny
+
+.profileInfo
+  display: flex
+  flex-direction: column
+
+.address
+  font-size: $font_small
+  color: $color_text_dark_gray
+
+.text
+  color: $color_text_dark_gray
+
+.balanceInfo
+  display: flex
+  flex-direction: row
+  padding-bottom: $space_small
+
+.balanceText
+  color: $color_text_dark_gray
+
+.balance
+  font-size: $font_small
+  & span
+    color: $color_text_secondary
+
+.buttons
+  display: flex
+  justify-content: end
+  gap: $space_normal
+
+.buttonCancel
+  padding: $space_tiny $space_large
+
+.button
+  padding: $space_tiny $space_large

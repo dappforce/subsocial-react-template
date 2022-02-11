@@ -4,17 +4,29 @@ import ButtonReply from '../button/ButtonReply';
 import { CommentActionProps } from 'src/models/comments';
 import ButtonVotes from '../button/buttons-vote/ButtonVotes';
 import { ReactionEnum } from '@subsocial/api/flat-subsocial/dto';
+import { useResponsiveSize } from "../../responsive/ResponsiveContext";
 
-const CommentAction: FC<CommentActionProps> = ({ onReply, comment }) => (
-  <div className={styles.group}>
-    <ButtonVotes post={comment} reactionEnum={ReactionEnum.Upvote} withLabel />
-    <ButtonVotes
-      post={comment}
-      reactionEnum={ReactionEnum.Downvote}
-      withLabel
-    />
-    <ButtonReply onClick={onReply} />
-  </div>
-);
+const CommentAction: FC<CommentActionProps> = ({ onReply, comment }) => {
+  const { isMobile } = useResponsiveSize();
+
+  return (
+    <div className={styles.group}>
+      <ButtonVotes
+        post={comment}
+        reactionEnum={ReactionEnum.Upvote}
+        withLabel={!isMobile}
+      />
+      <ButtonVotes
+        post={comment}
+        reactionEnum={ReactionEnum.Downvote}
+        withLabel={!isMobile}
+      />
+      <ButtonReply
+        onClick={onReply}
+        withLabel={!isMobile}
+      />
+    </div>
+  );
+};
 
 export default CommentAction;

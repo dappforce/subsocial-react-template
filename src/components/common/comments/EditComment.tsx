@@ -15,6 +15,7 @@ import { useApi } from 'src/components/api';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import ButtonCancel from '../button/button-cancel/ButtonCancel';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 const EditComment: FC<EditCommentProps> = (props) => {
   const { comment, className, autofocus, onClickCancel } = props;
@@ -26,6 +27,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
   const [isExpandedInput, setIsExpandedInput] = useState(false);
   const { api } = useApi();
   const [ipfsCid, setIpfsCid] = useState<IpfsCid>();
+  const { t } = useTranslation();
 
   const newTxParams = (cid: IpfsCid) => {
     const update = {
@@ -95,7 +97,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
         {isExpandedInput && (
           <TxButton
             {...props}
-            label={'Update'}
+            label={t('buttons.update')}
             accountId={address}
             tx={'posts.updatePost'}
             onSuccess={onTxSuccess}
@@ -118,7 +120,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
         )}
 
         <ButtonCancel onClick={handleCancel} className={styles.buttonCancel}>
-          Cancel
+          {t('buttons.cancel')}
         </ButtonCancel>
       </div>
     </Box>

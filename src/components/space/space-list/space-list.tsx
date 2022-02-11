@@ -14,6 +14,7 @@ import {
   loadMoreValuesArgs,
 } from 'src/models/infinity-scroll';
 import { SpaceIds } from 'src/models/profile';
+import { useTranslation } from 'react-i18next';
 
 const loadMoreSpacesFn = async (loadMoreValues: loadMoreValuesArgs) => {
   const { size, page, api, dispatch, ids, withUnlisted } = loadMoreValues;
@@ -36,6 +37,7 @@ const SpaceList: FC<SpaceIds> = ({ ids, withUnlisted = false }) => {
   const dispatch = useAppDispatch();
   const { api } = useApi();
   const [isEmpty, setIsEmpty] = useState(false);
+  const { t } = useTranslation();
 
   const loadMore: InnerLoadMoreFn = (page, size) =>
     loadMoreSpacesFn({
@@ -68,7 +70,7 @@ const SpaceList: FC<SpaceIds> = ({ ids, withUnlisted = false }) => {
       dataSource={spaceData}
       loadMore={loadMore}
       totalCount={ids.length}
-      emptyText={'No spaces yet'}
+      emptyText={t('content.noSpaces')}
       renderItem={(id) => (
         <Space id={id} key={id} withUnlisted={withUnlisted} />
       )}

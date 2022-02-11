@@ -11,7 +11,7 @@ export const copyText = (text: string) => {
   navigator.clipboard.writeText(text).then(() => console.log('copied'));
 };
 
-export const getTime = (date: Date | number) => {
+export const getTime = (date: Date | number | string) => {
   dayjs.updateLocale('en', {
     relativeTime: {
       future: 'in %s',

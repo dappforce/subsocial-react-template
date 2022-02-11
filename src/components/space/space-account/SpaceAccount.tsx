@@ -12,14 +12,19 @@ import { toEdit } from '../toEdit';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
 import { useAuth } from 'src/components/auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';
+import ModalSendTips from "../../modal/modal-send-tips/ModalSendTips";
+import { useModal } from "../../../hooks/useModal";
+import { useTranslation } from 'react-i18next';
 
 const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
   const router = useRouter();
   const { content, struct, id } = props;
   const isMy = useIsMySpace(struct);
   const [spaceId, setSpaceId] = useLocalStorage<string>('spaceId', id);
+  const { isVisible, toggleModal } = useModal();
   const { status } = useAuth();
   const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
+  const { t } = useTranslation();
 
   if (!content) return null;
 
@@ -40,16 +45,20 @@ const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
                 router.push(`/${router.query.spaceId}/edit`);
               }}
             >
-              Edit space
+              {t('buttons.editSpace')}
             </ButtonComponent>
           ) : (
-            <ButtonComponent
-              variant={'outlined'}
-              className={`${styles.button} ${styles.buttonGrey}`}
-              disabled={isAuthRequired}
-            >
-              Send tips
-            </ButtonComponent>
+            <>
+              <ModalSendTips open={isVisible} toggleModal={toggleModal} ownerId={struct.ownerId}/>
+              <ButtonComponent
+                onClick={toggleModal}
+                variant={'outlined'}
+                className={`${styles.button} ${styles.buttonGrey}`}
+                disabled={isAuthRequired}
+              >
+                {t('buttons.sendTips')}
+              </ButtonComponent>
+            </>
           )}
 
           {isMy ? (
@@ -61,7 +70,7 @@ const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
                 router.push('/posts/new');
               }}
             >
-              Write post
+              {t('buttons.writePost')}
             </ButtonComponent>
           ) : (
             <ButtonFollowSpace className={styles.button} space={struct} />

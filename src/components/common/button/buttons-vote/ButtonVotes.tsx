@@ -28,7 +28,9 @@ import { getNewIdsFromEvent, getPostStructWithUpdatedCounts } from './voting';
 import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
 import { useAppSelector } from 'src/rtk/app/store';
 import { SubmittableResult } from '@polkadot/api';
-import Image from '../../image/Image';
+import { useTranslation } from 'react-i18next';
+import IconLike from "../../icons/IconLike";
+import IconDislike from "../../icons/IconDislike";
 
 const ButtonVotes: FC<ButtonVoteProps> = (props) => {
   const myAddress = useMyAddress();
@@ -59,6 +61,7 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
   const isUpvote = newKind === ReactionEnum.Upvote;
   const type = isUpvote ? 'upvote' : 'downvote';
   const count = isUpvote ? upvotesCount : downvotesCount;
+  const { t } = useTranslation();
 
   const args = { id: postId };
 
@@ -118,38 +121,26 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
     () => ({
       downvote: {
         disable: (
-          <Image src={'/dislike.svg'} width={24} height={24} alt={'dislike'} />
+          <IconDislike type={'outline'} />
         ),
         active: (
-          <Image
-            src={'/dislike.svg'}
-            width={24}
-            height={24}
-            alt={'dislike'}
-            className={styles.downvote}
-          />
+          <IconDislike type={'contained'} />
         ),
-        label: 'Downvote',
+        label: t('buttons.downvote'),
         styles: styles.red,
       },
       upvote: {
         disable: (
-          <Image src={'/like.svg'} width={24} height={24} alt={'like'} />
+          <IconLike type={'outline'} />
         ),
         active: (
-          <Image
-            src={'/like.svg'}
-            width={24}
-            height={24}
-            alt={'like'}
-            className={styles.upvote}
-          />
+          <IconLike type={'contained'} />
         ),
-        label: 'Upvote',
+        label: t('buttons.upvote'),
         styles: styles.green,
       },
     }),
-    []
+    [t]
   );
 
   return (
@@ -165,14 +156,14 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
       {!isActive ? content[type].disable : content[type].active}
       {!withLabel && count > 0 && (
         <Text
-          type={TextSizes.SECONDARY}
+          type={TextSizes.NORMAL}
           className={`${styles.value} ${isActive ? content[type].styles : ''}`}
         >
           {count}
         </Text>
       )}
       {withLabel && (
-        <Text type={TextSizes.SECONDARY} className={styles.label}>
+        <Text type={TextSizes.NORMAL} className={styles.label}>
           {content[type].label} {count > 0 && `(${count})`}
         </Text>
       )}

@@ -14,6 +14,7 @@ import {
 import { useAppDispatch } from 'src/rtk/app/store';
 import { AccountId, PostId } from '@subsocial/api/flat-subsocial/dto';
 import { Tab } from 'src/models/common/tabs';
+import { useTranslation } from 'react-i18next';
 
 interface ReactionType {
   account: AccountId;
@@ -68,14 +69,15 @@ const ModalVotes: FC<ModalVotesProps> = ({ postId }) => {
   const [downvotesCount, setDownvotesCount] = useState(0);
   const [upvotesCount, setUpvotesCount] = useState(0);
   const [value, setValue] = useState('upvotes');
+  const { t } = useTranslation();
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
   const dispatch = useAppDispatch();
 
   const tabs: Tab[] = [
-    { label: 'Upvotes', tabValue: 'upvotes', count: upvotesCount },
-    { label: 'Downvotes', tabValue: 'downvotes', count: downvotesCount },
+    { label: t('tabs.upvotes'), tabValue: 'upvotes', count: upvotesCount },
+    { label: t('tabs.downvotes'), tabValue: 'downvotes', count: downvotesCount },
   ];
   const { api } = useApi();
 
@@ -126,7 +128,7 @@ const ModalVotes: FC<ModalVotesProps> = ({ postId }) => {
 
   return (
     <ModalReactionsLayout
-      title={`${upvotesCount + downvotesCount} Reactions`}
+      title={`${upvotesCount + downvotesCount} ${t('modals.likes.reactions')}`}
       valueTabs={value}
       handleTabs={handleChange}
       isTabs={true}

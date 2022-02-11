@@ -82,3 +82,9 @@ export interface ModalFollowProps {
 export interface ModalVotesProps {
   postId: PostId;
 }
+
+export interface ModalSendTipsProps {
+  open: boolean;
+  toggleModal: () => void;
+  ownerId: string;
+}

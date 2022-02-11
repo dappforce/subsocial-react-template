@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { AvatarSizes } from 'src/models/common/avatar';
 import { useApi } from 'src/components/api';
 import { CardContent, CardHeader } from '@mui/material';
@@ -45,7 +45,7 @@ const SharedPost: FC<any> = (props) => {
 
   return (
     <CardContent className={className}>
-      <CardContent className={styles.postContent}>
+      <CardContent className={styles.sharedContent}>
         <CardHeader
           avatar={
             <Link

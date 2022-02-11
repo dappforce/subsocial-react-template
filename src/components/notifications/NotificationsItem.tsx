@@ -1,5 +1,6 @@
 import styles from './NotificationsPage.module.sass';
 import {
+  Divider,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -10,17 +11,46 @@ import { AvatarSizes } from '../../models/common/avatar';
 import { FC } from 'react';
 import Image from '../common/image/Image';
 import { NotificationsItemProps } from '../../models/notifications';
-import { getUrl, TypeUrl } from 'src/utils';
+import { getTime, getUrl, loadImgUrl, TypeUrl } from 'src/utils';
 import Title from '../common/title/Title';
 import { TitleSizes } from '../../models/common/typography';
 import Link from '../common/links/link/Link';
 import SmallLink from '../common/links/small-link/SmallLink';
+import { useTranslation } from 'react-i18next';
+
+type NotificationMessageProps = {
+  msg: string;
+  aggregationCount: number;
+  withAggregation: boolean;
+};
+
+const NotificationMessage = ({
+  msg,
+  aggregationCount,
+  withAggregation = true,
+}: NotificationMessageProps) => {
+  const { t } = useTranslation();
+  const aggregationMsg = withAggregation
+    ? aggregationCount > 0 && (
+        <> {t('notifications.aggregate', { count: aggregationCount })}</>
+      )
+    : undefined;
+
+  return (
+    <>
+      {aggregationMsg} {msg}&nbsp;
+    </>
+  );
+};
 
 const NotificationsMessage: FC<NotificationsItemProps> = ({
   ownerName,
   ownerId,
   subject,
-  action,
+  msg,
+  aggregationCount,
+  msgType,
+  subjectLink,
 }) => (
   <Typography className={styles.message}>
     <Link
@@ -32,9 +62,13 @@ const NotificationsMessage: FC<NotificationsItemProps> = ({
       <Title type={TitleSizes.PROFILE} className={styles.title}>
         {ownerName}
       </Title>
-    </Link>{' '}
-    {action}
-    <Link href={'/'}>
+    </Link>
+    <NotificationMessage
+      msg={msg}
+      aggregationCount={aggregationCount}
+      withAggregation={msgType === 'notifications'}
+    />
+    <Link href={subjectLink}>
       <span className={styles.bold}>{subject}</span>
     </Link>
   </Typography>
@@ -42,32 +76,46 @@ const NotificationsMessage: FC<NotificationsItemProps> = ({
 
 const NotificationsItem: FC<NotificationsItemProps> = (props) => {
   return (
-    <ListItem>
-      <ListItemAvatar>
-        <Link
-          href={getUrl({
-            type: TypeUrl.Account,
-            id: props.ownerId,
-          })}
-          image
-        >
-          <AvatarElement
-            src={props.ownerImg}
-            size={AvatarSizes.LARGE}
-            id={props.id}
-          />
-        </Link>
-      </ListItemAvatar>
-      <ListItemText
-        primary={<NotificationsMessage {...props} />}
-        secondary={<SmallLink href={'/'}>{props.date}</SmallLink>}
-      />
-      {props.image && (
-        <Link href={'/'} image>
-          <Image src={props.image} width={46} height={46} alt={''} />
-        </Link>
-      )}
-    </ListItem>
+    <>
+      <ListItem>
+        <ListItemAvatar>
+          <Link
+            href={getUrl({
+              type: TypeUrl.Account,
+              id: props.ownerId,
+            })}
+            image
+          >
+            <AvatarElement
+              src={props.ownerImage}
+              size={AvatarSizes.LARGE}
+              id={props.ownerId}
+            />
+          </Link>
+        </ListItemAvatar>
+        <ListItemText
+          primary={<NotificationsMessage {...props} />}
+          //@ts-ignore
+          secondary={
+            <SmallLink href={props.subjectLink}>
+              {getTime(props.date)}
+            </SmallLink>
+          }
+        />
+        {props.image && (
+          <Link href={props.subjectLink} image className={styles.link}>
+            <Image
+              src={loadImgUrl(props.image)}
+              width={46}
+              height={46}
+              alt={''}
+              className={styles.image}
+            />
+          </Link>
+        )}
+      </ListItem>
+      <Divider variant="middle" component="li" />
+    </>
   );
 };
 

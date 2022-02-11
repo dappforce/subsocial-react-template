@@ -4,6 +4,7 @@ import Loader from '../../common/loader/Loader';
 import VoteUserItem from '../../common/vote-user-item/VoteUserItem';
 import styles from './ModalReactions.module.sass';
 import { ModalReactionsListProps } from 'src/models/modal';
+import { useTranslation } from 'react-i18next';
 
 const ModalReactionsList: FC<ModalReactionsListProps> = ({
   dataSource,
@@ -16,6 +17,7 @@ const ModalReactionsList: FC<ModalReactionsListProps> = ({
   const [data, setData] = useState<string[]>([]);
   const [fetching, setFetching] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const handleInfiniteOnLoad = async () => {
     const newData = page === 1 ? [] : await loadMore(page, DEFAULT_PAGE_SIZE);
@@ -74,7 +76,7 @@ const ModalReactionsList: FC<ModalReactionsListProps> = ({
       {data.map((id: string) => (
         <VoteUserItem id={id} key={id} onClose={onClose} />
       ))}
-      {fetching && <Loader label={'Loading...'} />}
+      {fetching && <Loader label={t('content.loading')} />}
     </div>
   );
 };

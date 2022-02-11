@@ -15,12 +15,14 @@ import SwitchAccountMenu from './SwitchAccountMenu';
 import SwitchAccountsExtension from './SwitchAccountsExtension';
 import { Divider } from '@mui/material';
 import ButtonComponent from '../common/button/button-component/ButtonComponent';
+import { useTranslation } from 'react-i18next';
 
 const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
   const { address, accounts = [] } = useAppSelector((state) => state.myAccount);
   const profile = useSelectProfile(address);
   const dispatch = useAppDispatch();
   const account = accounts?.find((acc) => acc.address === address);
+  const { t } = useTranslation();
 
   if (!address || (!account && !profile)) return null;
 
@@ -76,7 +78,7 @@ const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
           className={styles.button}
           onClick={singOut}
         >
-          Sign out
+          {t('buttons.signOut')}
         </ButtonComponent>
       </div>
     </>

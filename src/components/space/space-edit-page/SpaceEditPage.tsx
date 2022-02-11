@@ -7,6 +7,8 @@ import { useApi } from '../../api';
 import { fetchSpace } from 'src/rtk/features/spaces/spacesSlice';
 import { useAppDispatch } from 'src/rtk/app/store';
 import { SpaceWithSomeDetails } from '@subsocial/api/flat-subsocial/dto';
+import { CardEditType } from "../../../models/common/card-edit";
+import { useTranslation } from 'react-i18next';
 
 const SpaceEditPage = () => {
   const router = useRouter();
@@ -14,6 +16,7 @@ const SpaceEditPage = () => {
   const { api } = useApi();
   const dispatch = useAppDispatch();
   const [id, setId] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     (async () => await dispatch(fetchSpace({ api, id })))();
@@ -38,10 +41,11 @@ const SpaceEditPage = () => {
     <Layout>
       <CardEdit
         spaceData={spaceData}
-        title={'Edit Space'}
-        cancelButton={'Cancel'}
-        saveButton={'Save'}
+        title={t('forms.titles.editSpace')}
+        cancelButton={t('buttons.cancel')}
+        saveButton={t('buttons.save')}
         onCancel={onCancel}
+        type={CardEditType.Space}
       />
     </Layout>
   );

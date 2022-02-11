@@ -18,6 +18,10 @@ import { TitleSizes } from 'src/models/common/typography';
 import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
 import MaterialModal from '@mui/material/Modal';
 import styles from './ModalCreateSharedPost.module.sass';
+import { useSelectPost } from "../../../rtk/features/posts/postsHooks";
+import { SharedPostStruct } from "@subsocial/api/flat-subsocial/flatteners";
+import ButtonComponent from "../../common/button/button-component/ButtonComponent";
+import { useTranslation } from 'react-i18next';
 
 interface ModalCreateSharedPostProps {
   postId: string;
@@ -37,10 +41,13 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
   const address = useMyAddress();
   const { api } = useApi();
   const router = useRouter();
-
+  const postData = useSelectPost(postId);
+  const { isSharedPost, sharedPostId } = postData?.post.struct  as SharedPostStruct || {};
+  const hasSpace = !!mySpaceIds.length;
+  const { t } = useTranslation();
   const json = { body };
 
-  const sharedPostExtension = { SharedPost: postId };
+  const sharedPostExtension = { SharedPost: isSharedPost ? sharedPostId : postId };
 
   const newTxParams = (cid: IpfsCid) => {
     return [spaceId, sharedPostExtension, { IPFS: cid }];
@@ -59,7 +66,7 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
   };
 
   const options = {
-    placeholder: 'Add comment...',
+    placeholder: t('forms.placeholder.addComment'),
     autofocus: true,
   };
 
@@ -78,11 +85,12 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
       <Box className={styles.box}>
         <div className={styles.header}>
           <Title type={TitleSizes.PREVIEW} className={styles.title}>
-            Shared post
+            {t('post.sharePost')}
           </Title>
           <ButtonClose onClick={onClose} className={styles.buttonClose} />
         </div>
-        <Box component={'form'} className={styles.form}>
+        {hasSpace ? (
+          <Box component={'form'} className={styles.form}>
           <SelectSpaces
             spaceIds={mySpaceIds}
             initialId={spaceId}
@@ -90,13 +98,17 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
             className={styles.select}
           />
           <Editor value={body} onChange={handleChange} options={options} />
-          <Post postId={postId} isShowActions={false} className={styles.post} />
+          <Post
+            postId={isSharedPost ? sharedPostId : postId}
+            isShowActions={false}
+            className={styles.post}
+          />
           <div className={styles.buttons}>
             <ButtonCancel onClick={onClose} className={styles.buttonCancel}>
-              Cancel
+              {t('buttons.cancel')}
             </ButtonCancel>
             <TxButton
-              label={'Create a post'}
+              label={t('buttons.createAPost')}
               accountId={address}
               tx={'posts.createPost'}
               params={() =>
@@ -114,6 +126,17 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
             />
           </div>
         </Box>
+        ) : (
+          <ButtonComponent
+            variant={'outlined'}
+            className={styles.button}
+            onClick={() => {
+              router.push('/new');
+            }}
+          >
+            {t('buttons.createMyFirstSpace')}
+          </ButtonComponent>
+        )}
       </Box>
     </MaterialModal>
   );

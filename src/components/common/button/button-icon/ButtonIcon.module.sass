@@ -4,11 +4,11 @@
   display: flex
   align-items: center
   column-gap: .5rem
-  color: $color_medium_gray !important
+  color: $color_text_dark_gray !important
   box-shadow: none
 
   svg
-    fill: rgba(0, 0, 0, .54)
+    fill: $color_icon_dark_gray
 
   &:hover
     &:global(.MuiButton-root)
@@ -17,8 +17,4 @@
   &:global(.MuiButton-contained)
     box-shadow: none
     &:hover
-      background-color: $color_primary
-
-  &:global(.MuiButton-outlined)
-    &:hover
-      background-color: rgba(244, 142, 198, .05)
+      background-color: $color_button_primary_bg

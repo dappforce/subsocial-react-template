@@ -11,23 +11,23 @@ import { useAppDispatch } from 'src/rtk/app/store';
 import { useApi } from 'src/components/api';
 import { fetchSpaces } from 'src/rtk/features/spaces/spacesSlice';
 import { EntityId } from '@reduxjs/toolkit';
+import { useTranslation } from 'react-i18next';
 
 const SpaceHiddenComponent = ({ content }: { content: PostData }) => {
   const space = useSelectSpace(content?.struct?.spaceId as string);
   const dispatch = useAppDispatch();
   const { api } = useApi();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    if (!space) {
-      dispatch(
-        fetchSpaces({
-          api,
-          ids: [content?.struct?.spaceId as unknown as EntityId],
-          withUnlisted: true,
-        })
-      );
-    }
-  });
+    dispatch(
+      fetchSpaces({
+        api,
+        ids: [content?.struct?.spaceId as unknown as EntityId],
+        withUnlisted: true,
+      })
+    );
+  }, [api, dispatch, content?.struct?.spaceId]);
 
   if (!space?.struct?.hidden) return null;
   return (
@@ -43,7 +43,7 @@ const SpaceHiddenComponent = ({ content }: { content: PostData }) => {
       }
       icon={<ErrorIcon />}
     >
-      {'This post is not visible because its space is hidden'}
+      {t('generalMessages.hiddenPostBySpace')}
     </Alert>
   );
 };

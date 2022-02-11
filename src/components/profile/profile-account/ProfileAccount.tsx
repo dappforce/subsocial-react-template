@@ -17,6 +17,11 @@ import { Tooltip } from '@mui/material';
 import ButtonEdit from 'src/components/common/button/button-edit/ButtonEdit';
 import { useAuth } from 'src/components/auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';
+import ModalSendTips from "../../modal/modal-send-tips/ModalSendTips";
+import { useModal } from "../../../hooks/useModal";
+import { useTranslation } from 'react-i18next';
+import { useResponsiveSize } from "../../responsive/ResponsiveContext";
+import { TypeContent } from "../../../models/common/button";
 
 const ProfileAccount: FC<ProfileAccountProps> = (props) => {
   const { content, struct, id } = props;
@@ -27,7 +32,15 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
   const [hasSpace, setHasSpace] = useState(false);
   const [spaceId, setSpaceId] = useLocalStorage<string>('spaceId', '');
   const { status } = useAuth();
+  const { t } = useTranslation();
   const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
+  const { isVisible, toggleModal} = useModal();
+  const { isDesktop } = useResponsiveSize()
+
+  const onClickEdit = () => {
+    router.push(`/accounts/${address}/edit`)
+  }
+
   const tabs = [
     { label: 'Posts', tabValue: 'userPosts' },
     { label: 'Spaces', tabValue: 'userSpaces' },
@@ -67,10 +80,10 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
                 router.push('/new');
               }}
             >
-              Create Space
+              {t('buttons.createSpace')}
             </ButtonComponent>
             <Tooltip
-              title={hasSpace ? '' : 'Please create your space first'}
+              title={hasSpace ? '' : `${t('generalMessages.createSpaceFirst')}`}
               className={styles.tooltip}
               placement="top"
               arrow
@@ -84,21 +97,22 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
                     router.push('/posts/new');
                   }}
                   disabled={!hasSpace}
-                  data-tooltip={'test'}
                 >
-                  Write post
+                  {t('buttons.writePost')}
                 </ButtonComponent>
               </div>
             </Tooltip>
           </>
         ) : (
           <>
+            <ModalSendTips open={isVisible} toggleModal={toggleModal} ownerId={id}/>
             <ButtonComponent
+              onClick={toggleModal}
               variant={'outlined'}
               className={`${styles.button} ${styles.buttonGrey}`}
               disabled={isAuthRequired}
             >
-              Send tips
+              {t('buttons.sendTips')}
             </ButtonComponent>
             <ButtonFollowAccount address={id} className={styles.button} />
           </>
@@ -106,12 +120,16 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
       }
       action={
         <>
-          {isMy && (
+          {isMy && isDesktop && (
             <ButtonEdit
               onClick={() => router.push(`/accounts/${address}/edit`)}
             />
           )}
-          <Options className={styles.option} />
+          <Options
+            className={styles.option}
+            onClickEdit={isDesktop ? undefined : onClickEdit}
+            typeContent={TypeContent.Profile}
+          />
         </>
       }
       about={content?.about}

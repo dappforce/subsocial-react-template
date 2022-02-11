@@ -1,36 +1,36 @@
 @import src/styles/vars
 
 .snackbar
-  max-width: 384px
+  max-width: 336px
   width: 100%
 
   & :global(.MuiAlert-action)
     svg
-      fill: $color_font_secondary
+      fill: $color_icon_dark_gray
 
 .info
   & :global(MuiAlert-icon)
-    fill: $color_primary
+    fill: $color_text_primary
 
   & :global(.MuiAlert-message)
-    color: $color_black
+    color: $color_text_secondary
 
 .error
   & :global(MuiAlert-icon)
-    fill: $color_error
+    fill: $color_icon_error
 
   & :global(.MuiAlert-message)
-    color: $color_error
+    color: $color_text_error
 
 .alert
   align-items: center
-  background-color: $color_white
+  background-color: $color_snackbar_bg
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, .12), 0 6px 16px 0 rgba(0, 0, 0, .08), 0 9px 28px 8px rgba(0, 0, 0 , .05)
   width: 100%
 
   &:global(.MuiAlert-root)
     font-size: $font_small
-    color: $color_black
+    color: $color_text_secondary
 
   & :global(.MuiAlert-action)
     padding-top: 0

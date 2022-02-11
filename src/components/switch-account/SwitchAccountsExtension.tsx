@@ -39,7 +39,7 @@ const SwitchAccountsExtensionItem: FC<Account> = (props) => {
       </ListItemAvatar>
 
       <div className={styles.info}>
-        <Title type={TitleSizes.PROFILE}>
+        <Title type={TitleSizes.PROFILE} className={styles.name}>
           {profile?.content?.name || props.name}
         </Title>
         <Address

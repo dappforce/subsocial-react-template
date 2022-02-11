@@ -8,6 +8,7 @@ import { useResponsiveSize } from '../../responsive/ResponsiveContext';
 import Image from '../image/Image';
 import { useApi } from 'src/components/api';
 import { MAX_FILE_SIZE } from 'src/config/ListData.config';
+import { useTranslation } from 'react-i18next';
 
 const File: FC<FileProps> = ({
   type,
@@ -20,11 +21,16 @@ const File: FC<FileProps> = ({
   const [file, setFile] = useState('');
   const [isVisibleSettings, setIsVisibleSettings] = useState(isMobile);
   const imageRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
   const imgWarning = useMemo(
-    () => <p className={styles.hint}>{'Image should be less than 2 MB'}</p>,
+    () => <p className={styles.hint}>{t('imageShouldBeLessThan', { limit: MAX_FILE_SIZE / 1000000 })}</p>,
     []
   );
   const { api } = useApi();
+  const settingMbError = () => {
+    setMbError(true);
+    setTimeout(() => setMbError(false), 2000);
+  };
 
   useEffect(() => {
     if (image) setFile(image);
@@ -35,29 +41,14 @@ const File: FC<FileProps> = ({
 
     setFile(addedImage);
     setImage && setImage(addedImage);
-    if (image) {
-      if (e.target.files[0].size < MAX_FILE_SIZE) {
-        const ipfsImageCid = await api.subsocial.ipfs.saveFile(
-          e.target.files[0]
-        );
-        setCidImage(ipfsImageCid);
-      } else {
-        setFile(image);
-        setMbError(true);
-        setTimeout(() => setMbError(false), 2000);
-      }
-    } else {
-      if (e.target.files[0].size < MAX_FILE_SIZE) {
-        const ipfsImageCid = await api.subsocial.ipfs.saveFile(
-          e.target.files[0]
-        );
 
-        setCidImage(ipfsImageCid);
-      } else {
-        setFile('');
-        setMbError(true);
-        setTimeout(() => setMbError(false), 2000);
-      }
+    if (e.target.files[0].size < MAX_FILE_SIZE) {
+      const ipfsImageCid = await api.subsocial.ipfs.saveFile(e.target.files[0]);
+      setCidImage(ipfsImageCid);
+    } else {
+      image
+        ? (setFile(image), settingMbError())
+        : (setFile(''), settingMbError());
     }
   };
 

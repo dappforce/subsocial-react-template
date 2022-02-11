@@ -49,7 +49,7 @@ const Address: FC<AddressProps> = ({
           alt={'wallet'}
         />
       )}
-      <Text type={sizes[size].type} paragraph {...textProps}>
+      <Text type={sizes[size].type} paragraph component={'div'} {...textProps}>
         {shortedAddress}
       </Text>
       {(isCopy || isMobile) && (

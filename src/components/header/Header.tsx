@@ -1,5 +1,6 @@
 import { AppBar, Button, /*IconButton,*/ Toolbar } from '@mui/material';
-// import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import styles from './Header.module.sass';
@@ -21,8 +22,12 @@ import Text from '../common/text/Text';
 import { useAuth } from '../auth/AuthContext';
 import { useApi } from '../api';
 import classNames from 'classnames';
+import IconButton from '@mui/material/IconButton';
+import { useResponsiveSize } from "../responsive/ResponsiveContext";
+import Image from "../common/image/Image";
+import { useTranslation } from 'react-i18next';
 
-const Header: FC<HeaderProps> = ({ label }) => {
+const Header: FC<HeaderProps> = ({ label, isShowingMobileBurger, onMobileBurgerClick }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { address, accounts } = useAppSelector((state) => state.myAccount);
@@ -31,6 +36,8 @@ const Header: FC<HeaderProps> = ({ label }) => {
   const { openSingInModal } = useAuth();
   const { api } = useApi();
   const [hasSpace, setHasSpace] = useState(false);
+  const { isDesktop, isMobile } = useResponsiveSize();
+  const { t } = useTranslation();
 
   useEffect(() => {
     (async () => {
@@ -46,21 +53,26 @@ const Header: FC<HeaderProps> = ({ label }) => {
   }, [address, api]);
 
   return (
-    <AppBar position="fixed" className={styles.bar}>
+    <AppBar position="fixed" className={classNames(styles.bar, { [styles.barWithMenu]: isShowingMobileBurger })}>
       <Toolbar className={styles.header}>
         <div className={styles.menu}>
-          {/* It may use for mobile layout */}
-          {/* <IconButton
-                        className={styles.icon}
-                        size="large"
-                        edge="start"
-                        aria-label="menu"
-                        color="default"
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-          */}
-
+          {!isDesktop ? (
+            <IconButton
+              className={styles.icon}
+              size="large"
+              edge="start"
+              onClick={onMobileBurgerClick}
+            >
+              {isShowingMobileBurger ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+          ) : (
+            <Image
+              src={'/react_logo.svg'}
+              alt={'react logo'}
+              width={30}
+              height={30}
+            />
+          )}
           <Title type={TitleSizes.PREVIEW} className={styles.label}>
             <Link href={'/'}>
               <a>{label}</a>
@@ -74,19 +86,19 @@ const Header: FC<HeaderProps> = ({ label }) => {
               variant={'outlined'}
               onClick={() => openSingInModal()}
             >
-              Sign in
+              {t('buttons.signIn')}
             </ButtonComponent>
           ) : (
             <>
-              <Button
+              {isDesktop && <Button
                 variant="outlined"
                 onClick={() => router.push(hasSpace ? '/posts/new' : '/new')}
                 className={classNames([styles.spaceButton], {
                   [styles.postButton]: hasSpace,
                 })}
               >
-                <span>+</span> {hasSpace ? 'New Post' : 'Create Space'}
-              </Button>
+                <span>+</span> {hasSpace ? t('buttons.newPost') : t('buttons.createSpace')}
+              </Button>}
 
               <ButtonIcon
                 onClick={() => router.push('/notifications')}
@@ -106,7 +118,7 @@ const Header: FC<HeaderProps> = ({ label }) => {
                 />
 
                 <div>
-                  <Text type={TextSizes.SECONDARY} className={styles.name}>
+                  <Text type={TextSizes.SECONDARY} className={classNames(styles.name, { [styles.mobileName]: isMobile })}>
                     {profile?.content?.name || account?.name}
                   </Text>
                   <Balance

@@ -1,9 +1,6 @@
 import { PostId, PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto';
-import {
-  CommentStruct,
-  PostStruct,
-} from '@subsocial/api/flat-subsocial/flatteners';
-import { CommentContent, PostData } from '@subsocial/types';
+import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { PostData } from '@subsocial/types';
 
 export interface CommentsProps {
   parentStruct: PostStruct;
@@ -20,6 +17,7 @@ export interface NewCommentProps {
   className?: string;
   autofocus?: boolean;
   onClickCancel?: () => void;
+  addNewComment: (id: string) => void;
 }
 
 export interface EditCommentProps {

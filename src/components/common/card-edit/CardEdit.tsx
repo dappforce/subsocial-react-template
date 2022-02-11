@@ -11,13 +11,12 @@ import {
   ChangeEvent,
   FC,
   FormEvent,
-  SetStateAction,
   useCallback,
   useEffect,
   useState,
 } from 'react';
 import TagsInput from '../inputs/tags-input/TagsInput';
-import { CardEditProps } from 'src/models/common/card-edit';
+import { CardEditProps, CardEditType } from 'src/models/common/card-edit';
 import { loadImgUrl } from 'src/utils';
 import Editor from '../editor/Editor';
 import { IpfsCid } from '@subsocial/types';
@@ -26,13 +25,24 @@ import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import { useApi } from 'src/components/api';
 import { useRouter } from 'next/router';
-import { TxCallback } from 'src/models/common/button';
+import { TxCallback, TxFailedCallback } from 'src/models/common/button';
 import { getNewIdsFromEvent } from '../button/buttons-vote/voting';
 import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
 import Snackbar from '../snackbar/Snackbar';
 import { SnackbarType } from 'src/models/common/snackbar';
+import { unpinIpfsCid } from 'src/components/utils/unpinIpfsCid';
+import { useTranslation } from 'react-i18next';
+import { MAX_FILE_SIZE } from '../../../config/ListData.config';
 
-const CardEdit: FC<CardEditProps> = (props) => {
+const CardEdit: FC<CardEditProps> = ({
+  type,
+  spaceData,
+  profileData,
+  title,
+  onCancel,
+  cancelButton,
+  saveButton,
+}) => {
   const [state, setState] = useState<{
     name: string;
     description: string;
@@ -43,6 +53,7 @@ const CardEdit: FC<CardEditProps> = (props) => {
   const { api } = useApi();
   const router = useRouter();
   const { name, description } = state;
+  const { t } = useTranslation();
 
   const [tags, setTags] = useState<string[]>([]);
   const [image, setImage] = useState('');
@@ -52,13 +63,11 @@ const CardEdit: FC<CardEditProps> = (props) => {
   const [existentImage, setExistentImage] = useState<IpfsCid>();
   const [isOwner, setIsOwner] = useState(true);
   const [mbError, setMbError] = useState(false);
-  const existentPropsData = props?.spaceData
-    ? props?.spaceData
-    : props?.profileData;
 
-  const title: string = props.title.split(' ')[1];
+  const existentPropsData = spaceData ? spaceData : profileData;
+
   const json =
-    title === 'Space'
+    type === CardEditType.Space
       ? {
           about: description,
           name,
@@ -73,23 +82,23 @@ const CardEdit: FC<CardEditProps> = (props) => {
 
   const newTxParams = (cid: IpfsCid) => {
     if (existentPropsData?.id) {
-      return title === 'Space'
+      return type === CardEditType.Space
         ? [existentPropsData.id, { content: { IPFS: cid } }]
         : [{ content: { IPFS: cid } }];
     }
-    return title === 'Space'
+    return type === CardEditType.Space
       ? [null, null, { IPFS: cid }, null]
       : [{ IPFS: cid }];
   };
 
   useEffect(() => {
-    if (title === 'Profile') {
+    if (type === CardEditType.Profile) {
       profile?.id !== router.query.address
         ? setIsOwner(false)
         : setIsOwner(true);
-    } else if (title === 'Space') {
-      if (props?.spaceData !== undefined) {
-        props?.spaceData.struct.createdByAccount !== profile?.id
+    } else if (type === CardEditType.Space) {
+      if (spaceData !== undefined) {
+        spaceData.struct.createdByAccount !== profile?.id
           ? setIsOwner(false)
           : setIsOwner(true);
       }
@@ -103,7 +112,7 @@ const CardEdit: FC<CardEditProps> = (props) => {
     setTags(existentPropsData?.content?.tags || []);
     setImage(
       loadImgUrl(
-        props?.spaceData
+        spaceData
           ? //@ts-ignore
             existentPropsData?.content?.image
           : //@ts-ignore
@@ -111,7 +120,7 @@ const CardEdit: FC<CardEditProps> = (props) => {
       ) || ''
     );
     setExistentImage(
-      props?.spaceData
+      spaceData
         ? //@ts-ignore
           existentPropsData?.content?.image
         : //@ts-ignore
@@ -139,16 +148,73 @@ const CardEdit: FC<CardEditProps> = (props) => {
   }, []);
 
   const options = {
-    placeholder: 'Description',
+    placeholder: t('forms.fieldName.description'),
   };
 
-  const onSuccess: TxCallback = (txResult) => {
+  const onSuccess: TxCallback = (txResult, newCid) => {
     const id =
       existentPropsData?.id || getNewIdsFromEvent(txResult)?.toString();
 
-    title === 'Space'
-      ? router.push(`/${id}`)
-      : router.push(`/accounts/${address}`);
+    if (existentPropsData) {
+      if (type === CardEditType.Space) {
+        newCid &&
+          unpinIpfsCid(
+            api.subsocial.ipfs,
+            //@ts-ignore
+            existentPropsData?.struct?.contentId,
+            newCid
+          );
+
+        cidImage &&
+          unpinIpfsCid(
+            api.subsocial.ipfs,
+            //@ts-ignore
+            existentPropsData?.content?.image,
+            cidImage
+          );
+      } else {
+        newCid &&
+          unpinIpfsCid(api.subsocial.ipfs, profile?.struct?.contentId, newCid);
+
+        cidImage &&
+          unpinIpfsCid(api.subsocial.ipfs, profile?.content?.avatar, cidImage);
+      }
+      type === CardEditType.Space
+        ? router.push(`/${id}`)
+        : router.push(`/accounts/${address}`);
+    } else {
+      type === CardEditType.Space
+        ? router.push(`/${id}`)
+        : router.push(`/accounts/${address}`);
+    }
+  };
+
+  const onFailed: TxFailedCallback = (txResult, newCid) => {
+    if (existentPropsData) {
+      if (type === CardEditType.Space) {
+        newCid &&
+          unpinIpfsCid(
+            api.subsocial.ipfs,
+            newCid,
+            //@ts-ignore
+            existentPropsData?.content?.id
+          );
+
+        cidImage &&
+          unpinIpfsCid(
+            api.subsocial.ipfs,
+            cidImage,
+            //@ts-ignore
+            existentPropsData?.content?.image
+          );
+      } else {
+        newCid &&
+          unpinIpfsCid(api.subsocial.ipfs, newCid, profile?.struct.contentId);
+
+        cidImage &&
+          unpinIpfsCid(api.subsocial.ipfs, cidImage, profile?.content?.avatar);
+      }
+    }
   };
 
   return (
@@ -156,16 +222,17 @@ const CardEdit: FC<CardEditProps> = (props) => {
       <Snackbar
         type={SnackbarType.Error}
         open={mbError}
-        message={'Image should be less than 2mb'}
+        message={t('imageShouldBeLessThan', { limit: MAX_FILE_SIZE / 1000000 })}
       />
       {!isOwner ? (
         <CardContent className={styles.warningText}>
-          Only owner can edit his {title}
+          Only owner can edit his{' '}
+          {type === CardEditType.Space ? 'Space' : 'Profile'}
         </CardContent>
       ) : (
         <>
           <CardContent>
-            <Title type={TitleSizes.DETAILS}>{props.title}</Title>
+            <Title type={TitleSizes.DETAILS}>{title}</Title>
           </CardContent>
           <File
             type={'avatar'}
@@ -176,11 +243,19 @@ const CardEdit: FC<CardEditProps> = (props) => {
           <Box component="form" className={styles.form} onSubmit={onSubmit}>
             <Input
               isRequired
-              label={`${title} name`}
+              label={t(
+                type === CardEditType.Space
+                  ? 'forms.placeholder.spaceName'
+                  : 'forms.placeholder.profileName'
+              )}
               value={state.name}
               onChange={handleName}
               errorText={
-                error ? `This ${title.toLowerCase()} name is already taken` : ''
+                error
+                  ? `This ${
+                      type === CardEditType.Space ? 'space' : 'profile'
+                    } name is already taken`
+                  : ''
               }
               isError={error}
             />
@@ -192,24 +267,30 @@ const CardEdit: FC<CardEditProps> = (props) => {
               className={styles.editor}
             />
 
-            {title === 'Space' && <TagsInput tags={tags} setTags={setTags} />}
+            {type === CardEditType.Space && (
+              <TagsInput tags={tags} setTags={setTags} />
+            )}
 
             <CardActions className={styles.actions}>
               <ButtonCancel
                 className={styles.button}
-                onClick={props.onCancel || reset}
+                onClick={onCancel || reset}
               >
-                {props.cancelButton}
+                {cancelButton}
               </ButtonCancel>
               <TxButton
-                label={props.saveButton}
+                label={saveButton}
                 accountId={address}
                 disabled={false}
                 className={styles.button}
                 tx={
                   existentPropsData?.id
-                    ? `${title.toLowerCase()}s.update${title}`
-                    : `${title.toLowerCase()}s.create${title}`
+                    ? type === CardEditType.Space
+                      ? 'spaces.updateSpace'
+                      : 'profiles.updateProfile'
+                    : type === CardEditType.Space
+                    ? 'spaces.createSpace'
+                    : 'profiles.createProfile'
                 }
                 params={() =>
                   getTxParams({
@@ -221,8 +302,10 @@ const CardEdit: FC<CardEditProps> = (props) => {
                   })
                 }
                 onSuccess={onSuccess}
+                onFailed={onFailed}
                 variant={'contained'}
                 withLoader
+                cardType={type}
               />
             </CardActions>
           </Box>

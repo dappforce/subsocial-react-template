@@ -1,9 +1,6 @@
-import {
-  PostData,
-  PostWithAllDetails,
-  PostWithSomeDetails,
-} from '@subsocial/api/flat-subsocial/dto';
+import { PostData, PostWithAllDetails, PostWithSomeDetails } from '@subsocial/api/flat-subsocial/dto';
 import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { IpfsCid } from "@subsocial/types";
 
 export type PostActionsProps = {
   toggleComments: () => void;
@@ -30,4 +27,17 @@ export interface PostFullProps extends PostWithSomeDetails {
 
 export interface PostStructWithHidden extends PostStruct {
   hidden: boolean;
+}
+
+export enum TypePostTabs {
+  Article = 'article',
+  Video = 'video',
+}
+
+export interface dataPost {
+  title: string;
+  body: string;
+  tags: string[];
+  image?: string | IpfsCid;
+  link?: string;
 }

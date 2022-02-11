@@ -22,3 +22,5 @@ export const recommendedSpaceIds = [
   '1021',
   '1022',
 ];
+
+export const currency = 'SUB';
