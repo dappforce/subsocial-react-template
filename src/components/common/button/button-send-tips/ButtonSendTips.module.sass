@@ -1,0 +1,12 @@
+@import src/styles/vars
+
+.button
+  &:global(.MuiButton-root)
+    color: $color_text_secondary
+    border: 1px solid $color_button_outline
+    background-color: $color_button_basic_bg
+
+    &[disabled]
+      color: $color_text_dark_gray
+      background-color: $color_button_inactive_bg
+      border-color: $color_button_outline

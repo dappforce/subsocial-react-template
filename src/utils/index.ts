@@ -1,51 +1,55 @@
 import numeral from 'numeral';
-import dayjs from 'dayjs';
-import updateLocale from 'dayjs/plugin/updateLocale';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import slugify from 'slugify';
+import {
+  I18N_DAYJS_RELATIVE_TIME_KEY,
+  RelativeTimeProps,
+  relativeTimeUnits,
+  SubDate,
+  SubsocialDateLocaleProps
+} from '@subsocial/utils';
+import { t } from 'i18next';
+import { config } from 'src/config';
 
-dayjs.extend(relativeTime);
-dayjs.extend(updateLocale);
 
 export const copyText = (text: string) => {
   navigator.clipboard.writeText(text).then(() => console.log('copied'));
 };
 
-export const getTime = (date: Date | number) => {
-  dayjs.updateLocale('en', {
-    relativeTime: {
-      future: 'in %s',
-      past: '%s ago',
-      s: 'a few seconds',
-      m: 'a minute',
-      mm: '%dm',
-      h: 'an hour',
-      hh: '%dh',
-      d: 'a day',
-      dd: '%dd',
-      M: 'a month',
-      MM: '%d months',
-      y: 'a year',
-      yy: '%d years',
-    },
-  });
+export const DateService =  {
+  getDate(date: string | number) {
+    return SubDate.formatDate(date);
+  },
 
-  const dateOfItem = dayjs(date);
-  const days = dayjs().diff(dateOfItem, 'days');
+  updateLocale(lang: string) {
+    const relativeTime = Object.assign({}, relativeTimeUnits);
 
-  if (days < 7) return dateOfItem.fromNow();
-  if (days > 365) return dateOfItem.format('d MMM YY');
-  return dateOfItem.format('DD MMM');
-};
+    for (let key in relativeTimeUnits) {
+      const unit = relativeTimeUnits[key as keyof RelativeTimeProps];
+
+      relativeTime[key as keyof RelativeTimeProps] = t(
+        `${I18N_DAYJS_RELATIVE_TIME_KEY}.${key}`,
+        {
+          unit,
+        }
+      );
+    }
+
+    const subDateLocale: SubsocialDateLocaleProps = {
+      localeName: lang,
+      relativeTime: relativeTime,
+    };
+
+    SubDate.updateLocale(subDateLocale);
+  },
+}
 
 export const transformCount = (value: number): string => {
   return numeral(value).format('0,0a');
 };
 
 export const loadImgUrl = (cid: string) => {
-  // return cid ? `https://app.subsocial.network/ipfs/ipfs/${cid}` : ''
   return cid
-    ? `https://dev-subsocial.codebridge.tech/ipfs/read/ipfs/${cid}`
+    ? `${config.ipfsNodeUrl}/ipfs/${cid}`
     : '';
 };
 

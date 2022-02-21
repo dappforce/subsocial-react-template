@@ -7,20 +7,15 @@ import {
   fetchPost,
   fetchPosts,
   selectPost,
-} from 'src/rtk/features/posts/postsSlice';
-import { getInitialPropsWithRedux, NextContextWithRedux } from 'src/rtk/app';
+} from 'src/store/features/posts/postsSlice';
+import { getInitialPropsWithRedux, NextContextWithRedux } from 'src/store/app';
 import { bnsToIds, idToBn } from '@subsocial/utils';
-import {
-  asCommentStruct,
-  PostStruct,
-} from '@subsocial/api/flat-subsocial/flatteners';
-import { PostWithAllDetails } from '@subsocial/api/flat-subsocial/dto';
-import { PostWithSomeDetails } from '@subsocial/types';
+import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { PostWithAllDetails, PostWithSomeDetails, PostStruct } from '@subsocial/types/dto';
 import { useContext, useEffect } from 'react';
 import { ApiContext } from 'src/components/api';
-import { useAppDispatch } from 'src/rtk/app/store';
-import { useSelectPost } from 'src/rtk/app/hooks';
-import SharedPost from '../shared-post/SharedPost';
+import { useAppDispatch } from 'src/store/app/store';
+import { useSelectPost } from 'src/store/app/hooks';
 
 export type PostDetailsProps = {
   postData: PostWithAllDetails;
@@ -85,7 +80,7 @@ export async function loadPostOnNextReq({
 }
 
 getInitialPropsWithRedux(PostPage, async (props) => {
-  const { subsocial, dispatch, reduxStore } = props;
+  const { subsocial, dispatch } = props;
 
   const postData = await loadPostOnNextReq(props);
   const postStruct = postData?.post?.struct as unknown as PostStruct;

@@ -4,10 +4,9 @@ import { Box } from '@mui/material';
 import styles from './Comments.module.sass';
 import { FC, useCallback, useState } from 'react';
 import { EditCommentProps } from 'src/models/comments';
-import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import Editor from '../editor/Editor';
-import Router from 'next/router';
 import TxButton from '../button/TxButton';
 import { OptionIpfsContent } from '@subsocial/types/substrate/classes';
 import { IpfsCid } from '@subsocial/types';
@@ -15,6 +14,12 @@ import { useApi } from 'src/components/api';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import ButtonCancel from '../button/button-cancel/ButtonCancel';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from "../../../store/app/store";
+import { upsertPost } from "../../../store/features/posts/postsSlice";
+import { TxCallback, TxFailedCallback } from "../../../models/common/button";
+import { upsertContent } from "../../../store/features/contents/contentsSlice";
+import { unpinIpfsCid } from "../../utils/unpinIpfsCid";
 
 const EditComment: FC<EditCommentProps> = (props) => {
   const { comment, className, autofocus, onClickCancel } = props;
@@ -22,10 +27,11 @@ const EditComment: FC<EditCommentProps> = (props) => {
   const [body, setBody] = useState(comment?.content?.body || '');
   const address = useMyAddress();
   const user = useSelectProfile(address);
+  const dispatch = useAppDispatch();
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [isExpandedInput, setIsExpandedInput] = useState(false);
   const { api } = useApi();
-  const [ipfsCid, setIpfsCid] = useState<IpfsCid>();
+  const { t } = useTranslation();
 
   const newTxParams = (cid: IpfsCid) => {
     const update = {
@@ -53,10 +59,6 @@ const EditComment: FC<EditCommentProps> = (props) => {
 
   if (!user) return null;
 
-  const options = {
-    autofocus,
-  };
-
   const expandForm = () => {
     setIsExpandedInput(true);
   };
@@ -65,8 +67,26 @@ const EditComment: FC<EditCommentProps> = (props) => {
     if (!comment) setIsExpandedInput(false);
   };
 
-  const onTxSuccess = () => {
-    Router.reload();
+  const onTxSuccess: TxCallback = (txResult, newCid) => {
+    dispatch(upsertContent({id: newCid as string, body, isShowMore: false, summary: body }))
+    dispatch(upsertPost({...comment.struct, contentId: newCid as string }))
+    onClickCancel()
+
+    newCid &&
+    unpinIpfsCid(
+      api.subsocial.ipfs,
+      comment.struct.contentId,
+      newCid,
+    );
+  };
+
+  const onFailed: TxFailedCallback = (txResult, newCid) => {
+    newCid &&
+    unpinIpfsCid(
+      api.subsocial.ipfs,
+      newCid,
+      comment.struct.contentId,
+    );
   };
 
   return (
@@ -79,32 +99,32 @@ const EditComment: FC<EditCommentProps> = (props) => {
     >
       <AvatarElement
         src={user?.content?.avatar}
-        size={AvatarSizes.MEDIUM}
+        size={AvatarSizes.SMALL}
         id={user?.id}
       />
       <div className={styles.commentContent}>
         <Editor
-          options={options}
           onFocus={expandForm}
           onBlur={rollUpForm}
           toolbar={isExpandedInput}
           onChange={handleChange}
           value={body}
           className={styles.editor}
+          autofocus={autofocus}
         />
         {isExpandedInput && (
           <TxButton
             {...props}
-            label={'Update'}
+            label={t('buttons.update')}
             accountId={address}
             tx={'posts.updatePost'}
             onSuccess={onTxSuccess}
+            onFailed={onFailed}
             disabled={isDisabledButton}
             params={() =>
               getTxParams({
                 json: { body },
                 ipfs: api.subsocial.ipfs,
-                setIpfsCid,
                 buildTxParamsCallback: newTxParams,
               })
             }
@@ -118,7 +138,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
         )}
 
         <ButtonCancel onClick={handleCancel} className={styles.buttonCancel}>
-          Cancel
+          {t('buttons.cancel')}
         </ButtonCancel>
       </div>
     </Box>

@@ -1,14 +1,16 @@
 @import src/styles/common
 
 .box
+  margin-top: -1rem
   box-shadow: 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px rgba(0, 0, 0, .12), 0 1px 3px rgba(0, 0, 0, .2)
   border-radius: 4px
   width: 100%
+  height: 100%
 
 .message
   font-size: $font_normal
   text-overflow: ellipsis
-  word-wrap: break-word
+  word-wrap: wrap
   overflow: hidden
   display: -webkit-box
   -webkit-line-clamp: 1
@@ -26,3 +28,8 @@
 
 .subheader
   padding: $space_normal $space_normal $space_tiny
+
+@include mobile
+  .message
+    display: block
+    height: auto

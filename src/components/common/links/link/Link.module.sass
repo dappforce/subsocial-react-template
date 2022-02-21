@@ -5,9 +5,11 @@
   cursor: pointer
 
   &:not(.image):hover
-    color: $color_primary
+    color: $color_text_primary
     img
       filter: invert(35%) sepia(90%) saturate(4187%) hue-rotate(308deg) brightness(95%) contrast(93%)
+    svg
+      fill: $color_icon_primary
 
 .external
-  color: $color_primary
+  color: $color_text_primary

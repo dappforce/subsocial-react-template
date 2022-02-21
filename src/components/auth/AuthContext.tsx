@@ -1,19 +1,16 @@
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { asAccountId } from '@subsocial/api';
-import { fetchProfiles } from '../../rtk/features/profiles/profilesSlice';
-import {
-  MY_ADDRESS,
-  setAccounts,
-  setSigner,
-} from '../../rtk/features/myAccount/myAccountSlice';
+import { fetchProfiles } from '../../store/features/profiles/profilesSlice';
+import { MY_ADDRESS, setAccounts, setSigner, } from '../../store/features/myAccount/myAccountSlice';
 import { ACCOUNT_STATUS } from '../../models/auth';
 import { useModal } from '../../hooks/useModal';
 import { useApi } from '../api';
-import { useAppDispatch, useAppSelector } from '../../rtk/app/store';
+import { useAppDispatch, useAppSelector } from '../../store/app/store';
 import ModalSignIn from '../modal/modal-sign-in/ModalSignIn';
 import { reloadSpaceIdsFollowedByAccount } from '../space/reloadSpaceIdsFollowedByAccount';
-import { useCreateReloadAccountIdsByFollower } from '../../rtk/features/profiles/profilesHooks';
+import { useCreateReloadAccountIdsByFollower } from '../../store/features/profiles/profilesHooks';
 import store from 'store';
+import { web3AccountsSubscribe } from "@polkadot/extension-dapp";
 
 type ContextType = {
   openSingInModal: (isAlert?: boolean) => void;
@@ -38,55 +35,75 @@ export const AuthProvider: FC = (props) => {
   const reloadAccountIdsByFollower = useCreateReloadAccountIdsByFollower();
 
   useEffect(() => {
+    let unsub: Function
+
     (async () => {
-      const { isWeb3Injected, web3Enable, web3Accounts } = await import(
+      const { isWeb3Injected, web3Enable, web3Accounts, web3AccountsSubscribe  } = await import(
         '@polkadot/extension-dapp'
-      );
+        );
 
       if (!isWeb3Injected) {
         setStatus(ACCOUNT_STATUS.EXTENSION_NOT_FOUND);
       }
 
-      if (isWeb3Injected) {
-        const injectedExtensions = await web3Enable('Subsocial');
+      const injectedExtensions = await web3Enable('Subsocial');
 
-        const polkadotJs = injectedExtensions.find(
-          (extension) => extension.name === 'polkadot-js'
+      const polkadotJs = injectedExtensions.find(
+        (extension) => extension.name === 'polkadot-js'
+      );
+
+      if (!polkadotJs) {
+        setStatus(ACCOUNT_STATUS.EXTENSION_NOT_FOUND);
+        store.remove(MY_ADDRESS);
+        return;
+      }
+
+      dispatch(setSigner(polkadotJs.signer));
+
+      const accounts = await web3Accounts()
+
+      if (!accounts.length) {
+        store.remove(MY_ADDRESS);
+        setStatus(ACCOUNT_STATUS.ACCOUNTS_NOT_FOUND);
+      }
+
+      const addresses = accounts.map((account) => {
+        return {
+          address: asAccountId(account.address)?.toString() as string,
+          name: account.meta.name as string,
+        };
+      });
+      await dispatch(
+        fetchProfiles({
+          api,
+          ids: addresses.map((address) => address.address),
+          reload: true,
+        })
+      );
+      dispatch(setAccounts(addresses));
+
+      unsub = await web3AccountsSubscribe( accounts => {
+        const addresses = accounts.map((account) => {
+          return {
+            address: asAccountId(account.address)?.toString() as string,
+            name: account.meta.name as string,
+          };
+        });
+        dispatch(
+          fetchProfiles({
+            api,
+            ids: addresses.map((address) => address.address),
+            reload: true,
+          })
         );
 
-        if (!polkadotJs) {
-          setStatus(ACCOUNT_STATUS.EXTENSION_NOT_FOUND);
-          store.remove(MY_ADDRESS);
-          return;
+        dispatch(setAccounts(addresses));
+        if (!addresses.length) {
+          setStatus(ACCOUNT_STATUS.ACCOUNTS_NOT_FOUND)
+
         }
-
-        dispatch(setSigner(polkadotJs.signer));
-
-        unsub = polkadotJs.accounts.subscribe(async (accounts) => {
-          if (!accounts.length) {
-            store.remove(MY_ADDRESS);
-            return setStatus(ACCOUNT_STATUS.ACCOUNTS_NOT_FOUND);
-          }
-
-          const addresses = accounts.map((account) => {
-            return {
-              address: asAccountId(account.address)?.toString() as string,
-              name: account.name as string,
-            };
-          });
-          await dispatch(
-            fetchProfiles({
-              api,
-              ids: addresses.map((address) => address.address),
-              reload: true,
-            })
-          );
-          dispatch(setAccounts(addresses));
-        });
-      }
+      })
     })();
-
-    let unsub: (() => void) | undefined;
 
     return () => {
       unsub && unsub();
@@ -94,11 +111,17 @@ export const AuthProvider: FC = (props) => {
   }, [api, dispatch]);
 
   useEffect(() => {
+    if (status === ACCOUNT_STATUS.EXTENSION_NOT_FOUND) return
+
     if (accounts?.length && !address) {
       setStatus(ACCOUNT_STATUS.UNAUTHORIZED);
     }
 
     (async () => {
+      if (!accounts?.length) {
+        setStatus(ACCOUNT_STATUS.ACCOUNTS_NOT_FOUND)
+        return;
+      }
       if (!address) {
         setStatus(ACCOUNT_STATUS.UNAUTHORIZED);
         return;
@@ -114,6 +137,8 @@ export const AuthProvider: FC = (props) => {
 
         await reloadAccountIdsByFollower(address);
       }
+
+
     })();
 
     let unsubBalance: (() => void) | undefined;

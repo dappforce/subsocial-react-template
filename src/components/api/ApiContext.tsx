@@ -8,20 +8,23 @@ import store from 'store';
 import {
   MY_ADDRESS,
   setMyAddress,
-} from '../../rtk/features/myAccount/myAccountSlice';
-import { useAppDispatch } from '../../rtk/app/store';
+} from '../../store/features/myAccount/myAccountSlice';
+import { useAppDispatch } from '../../store/app/store';
 import { useSnackbar } from 'src/hooks/useSnackbar';
 import { useTranslation } from 'react-i18next';
+import { ApiPromise } from "@polkadot/api";
+import { config as inputConfig } from 'src/config'
 
-type ContextType = { api: FlatSubsocialApi };
+type ContextType = { api: FlatSubsocialApi, substrateApi: ApiPromise };
 export const ApiContext = createContext<ContextType>({
   api: {} as FlatSubsocialApi,
+  substrateApi: {} as ApiPromise,
 });
 
 const config = {
-  substrateNodeUrl: 'wss://dev-subsocial.codebridge.tech/rpc',
-  offchainUrl: 'https://dev-subsocial.codebridge.tech/offchain',
-  ipfsNodeUrl: 'https://dev-subsocial.codebridge.tech/ipfs/read',
+  substrateNodeUrl: inputConfig.substrateNodeUrl,
+  offchainUrl: inputConfig.offchainUrl,
+  ipfsNodeUrl: inputConfig.ipfsNodeUrl,
   useServer: {
     httpRequestMethod: 'get' as HttpRequestMethod,
   },
@@ -33,6 +36,7 @@ export async function initSubsocialApi() {
 
 export const ApiProvider: FC = (props) => {
   const [api, setApi] = useState<FlatSubsocialApi>({} as FlatSubsocialApi);
+  const [subApi, setSubApi] = useState<ApiPromise>({} as ApiPromise)
   const { isLoader, toggleLoader } = useLoader();
   const dispatch = useAppDispatch();
   const { type, message, setSnackConfig, removeSnackbar } = useSnackbar();
@@ -47,7 +51,10 @@ export const ApiProvider: FC = (props) => {
     toggleLoader();
     initSubsocialApi().then((res) => {
       setApi(res);
-      toggleLoader();
+      res.subsocial.substrate.api.then((res) => {
+        setSubApi(res)
+        toggleLoader();
+      })
     });
   }, []);
 
@@ -62,7 +69,7 @@ export const ApiProvider: FC = (props) => {
       }}
     />
   ) : (
-    <ApiContext.Provider value={{ api }}>{props.children}</ApiContext.Provider>
+    <ApiContext.Provider value={{ api, substrateApi: subApi }}>{props.children}</ApiContext.Provider>
   );
 };
 

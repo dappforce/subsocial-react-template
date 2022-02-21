@@ -7,28 +7,30 @@ import {
   ButtonVoteProps,
   InnerButtonVoteProps,
 } from 'src/models/common/button';
-import { useCreateUpsertMyReaction } from 'src/rtk/features/reactions/myPostReactionsHooks';
+import { useCreateUpsertMyReaction } from 'src/store/features/reactions/myPostReactionsHooks';
 import {
   useCreateReloadPost,
   useCreateUpsertPost,
-} from 'src/rtk/features/posts/postsHooks';
+} from 'src/store/features/posts/postsHooks';
 import {
   Reaction,
   ReactionStruct,
   selectMyReactionByPostId,
-} from 'src/rtk/features/reactions/myPostReactionsSlice';
+} from 'src/store/features/reactions/myPostReactionsSlice';
 import {
   ReactionEnum,
   ReactionId,
   ReactionType,
-} from '@subsocial/api/flat-subsocial/dto';
+} from '@subsocial/types/dto';
 import { ReactionKind } from '@subsocial/types/substrate/classes';
 import TxButton from '../TxButton';
 import { getNewIdsFromEvent, getPostStructWithUpdatedCounts } from './voting';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
-import { useAppSelector } from 'src/rtk/app/store';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
+import { useAppSelector } from 'src/store/app/store';
 import { SubmittableResult } from '@polkadot/api';
-import Image from '../../image/Image';
+import { useTranslation } from 'react-i18next';
+import IconLike from "../../icons/IconLike";
+import IconDislike from "../../icons/IconDislike";
 
 const ButtonVotes: FC<ButtonVoteProps> = (props) => {
   const myAddress = useMyAddress();
@@ -59,16 +61,17 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
   const isUpvote = newKind === ReactionEnum.Upvote;
   const type = isUpvote ? 'upvote' : 'downvote';
   const count = isUpvote ? upvotesCount : downvotesCount;
+  const { t } = useTranslation();
 
   const args = { id: postId };
 
   const buildTxParams = () => {
     if (!reactionId) {
       // Case: Add a new reaction
-      return [postId, new ReactionKind(newKind)];
+      return [postId, ReactionKind(newKind)];
     } else if (oldKind !== newKind) {
       // Case: Change a kind of the existing reaction
-      return [postId, reactionId, new ReactionKind(newKind)];
+      return [postId, reactionId, ReactionKind(newKind)];
     } else {
       // Case: Delete the existing reaction
       return [postId, reactionId];
@@ -86,6 +89,9 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
       reactionId: newReactionId,
       kind: isActive ? undefined : newKind,
     };
+
+    console.log(newReaction)
+
 
     upsertMyReaction({ id: postId, ...newReaction });
   };
@@ -118,38 +124,26 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
     () => ({
       downvote: {
         disable: (
-          <Image src={'/dislike.svg'} width={24} height={24} alt={'dislike'} />
+          <IconDislike type={'outline'} />
         ),
         active: (
-          <Image
-            src={'/dislike.svg'}
-            width={24}
-            height={24}
-            alt={'dislike'}
-            className={styles.downvote}
-          />
+          <IconDislike type={'contained'} />
         ),
-        label: 'Downvote',
+        label: t('buttons.downvote'),
         styles: styles.red,
       },
       upvote: {
         disable: (
-          <Image src={'/like.svg'} width={24} height={24} alt={'like'} />
+          <IconLike type={'outline'} />
         ),
         active: (
-          <Image
-            src={'/like.svg'}
-            width={24}
-            height={24}
-            alt={'like'}
-            className={styles.upvote}
-          />
+          <IconLike type={'contained'} />
         ),
-        label: 'Upvote',
+        label: t('buttons.upvote'),
         styles: styles.green,
       },
     }),
-    []
+    [t]
   );
 
   return (
@@ -165,14 +159,14 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
       {!isActive ? content[type].disable : content[type].active}
       {!withLabel && count > 0 && (
         <Text
-          type={TextSizes.SECONDARY}
+          type={TextSizes.NORMAL}
           className={`${styles.value} ${isActive ? content[type].styles : ''}`}
         >
           {count}
         </Text>
       )}
       {withLabel && (
-        <Text type={TextSizes.SECONDARY} className={styles.label}>
+        <Text type={TextSizes.NORMAL} className={styles.label}>
           {content[type].label} {count > 0 && `(${count})`}
         </Text>
       )}

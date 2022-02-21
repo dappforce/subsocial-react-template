@@ -6,10 +6,10 @@ import Address from '../address/Address';
 import AvatarElement from '../avatar/AvatarElement';
 import Title from '../title/Title';
 import { TitleSizes } from 'src/models/common/typography';
-import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
+import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { toShortAddress } from '../../utils/address';
 import Link from '../links/link/Link';
-import { AccountId } from '@subsocial/api/flat-subsocial/dto';
+import { AccountId } from '@subsocial/types/dto';
 import ButtonFollowAccount from '../button/button-follow/ButtonFollowAccount';
 import { getUrl, TypeUrl } from 'src/utils';
 
@@ -34,7 +34,7 @@ const VoteUserItem: FC<VoteUserItemProps> = (props) => {
         <ListItemAvatar className={styles.avatar}>
           <AvatarElement
             src={profile?.content?.avatar}
-            size={AvatarSizes.LARGE}
+            size={AvatarSizes.MEDIUM}
             id={props.id}
           />
         </ListItemAvatar>
@@ -58,7 +58,9 @@ const VoteUserItem: FC<VoteUserItemProps> = (props) => {
           />
         </div>
         <ButtonFollowAccount address={props.id} />
+
       </ListItem>
+
       <Divider variant="middle" />
     </>
   );

@@ -6,7 +6,7 @@ import Title from '../../common/title/Title';
 import { TitleSizes } from 'src/models/common/typography';
 import Balance from '../../common/balance/Balance';
 import Address from '../../common/address/Address';
-import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
+import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { ModalListUserItemProps } from 'src/models/modal';
 import { FC } from 'react';
 
@@ -22,13 +22,13 @@ const ModalListUserItem: FC<ModalListUserItemProps> = ({
       <ListItemAvatar className={styles.avatar}>
         <AvatarElement
           src={profile?.content?.avatar || ''}
-          size={AvatarSizes.LARGE}
+          size={AvatarSizes.MEDIUM}
           id={address}
         />
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Title type={TitleSizes.PROFILE}>
+          <Title type={TitleSizes.PROFILE} className={styles.name}>
             {profile?.content?.name || name}
           </Title>
         }
@@ -39,6 +39,7 @@ const ModalListUserItem: FC<ModalListUserItemProps> = ({
             className={styles.balance}
           />
         }
+        secondaryTypographyProps={{component: 'div'}}
       />
       <Address
         size={'sm'}

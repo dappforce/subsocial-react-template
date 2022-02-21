@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { SwitchAccountContentProps } from '../../models/account';
-import { useAppDispatch, useAppSelector } from '../../rtk/app/store';
-import { useSelectProfile } from '../../rtk/features/profiles/profilesHooks';
-import { signOut } from '../../rtk/features/myAccount/myAccountSlice';
+import { useAppDispatch, useAppSelector } from '../../store/app/store';
+import { useSelectProfile } from '../../store/features/profiles/profilesHooks';
+import { signOut } from '../../store/features/myAccount/myAccountSlice';
 import styles from './SwitchAccount.module.sass';
 import AvatarElement from '../common/avatar/AvatarElement';
 import { AvatarSizes } from '../../models/common/avatar';
@@ -14,7 +14,7 @@ import Balance from '../common/balance/Balance';
 import SwitchAccountMenu from './SwitchAccountMenu';
 import SwitchAccountsExtension from './SwitchAccountsExtension';
 import { Divider } from '@mui/material';
-import ButtonComponent from '../common/button/button-component/ButtonComponent';
+import ButtonSignOut from '../common/button/button-sign-out/ButtonSignOut';
 
 const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
   const { address, accounts = [] } = useAppSelector((state) => state.myAccount);
@@ -35,7 +35,7 @@ const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
         <div className={styles.header}>
           <AvatarElement
             src={profile?.content?.avatar}
-            size={AvatarSizes.LARGE}
+            size={AvatarSizes.MEDIUM}
             id={address}
           />
 
@@ -71,13 +71,7 @@ const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
       <div className={styles.signout}>
         <Divider />
 
-        <ButtonComponent
-          variant={'outlined'}
-          className={styles.button}
-          onClick={singOut}
-        >
-          Sign out
-        </ButtonComponent>
+        <ButtonSignOut onClick={singOut} />
       </div>
     </>
   );

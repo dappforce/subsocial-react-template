@@ -1,12 +1,9 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  DEFAULT_FIRST_PAGE,
-  DEFAULT_PAGE_SIZE,
-} from 'src/config/ListData.config';
+import { config } from 'src/config'
 import { getPageOfIds } from '../../utils/getIds';
-import { fetchSpaces } from 'src/rtk/features/spaces/spacesSlice';
+import { fetchSpaces } from 'src/store/features/spaces/spacesSlice';
 import { useApi } from '../../api';
-import { useAppDispatch } from 'src/rtk/app/store';
+import { useAppDispatch } from 'src/store/app/store';
 import InfinityListScroll from '../../common/infinity-list/InfinityListScroll';
 import { Space } from '../space-item/Space';
 import {
@@ -14,6 +11,7 @@ import {
   loadMoreValuesArgs,
 } from 'src/models/infinity-scroll';
 import { SpaceIds } from 'src/models/profile';
+import { useTranslation } from 'react-i18next';
 
 const loadMoreSpacesFn = async (loadMoreValues: loadMoreValuesArgs) => {
   const { size, page, api, dispatch, ids, withUnlisted } = loadMoreValues;
@@ -36,6 +34,7 @@ const SpaceList: FC<SpaceIds> = ({ ids, withUnlisted = false }) => {
   const dispatch = useAppDispatch();
   const { api } = useApi();
   const [isEmpty, setIsEmpty] = useState(false);
+  const { t } = useTranslation();
 
   const loadMore: InnerLoadMoreFn = (page, size) =>
     loadMoreSpacesFn({
@@ -51,7 +50,7 @@ const SpaceList: FC<SpaceIds> = ({ ids, withUnlisted = false }) => {
     let isMounted = true;
 
     isMounted &&
-      loadMore(DEFAULT_FIRST_PAGE, DEFAULT_PAGE_SIZE).then((ids) => {
+      loadMore(config.infinityScrollFirstPage, config.infinityScrollOffset).then((ids) => {
         if (!ids.length) {
           setIsEmpty(true);
         }
@@ -68,7 +67,7 @@ const SpaceList: FC<SpaceIds> = ({ ids, withUnlisted = false }) => {
       dataSource={spaceData}
       loadMore={loadMore}
       totalCount={ids.length}
-      emptyText={'No spaces yet'}
+      emptyText={t('content.noSpaces')}
       renderItem={(id) => (
         <Space id={id} key={id} withUnlisted={withUnlisted} />
       )}

@@ -23,7 +23,7 @@ const Account: FC<AccountProps> = (props) => {
         avatar={
           <AvatarElement
             src={props.avatar}
-            size={AvatarSizes.HUGE}
+            size={AvatarSizes.LARGE}
             id={props.id}
           />
         }
@@ -68,7 +68,7 @@ const Account: FC<AccountProps> = (props) => {
       {props.withBalance && (
         <CardContent className={styles.accountBalanceInfo}>
           <div className={styles.accountWallet}>
-            <Image src={'/wallet.svg'} width={24} height={24} alt={'wallet'} />
+            <Image src={'/wallet.jpg'} width={24} height={24} alt={'wallet'} />
             <Address label={props.id} size={'lg'} isCopy isQr />
           </div>
 

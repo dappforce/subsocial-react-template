@@ -1,6 +1,6 @@
 import { TabProps } from './common/tabs';
 import { ReactNode, SyntheticEvent } from 'react';
-import { AccountId, PostId, SpaceId } from '@subsocial/api/flat-subsocial/dto';
+import { AccountId, PostId, SpaceId } from '@subsocial/types/dto';
 import { ModalProps as ModalMaterialProps } from '@mui/material/Modal/Modal';
 import { Account } from './account';
 import { ACCOUNT_STATUS } from './auth';
@@ -81,4 +81,10 @@ export interface ModalFollowProps {
 
 export interface ModalVotesProps {
   postId: PostId;
+}
+
+export interface ModalSendTipsProps {
+  open: boolean;
+  toggleModal: () => void;
+  ownerId: string;
 }

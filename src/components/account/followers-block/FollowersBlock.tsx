@@ -5,7 +5,6 @@ import { transformCount } from '../../../utils';
 import ModalFollow from '../../modal/modal-reactions/modal-follow/ModalFollow';
 import Modal from '../../modal/Modal';
 import { useModal } from 'src/hooks/useModal';
-import { pluralize } from '@subsocial/utils';
 import { useTranslation } from 'react-i18next';
 
 const FollowersBlock: FC<FollowersBlockProps> = ({
@@ -19,16 +18,6 @@ const FollowersBlock: FC<FollowersBlockProps> = ({
     : styles.followers;
   const { isVisible, toggleModal } = useModal();
   const { t } = useTranslation();
-  const [postCount, postLabel] = pluralize({
-    count: posts,
-    singularText: t('general.post'),
-    pluralText: t('general.Post'),
-  }).split(' ');
-  const [followerCount, followerLabel] = pluralize({
-    count: followers,
-    singularText: t('general.follower'),
-    pluralText: t('general.followers'),
-  }).split(' ');
 
   return (
     <div className={classname}>
@@ -36,12 +25,12 @@ const FollowersBlock: FC<FollowersBlockProps> = ({
         <ModalFollow count={followers} id={id} />
       </Modal>
       <button>
-        <span className={styles.bold}>{transformCount(+postCount)}</span>{' '}
-        {postLabel}
+        <span className={styles.bold}>{transformCount(posts)}</span>{' '}
+        {t('plural.post', { count: posts || 0 })}
       </button>
       <button onClick={toggleModal}>
-        <span className={styles.bold}>{transformCount(+followerCount)}</span>{' '}
-        {followerLabel}
+        <span className={styles.bold}>{transformCount(followers)}</span>{' '}
+        {t('plural.follower', { count: followers || 0 })}
       </button>
     </div>
   );

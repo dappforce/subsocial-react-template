@@ -31,15 +31,16 @@ $size_img_content: 174px
   justify-content: center
   align-items: center
   padding: $space_large 0
-  border: $border_grey_color
+  border: 1px solid $color_line_outline
   box-shadow: none
 
 .notFoundText
-  color: $color_medium_gray
+  color: $color_text_dark_gray
 
 .sharedPostContent
-  border: $border_grey_color
+  border: 1px solid $color_button_outline
   box-shadow: none
+
 
 .mainPostContent
   display: flex
@@ -50,14 +51,20 @@ $size_img_content: 174px
   padding-bottom: 0
 
 .postContent
-  padding: 0
+  padding: 0 !important
   flex-grow: 1
+
+.sharedContent
+  flex-grow: 1
+  padding-left: 0
+  padding-right: 0
+  padding-top: 0
 
 .action
   margin: $space_mini 0 0
 
   & :global(.MuiSvgIcon-root)
-    fill: $color_black
+    fill: $color_icon_black
 
 .header
   padding-right: 0

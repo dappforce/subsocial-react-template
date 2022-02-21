@@ -1,56 +1,143 @@
 @import '../../styles/_vars.sass'
 
 .drawer
-  & :global(.MuiDrawer-paper)
-    margin: 57px 0px 0px 0px
-    max-width: $sidebar_max_width !important
-    width: $sidebar_min_width !important
-    transition: all 500ms ease-in-out
+  & :global(.MuiPaper-root)
+    width: $sidebar_min_width_on_desktop
+    transition: all 400ms ease-in-out !important
+    height: calc(100vh - #{$header_height_on_desktop} - 1px)
+    margin-top: calc(#{$header_height_on_desktop} + 1px)
     display: flex
-    height: calc(100vh - 57px) !important
     justify-content: space-between
-  .topBox
-    display: flex
-    flex-direction: column
-    align-items: flex-start
-    transition: all 500ms ease-in-out
-    padding-left: $space_big
-  .divider
-    width: 100%
-    margin-left: -$space_small
-  .bottomBox
-    margin-left: $space_normal
-    transition: all 500ms ease-in-out
-    .bottomList
-      display: flex
-      align-item: center
-      .listItemHide
-        justify-content: flex-start
-      .bottomBlock
-        display: flex
-        flex-direction: column
-        align-items: center
-        .itemText
-          color: $color_semi_gray
-        & :global(.MuiTypography-root)
-          font-size: $font_small
-        .bottom
-          display: flex
-          align-items: flex-start
-  & :global(.MuiDrawer-paper):hover
-    max-width: $sidebar_max_width !important
-    width: $sidebar_max_width !important
-    transition: all 500ms ease-in-out
-    .topBox
-      align-items: flex-start
-      transition: all 500ms ease-in-out
-      width: 200px
-    .bottomBox
-      transition: all 500ms ease-in-out
-      width: 200px
-      bottomList
-        display: flex
-        flex-direction: column
+    border: none
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1)
+    overflow-x: hidden
+
+    &:hover
+      width: $sidebar_max_width_on_desktop
+
+    @include tablet
+      width: 0
+
+.drawerOpenMobile
+  & :global(.MuiPaper-root)
+    width: $sidebar_width_on_mobile
+
+.topBox
+  width: $sidebar_max_width_on_desktop
+
+  @include tablet
+    width: $sidebar_width_on_mobile
+
+.list
+  display: flex
+  flex-direction: column
+  gap: 0.125rem
+  padding: 0.375rem 0
+
+.item
+  padding: 0.875rem 0
+  height: 46px
+  color: $color_text_dark_gray
+  transition: all 0.5s linear
+
+  &:hover
+    color: $color_text_primary
+    background-color: $color_menu-item_bg_hover
+
+    svg
+      fill: $color_icon_primary
+
+.icon
+  display: flex
+  justify-content: center
+  align-items: center
+  width: $sidebar_min_width_on_desktop
+  padding: 0 $space_small
+
+  @include tablet
+    width: 3.5rem
+
+.divider
+  width: $sidebar_min_width_on_desktop
+  margin-left: 0.9375rem
+  & :global(.MuiDivider-root)
+    width: 1.5rem
+    border-color: $color_line_outline
+    transition: width 0.5s linear
+
+  @include tablet
+    margin: 0 $space_large
+    width: $sidebar_width_on_mobile !important
+    & :global(.MuiDivider-root)
+      width: 14.375rem !important
+
+.drawer
+  &:hover
     .divider
-      width:115%
-      margin-left: -$space_small
+      width: $sidebar_max_width_on_desktop
+      margin-left: $space_normal
+      & :global(.MuiDivider-root)
+        width: 11.75rem
+
+.bottomBox
+  width: $sidebar_min_width_on_desktop
+  display: flex
+  flex-direction: column
+  gap: $space_normal
+  padding-bottom: $space_big
+  transition: width 0.5s linear
+
+  @include tablet
+    width: $sidebar_width_on_mobile !important
+    padding-bottom: 2.75rem
+
+.drawer
+  &:hover
+    .bottomBox
+      width: $sidebar_max_width_on_desktop
+
+.socialText
+  display: none
+  text-align: center
+  color: $color_text_dark_gray
+  white-space: nowrap
+
+  @include tablet
+    display: block
+
+.drawer
+  &:hover
+    .socialText
+      display: block
+
+.socialList
+  display: flex
+  gap: 0.9375rem
+  justify-content: center
+  padding: 0
+
+.socialIcon
+  min-width: 30px
+  min-height: 30px
+  display: flex
+  justify-content: center
+  align-items: center
+  background-color: $color_icon_bg
+  border-radius: 50%
+  transition: background-color 0.5s linear
+
+  &:nth-child(n + 2)
+    display: none
+
+  &:hover
+    background-color: $color_icon_bg_hover
+    border: 1px solid $color_button_outline
+
+  @include tablet
+    display: flex !important
+
+.drawer
+  &:hover
+    .socialIcon
+      &:nth-child(n + 2)
+        display: flex

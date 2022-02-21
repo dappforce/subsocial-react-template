@@ -1,12 +1,14 @@
 import Layout from '../../layout/Layout';
 import CardEdit from '../../common/card-edit/CardEdit';
 import { useRouter } from 'next/router';
-import { useSelectSpace } from 'src/rtk/features/spaces/spacesHooks';
+import { useSelectSpace } from 'src/store/features/spaces/spacesHooks';
 import { useEffect, useState } from 'react';
 import { useApi } from '../../api';
-import { fetchSpace } from 'src/rtk/features/spaces/spacesSlice';
-import { useAppDispatch } from 'src/rtk/app/store';
-import { SpaceWithSomeDetails } from '@subsocial/api/flat-subsocial/dto';
+import { fetchSpace } from 'src/store/features/spaces/spacesSlice';
+import { useAppDispatch } from 'src/store/app/store';
+import { SpaceWithSomeDetails } from '@subsocial/types/dto';
+import { CardEditType } from "../../../models/common/card-edit";
+import { useTranslation } from 'react-i18next';
 
 const SpaceEditPage = () => {
   const router = useRouter();
@@ -14,6 +16,7 @@ const SpaceEditPage = () => {
   const { api } = useApi();
   const dispatch = useAppDispatch();
   const [id, setId] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     (async () => await dispatch(fetchSpace({ api, id })))();
@@ -38,10 +41,11 @@ const SpaceEditPage = () => {
     <Layout>
       <CardEdit
         spaceData={spaceData}
-        title={'Edit Space'}
-        cancelButton={'Cancel'}
-        saveButton={'Save'}
+        title={t('forms.titles.editSpace')}
+        cancelButton={t('buttons.cancel')}
+        saveButton={t('buttons.save')}
         onCancel={onCancel}
+        type={CardEditType.Space}
       />
     </Layout>
   );

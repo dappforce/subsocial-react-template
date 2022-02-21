@@ -4,10 +4,9 @@ import { Box } from '@mui/material';
 import styles from './Comments.module.sass';
 import { FC, useCallback, useState } from 'react';
 import { CommentExtension, NewCommentProps } from 'src/models/comments';
-import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import Editor from '../editor/Editor';
-import Router from 'next/router';
 import TxButton from '../button/TxButton';
 import { IpfsContent } from '@subsocial/types/substrate/classes';
 import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
@@ -16,18 +15,26 @@ import { useApi } from 'src/components/api';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import ButtonCancel from '../button/button-cancel/ButtonCancel';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
+import { TxCallback, TxFailedCallback } from "../../../models/common/button";
+import { getNewIdsFromEvent } from "../button/buttons-vote/voting";
+import { upsertContent } from "../../../store/features/contents/contentsSlice";
+import { useAppDispatch } from "../../../store/app/store";
+import { fetchPosts } from "../../../store/features/posts/postsSlice";
+import { unpinIpfsCid } from "../../utils/unpinIpfsCid";
 
 const NewComment: FC<NewCommentProps> = (props) => {
-  const { parentStruct, className, placeholder, autofocus, onClickCancel } =
+  const { parentStruct, className, placeholder, autofocus, onClickCancel, addNewComment } =
     props;
   const { id, isComment } = parentStruct;
   const [comment, setComment] = useState('');
   const address = useMyAddress();
+  const dispatch = useAppDispatch();
   const user = useSelectProfile(address);
   const [isDisabledButton, setIsDisabledButton] = useState(true);
   const [isExpandedInput, setIsExpandedInput] = useState(false);
   const { api } = useApi();
-  const [ipfsCid, setIpfsCid] = useState<IpfsCid>();
+  const { t } = useTranslation();
   let rootPostId = id;
   let extension: CommentExtension;
 
@@ -62,11 +69,6 @@ const NewComment: FC<NewCommentProps> = (props) => {
     }
   }, []);
 
-  const options = {
-    placeholder,
-    autofocus,
-  };
-
   const expandForm = () => {
     setIsExpandedInput(true);
   };
@@ -78,8 +80,19 @@ const NewComment: FC<NewCommentProps> = (props) => {
     onClickCancel && onClickCancel();
   };
 
-  const onTxSuccess = () => {
-    Router.reload();
+  const onTxSuccess: TxCallback = (txResult, newCid) => {
+    dispatch(upsertContent({id: newCid as string, body: comment, isShowMore: false, summary: comment }))
+    dispatch(fetchPosts({ ids: [getNewIdsFromEvent(txResult).toString()], api}))
+    addNewComment(getNewIdsFromEvent(txResult).toString())
+    handelCancel();
+  };
+
+  const onFailed: TxFailedCallback = (txResult, newCid) => {
+    newCid &&
+    unpinIpfsCid(
+      api.subsocial.ipfs,
+      newCid,
+    );
   };
 
   return (
@@ -91,16 +104,17 @@ const NewComment: FC<NewCommentProps> = (props) => {
     >
       <AvatarElement
         src={user?.content?.avatar}
-        size={AvatarSizes.MEDIUM}
+        size={AvatarSizes.SMALL}
         id={user?.id || ''}
       />
       <div className={styles.commentContent}>
         <Editor
-          options={options}
           onFocus={expandForm}
           toolbar={isExpandedInput}
           onChange={handleChange}
           value={comment}
+          placeholder={placeholder}
+          autofocus={autofocus}
           className={classNames({
             [styles.editor]: true,
             [styles.editorActive]: isExpandedInput,
@@ -111,16 +125,16 @@ const NewComment: FC<NewCommentProps> = (props) => {
           <>
             <TxButton
               {...props}
-              label={'Send'}
+              label={t('buttons.send')}
               accountId={address}
               tx={'posts.createPost'}
               onSuccess={onTxSuccess}
+              onFailed={onFailed}
               disabled={isDisabledButton}
               params={() =>
                 getTxParams({
                   json: { body: comment },
                   ipfs: api.subsocial.ipfs,
-                  setIpfsCid,
                   buildTxParamsCallback: newTxParams,
                 })
               }
@@ -135,7 +149,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
               onClick={handelCancel}
               className={styles.buttonCancel}
             >
-              Cancel
+              {t('buttons.cancel')}
             </ButtonCancel>
           </>
         )}

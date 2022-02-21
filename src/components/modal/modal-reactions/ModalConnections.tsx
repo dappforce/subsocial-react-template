@@ -12,17 +12,15 @@ import {
   ModalConnectionsProps,
 } from 'src/models/modal';
 import { useApi } from '../../api';
-import { fetchProfiles } from 'src/rtk/features/profiles/profilesSlice';
+import { fetchProfiles } from 'src/store/features/profiles/profilesSlice';
 import { asString } from '@subsocial/utils';
 import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
-import { useAppDispatch } from 'src/rtk/app/store';
-import {
-  DEFAULT_FIRST_PAGE,
-  DEFAULT_PAGE_SIZE,
-} from 'src/config/ListData.config';
+import { useAppDispatch } from 'src/store/app/store';
+import { config } from 'src/config'
 import { Tab } from 'src/models/common/tabs';
-import { PostId } from '@subsocial/api/flat-subsocial/dto';
+import { PostId } from '@subsocial/types/dto';
 import { getPageOfIds } from '../../utils/getIds';
+import { useTranslation } from 'react-i18next';
 
 const loadSuggestedConnectionsIds = async (
   api: FlatSubsocialApi,
@@ -57,15 +55,16 @@ const ModalConnections: FC<ModalConnectionsProps> = ({
   countFollowers = 0,
   onClose,
 }) => {
+  const { t } =useTranslation();
   const [value, setValue] = useState<string>(activeTab || 'following');
   const [data, setData] = useState<any[]>([]);
 
   const tabs: Tab[] = useMemo(
     () => [
-      { label: 'Following', tabValue: 'following', count: countFollowing },
-      { label: 'Followers', tabValue: 'followers', count: countFollowers },
+      { label: t('tabs.following'), tabValue: 'following', count: countFollowing },
+      { label: t('tabs.followers'), tabValue: 'followers', count: countFollowers },
     ],
-    [countFollowers, countFollowing]
+    [countFollowers, countFollowing, t]
   );
   const { api } = useApi();
   const dispatch = useAppDispatch();
@@ -86,7 +85,7 @@ const ModalConnections: FC<ModalConnectionsProps> = ({
   );
 
   useEffect(() => {
-    loadMore(DEFAULT_FIRST_PAGE, DEFAULT_PAGE_SIZE).then((res) => {
+    loadMore(config.infinityScrollFirstPage, config.infinityScrollOffset).then((res) => {
       setData(res);
     });
   }, [loadMore, value]);
@@ -97,7 +96,7 @@ const ModalConnections: FC<ModalConnectionsProps> = ({
 
   return (
     <ModalReactionsLayout
-      title={`Connections`}
+      title={t('modals.connections.connections')}
       valueTabs={value}
       handleTabs={handleChange}
       isTabs={true}

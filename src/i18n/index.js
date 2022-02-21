@@ -4,22 +4,34 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import translation_en from './en.json';
 import translation_ru from './ru.json';
-import languages from '../config/languages';
+import languages from './languages';
+import { DateService } from '../utils';
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      'en': {
+      en: {
         translation: translation_en
       },
-      'ru': {
+      ru: {
         translation: translation_ru
       }
     },
-  })
+    interpolation: {
+      prefix: '{',
+      suffix: '}',
+    },
+  });
 
-  if (!Object.keys(languages).includes(i18n.language)) {
-    i18n.changeLanguage(Object.keys(languages)[0]);
-  }
+const lng = i18n.language.replace(/"/g, '');
+
+i18n.changeLanguage(lng, () => DateService.updateLocale(lng));
+i18n.on('languageChanged', (lang) => DateService.updateLocale(lang));
+
+if (!Object.keys(languages).includes(i18n.language)) {
+  i18n.changeLanguage(Object.keys(languages)[0]);
+}
+
+export default i18n;

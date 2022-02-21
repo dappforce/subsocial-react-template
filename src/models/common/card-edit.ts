@@ -1,4 +1,11 @@
-import { SpaceData, ProfileData } from '@subsocial/api/flat-subsocial/dto';
+import { SpaceData, ProfileData } from '@subsocial/types/dto';
+
+export enum CardEditType {
+  Space = 'Space',
+  Profile = 'Profile',
+  Post = 'Post',
+  Comment = 'Comment',
+}
 
 export interface CardEditProps {
   spaceData?: SpaceData;
@@ -7,4 +14,5 @@ export interface CardEditProps {
   cancelButton: string;
   saveButton: string;
   onCancel?: () => void;
+  type: CardEditType;
 }

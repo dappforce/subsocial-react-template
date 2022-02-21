@@ -2,28 +2,30 @@ import Layout from '../../layout/Layout'
 import SpaceAccount from '../space-account/SpaceAccount'
 import React, { FC, useEffect, useState } from 'react'
 import Post from '../../post/post-item/Post'
-import { getInitialPropsWithRedux } from 'src/rtk/app'
+import { getInitialPropsWithRedux } from 'src/store/app'
 import { loadSpaceOnNextReq } from './loadSpaceOnNextReq'
 import { bnsToIds, idToBn } from '@subsocial/utils'
 import { getPageOfIds } from '../../utils/getIds'
-import { fetchPosts, selectPosts } from 'src/rtk/features/posts/postsSlice'
+import { fetchPosts, selectPosts } from 'src/store/features/posts/postsSlice'
 import { useApi } from '../../api'
-import { PostId, PostWithSomeDetails, SpaceWithSomeDetails } from '@subsocial/api/flat-subsocial/dto'
-import { useAppDispatch } from '../../../rtk/app/store'
+import { PostId, PostWithSomeDetails, SpaceWithSomeDetails } from '@subsocial/types/dto'
+import { useAppDispatch } from '../../../store/app/store'
 import EmptyComponent from '../../common/empty/EmptyComponent'
 import InfinityListScroll from '../../common/infinity-list/InfinityListScroll'
 import { InnerLoadMoreFn } from '../../../models/infinity-scroll'
+import { useTranslation } from 'react-i18next';
 
 const PostList: FC<Omit<ViewSpaceProps, 'spaceData'>> = ({posts, postIds}) => {
     const dispatch = useAppDispatch()
     const { api } = useApi()
     const [ totalCount, setTotalCount ] = useState(0)
+    const { t } = useTranslation();
 
     useEffect(() => {
         setTotalCount(postIds?.length || 0)
     }, [])
 
-    if (!posts || !postIds) return <EmptyComponent text={'No posts yet'}/>
+    if (!posts || !postIds) return <EmptyComponent text={t('content.noPosts')}/>
 
     const initialPostIds = posts.map((post) => post.id)
 
@@ -37,7 +39,7 @@ const PostList: FC<Omit<ViewSpaceProps, 'spaceData'>> = ({posts, postIds}) => {
         dataSource={initialPostIds}
         loadMore={loadMore}
         totalCount={totalCount}
-        emptyText={'No posts yet'}
+        emptyText={t('content.noPosts')}
         renderItem={(id) => <Post postId={id} key={id} />}
     />
 }

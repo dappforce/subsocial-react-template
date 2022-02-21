@@ -2,7 +2,7 @@ import {
   PostId,
   PostWithSomeDetails,
   SpaceWithSomeDetails,
-} from '@subsocial/api/flat-subsocial/dto';
+} from '@subsocial/types/dto';
 
 export interface SpacePageProps {
   spaceData: SpaceWithSomeDetails;

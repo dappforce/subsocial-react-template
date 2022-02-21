@@ -8,20 +8,18 @@ const log = newLogger('BuildTxParams');
 type Params<C extends CommonContent> = {
   ipfs: SubsocialIpfsApi;
   json: C;
-  setIpfsCid: (cid: IpfsCid) => void;
   buildTxParamsCallback: (cid: IpfsCid) => any[];
 };
 
 export const getTxParams = async <C extends CommonContent>({
   ipfs,
   json,
-  setIpfsCid,
   buildTxParamsCallback,
 }: Params<C>) => {
   try {
     const cid = await ipfs.saveContent(json);
+
     if (cid) {
-      setIpfsCid(cid);
       return buildTxParamsCallback(cid);
     } else {
       log.error('Save to IPFS returned an undefined CID');

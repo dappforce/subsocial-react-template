@@ -1,100 +1,174 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Box,
   Divider,
   Drawer,
   List,
   ListItem,
+  ListItemIcon,
   ListItemText,
 } from '@mui/material';
-
+import Text from 'src/components/common/text/Text';
 import styles from './Sidebar.module.sass';
-import SidebarList from './sidebar-list/SidebarList';
-import SidebarHorizontalList from './sidebar-horizontal-list/SidebarHorizontalList';
 import Image from '../common/image/Image';
+import { SidebarProps } from '../../models/sidebar';
+import { useResponsiveSize } from '../responsive/ResponsiveContext';
+import { TextSizes } from '../../models/common/typography';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import LanguageIcon from '@mui/icons-material/Language';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { useTranslation } from 'react-i18next';
+import classNames from "classnames";
 
-const Sidebar: FC = () => {
-  const [show, setShow] = useState(false);
+const Sidebar: FC<SidebarProps> = ({
+  isShowingMobileBurger,
+  onSidebarClose,
+}) => {
+  const { isDesktop } = useResponsiveSize();
+  const { t } = useTranslation();
 
   const frameworks = [
-    { name: 'Angular app', img: '/angular.svg' },
-    { name: 'Vue app', img: '/vue.svg' },
+    {
+      name: t('buttons.angularApp'),
+      icon: (
+        <Image src={'/angular.svg'} alt={'angular'} width={20} height={22} />
+      ),
+      href: '/',
+    },
+    {
+      name: t('buttons.vueApp'),
+      icon: <Image src={'/vue.svg'} alt={'vue'} width={20} height={17} />,
+      href: '/',
+    },
   ];
 
   const additional = [
-    { name: 'Subsocial app', img: '/favicon.ico' },
-    { name: 'Landing page', img: '/world.svg' },
-    { name: 'Legal Documents', img: '/file.svg' },
-    { name: 'Github', img: '/github-2 1.svg' },
-    { name: 'What is Subsocial?', img: '/info.svg' },
-  ];
-
-  const hiddenSocial = [
-    { name: 'Twitter', img: '/twitter.svg' },
-    { name: 'More', img: '/more.svg' },
+    {
+      name: t('buttons.subsocialApp'),
+      icon: (
+        <Image
+          src={'/favicon.ico'}
+          alt={'Subsocial app'}
+          width={20}
+          height={20}
+        />
+      ),
+      href: '/',
+    },
+    {
+      name: t('buttons.landingPage'),
+      icon: <LanguageIcon />,
+      href: '/',
+    },
+    {
+      name: t('buttons.legalDocuments'),
+      icon: <DescriptionOutlinedIcon />,
+      href: '/',
+    },
+    {
+      name: t('buttons.github'),
+      icon: <GitHubIcon />,
+      href: '/',
+    },
+    {
+      name: t('buttons.whatIsSubsocial'),
+      icon: <HelpOutlineIcon />,
+      href: '/',
+    },
   ];
 
   const social = [
-    { name: 'Twitter', img: '/twitter.svg' },
-    { name: 'Discord', img: '/discord.svg' },
-    { name: 'Telegram', img: '/telegram2.svg' },
-    { name: 'Megaphone', img: '/megaphone.svg' },
+    {
+      name: 'Twitter',
+      icon: (
+        <Image src={'/twitter.svg'} alt={'Twitter'} width={15} height={15} />
+      ),
+      href: '/',
+    },
+    {
+      name: 'Discord',
+      icon: (
+        <Image src={'/discord.svg'} alt={'Discord'} width={15} height={15} />
+      ),
+      href: '/',
+    },
+    {
+      name: 'Telegram',
+      icon: (
+        <Image src={'/telegram2.svg'} alt={'Telegram'} width={15} height={15} />
+      ),
+      href: '/',
+    },
+    {
+      name: 'Megaphone',
+      icon: (
+        <Image
+          src={'/megaphone.svg'}
+          alt={'Megaphone'}
+          width={15}
+          height={15}
+        />
+      ),
+      href: '/',
+    },
   ];
 
   return (
     <Drawer
-      open={show}
-      variant="permanent"
-      className={styles.drawer}
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
+      open={isShowingMobileBurger}
+      onClose={onSidebarClose}
+      variant={'permanent'}
+      className={classNames(styles.drawer, {[styles.drawerOpenMobile]: isShowingMobileBurger})}
     >
       <Box className={styles.topBox}>
-        <List>
-          {frameworks.map((item, index) => (
-            <SidebarList item={item} key={index} show={show} />
+        <List className={styles.list}>
+          {frameworks.map((framework) => (
+            <ListItem button key={framework.name} className={styles.item}>
+              <ListItemIcon className={styles.icon}>
+                {framework.icon}
+              </ListItemIcon>
+              <ListItemText>
+                <Text
+                  type={!isDesktop ? TextSizes.NORMAL : TextSizes.SECONDARY}
+                >
+                  {framework.name}
+                </Text>
+              </ListItemText>
+            </ListItem>
           ))}
         </List>
-        <Divider className={styles.divider} />
-        <List>
-          {additional.map((item, index) => (
-            <SidebarList item={item} key={index} show={show} />
+        <div className={styles.divider}>
+          <Divider />
+        </div>
+        <List className={styles.list}>
+          {additional.map((item) => (
+            <ListItem button key={item.name} className={styles.item}>
+              <ListItemIcon className={styles.icon}>{item.icon}</ListItemIcon>
+              <ListItemText>
+                <Text
+                  type={!isDesktop ? TextSizes.NORMAL : TextSizes.SECONDARY}
+                >
+                  {item.name}
+                </Text>
+              </ListItemText>
+            </ListItem>
           ))}
         </List>
       </Box>
       <Box className={styles.bottomBox}>
-        <List className={styles.bottomList}>
-          {!show && (
-            <>
-              <ListItem button key={0} className={styles.listItemHide}>
-                <Image
-                  src={hiddenSocial[0].img}
-                  width={30}
-                  height={30}
-                  alt={hiddenSocial[0].name}
-                />
-                <Image
-                  src={hiddenSocial[1].img}
-                  width={18}
-                  height={18}
-                  alt={hiddenSocial[1].name}
-                />
-              </ListItem>
-            </>
-          )}
-          {show && (
-            <div className={styles.bottomBlock}>
-              <ListItemText
-                primary="Our social links:"
-                className={styles.itemText}
-              />
-              <div className={styles.bottom}>
-                {social.map((item, index) => (
-                  <SidebarHorizontalList item={item} key={index} show={show} />
-                ))}
-              </div>
-            </div>
-          )}
+        <Text
+          type={!isDesktop ? TextSizes.NORMAL : TextSizes.SECONDARY}
+          className={styles.socialText}
+        >
+          {t('serverApp.social')}
+        </Text>
+        <List className={styles.socialList}>
+          {social.map((item) => (
+            <ListItemIcon key={item.name} className={styles.socialIcon}>
+              {item.icon}
+            </ListItemIcon>
+          ))}
         </List>
       </Box>
     </Drawer>

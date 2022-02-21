@@ -13,6 +13,7 @@ const ButtonCancel: FC<ButtonCancelProps> = (props) => {
       variant={'outlined'}
       onClick={props.onClick}
       className={className}
+      disabled={props.disabled}
     >
       {props.children}
     </ButtonComponent>

@@ -3,7 +3,8 @@
   display: flex
   justify-content: center
   font-size: $font_huge
-  color: $color_error
+  color: $color_text_error
+
 .form
   display: flex
   flex-direction: column
@@ -15,7 +16,7 @@
   min-width: 110px
   letter-spacing: .15px
   font-size: $font_normal
-  padding: 0px 28px
+  padding: 0 28px
 
 .actions
   justify-content: flex-end
@@ -27,4 +28,4 @@
     min-height: 8.625rem !important
 
   & :global(.CodeMirror-focused)
-    border: $border_focused_input
+    border: 2px solid $color_button_outline

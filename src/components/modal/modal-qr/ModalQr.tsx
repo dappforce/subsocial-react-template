@@ -13,15 +13,17 @@ import MaterialModal from '@mui/material/Modal';
 import { ModalQrProps } from 'src/models/modal';
 import Snackbar from '../../common/snackbar/Snackbar';
 import { useSnackbar } from 'src/hooks/useSnackbar';
+import { useTranslation } from 'react-i18next';
 
 const ModalQrcode: FC<ModalQrProps> = ({ id, onClose, open, ...props }) => {
   const [isCopied, setIsCopied] = useState(false);
   const { type, message, setSnackConfig, removeSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   const handleClick = () => {
     setIsCopied(true);
     copyText(id);
-    setSnackConfig({ message: 'Address copied!' });
+    setSnackConfig({ message: t('snackbars.addressCopied') });
   };
 
   return (
@@ -34,7 +36,7 @@ const ModalQrcode: FC<ModalQrProps> = ({ id, onClose, open, ...props }) => {
       <Box className={styles.box}>
         <ButtonClose onClick={onClose} className={styles.close} />
         <Title type={TitleSizes.PREVIEW} className={styles.title}>
-          Account address
+          {t('modals.qrCode.title')}
         </Title>
         <Box className={styles.content}>
           <Snackbar
@@ -56,7 +58,7 @@ const ModalQrcode: FC<ModalQrProps> = ({ id, onClose, open, ...props }) => {
               onClick={onClose}
               className={styles.button}
             >
-              Close
+              {t('buttons.close')}
             </ButtonComponent>
             <ButtonComponent
               variant={'contained'}
@@ -64,7 +66,7 @@ const ModalQrcode: FC<ModalQrProps> = ({ id, onClose, open, ...props }) => {
               className={styles.button}
             >
               <ContentCopyIcon />
-              Copy
+              {t('buttons.copy')}
             </ButtonComponent>
           </div>
         </Box>

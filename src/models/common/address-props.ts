@@ -11,4 +11,5 @@ export interface AddressProps {
   isQr?: boolean;
   isIcon?: boolean;
   textProps?: Omit<TextProps, 'type'>;
+  isShort?: boolean;
 }

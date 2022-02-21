@@ -1,3 +1,3 @@
-import NotificationsPage from '../components/notifications/NotificationsPage';
+import MyNotifications from '../components/notifications/MyNotifications';
 
-export default NotificationsPage;
+export default MyNotifications;

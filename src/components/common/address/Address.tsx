@@ -6,7 +6,6 @@ import { toShortAddress } from '../../utils/address';
 import { copyText } from 'src/utils';
 import { Grow, IconButton } from '@mui/material';
 import Image from '../image/Image';
-import ButtonIcon from '../button/button-icon/ButtonIcon';
 import Text from '../text/Text';
 import { TextSizes } from 'src/models/common/typography';
 import { useModal } from 'src/hooks/useModal';
@@ -14,6 +13,7 @@ import ModalQr from '../../modal/modal-qr/ModalQr';
 import { useResponsiveSize } from '../../responsive/ResponsiveContext';
 import { useSnackbar } from 'src/hooks/useSnackbar';
 import { useTranslation } from 'react-i18next';
+import ButtonQr from '../button/button-qr/ButtonQr';
 
 const Address: FC<AddressProps> = ({
   isQr,
@@ -24,6 +24,7 @@ const Address: FC<AddressProps> = ({
   lengthOfAddress,
   size,
   isCopy = true,
+  isShort = true,
 }) => {
   const { isMobile } = useResponsiveSize();
   const [isCopied, setIsCopied] = useState(false);
@@ -43,14 +44,14 @@ const Address: FC<AddressProps> = ({
     <div className={className}>
       {isIcon && (
         <Image
-          src={'/wallet.svg'}
+          src={'/wallet.jpg'}
           width={sizes[size].size}
           height={sizes[size].size}
           alt={'wallet'}
         />
       )}
-      <Text type={sizes[size].type} paragraph {...textProps}>
-        {shortedAddress}
+      <Text type={sizes[size].type} paragraph component={'div'} {...textProps}>
+        {isShort ? shortedAddress : label}
       </Text>
       {(isCopy || isMobile) && (
         <>
@@ -85,14 +86,7 @@ const Address: FC<AddressProps> = ({
       {isQr && (
         <>
           <ModalQr id={label} open={isVisible} onClose={toggleModal} />
-          <ButtonIcon className={styles.qr} onClick={toggleModal}>
-            <Image
-              src={'/qr.svg'}
-              width={sizes[size].size}
-              height={sizes[size].size}
-              alt={'qr'}
-            />
-          </ButtonIcon>
+          <ButtonQr onClick={toggleModal} sizeIcon={sizes[size].size}/>
         </>
       )}
     </div>

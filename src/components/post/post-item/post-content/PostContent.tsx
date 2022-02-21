@@ -1,114 +1,24 @@
 import { FC } from 'react';
 import styles from '../Post.module.sass';
-import { AvatarSizes } from 'src/models/common/avatar';
-import { CardContent, CardHeader, CardMedia } from '@mui/material';
-import AvatarElement from 'src/components/common/avatar/AvatarElement';
-import Options from 'src/components/common/button/button-options/ButtonOptions';
+import { CardContent, CardMedia } from '@mui/material';
 import Link from 'src/components/common/links/link/Link';
-import SmallLink from 'src/components/common/links/small-link/SmallLink';
 import Title from 'src/components/common/title/Title';
 import { TitleSizes, TextSizes } from 'src/models/common/typography';
-import { getTime, getUrl, loadImgUrl, TypeUrl } from 'src/utils';
+import { getUrl, loadImgUrl, TypeUrl } from 'src/utils';
 import Embed from 'src/components/common/Embed';
 import SeeMore from 'src/components/common/links/see-more/SeeMore';
 import Text from 'src/components/common/text/Text';
-import { useResponsiveSize } from '../../../responsive/ResponsiveContext';
-import { toShortAddress } from 'src/components/utils/address';
-import { TypeContent } from 'src/models/common/button';
-import Router from 'next/router';
+import { useResponsiveSize } from 'src/components/responsive/ResponsiveContext';
+import PostInfo from '../PostInfo';
 
 const PostContent: FC<any> = (props) => {
   const { isMobile } = useResponsiveSize();
   const { post, space, profile } = props;
-  const { isComment } = post.struct;
-
-  const onClickEdit = () => {
-    Router.push(`/${post.struct.spaceId}/${post.id}/edit`);
-  };
 
   return (
     <CardContent className={styles.mainPostContent}>
       <CardContent className={styles.postContent}>
-        <CardHeader
-          avatar={
-            <Link
-              href={getUrl({
-                type: TypeUrl.Account,
-                id: profile?.id || post.struct.ownerId,
-              })}
-              image
-            >
-              <AvatarElement
-                src={profile?.content?.avatar}
-                size={AvatarSizes.LARGE}
-                id={profile?.id || post.struct.ownerId}
-              />
-            </Link>
-          }
-          action={
-            <Options
-              className={styles.action}
-              withReactions
-              withHidden
-              contentStruct={post.struct}
-              typeContent={TypeContent.Post}
-              onClickEdit={onClickEdit}
-            />
-          }
-          title={
-            <Link
-              href={getUrl({
-                type: TypeUrl.Account,
-                id: profile?.id || post.struct.ownerId,
-              })}
-            >
-              <Title type={TitleSizes.PROFILE}>
-                {profile?.content?.name || toShortAddress(post.struct.ownerId)}
-              </Title>
-            </Link>
-          }
-          className={styles.header}
-          subheader={
-            <>
-              {space && (
-                <SmallLink
-                  href={getUrl({
-                    type: TypeUrl.Space,
-                    title: space?.content.handle,
-                    id: space?.id,
-                  })}
-                  as={getUrl({
-                    type: TypeUrl.Space,
-                    title: space?.content.handle,
-                    id: space?.id,
-                  })}
-                >
-                  {space?.content.name}
-                </SmallLink>
-              )}
-              {space && '\xA0 · \xA0'}
-              <SmallLink
-                href={
-                  isComment
-                    ? getUrl({
-                        type: TypeUrl.Comment,
-                        subTitle: post.content.body,
-                        subId: post.struct.id,
-                      })
-                    : getUrl({
-                        type: TypeUrl.Post,
-                        title: space?.content.handle,
-                        id: space?.struct.id,
-                        subTitle: post?.content.title,
-                        subId: post.struct.id,
-                      })
-                }
-              >
-                {getTime(post.struct.createdAtTime)}
-              </SmallLink>
-            </>
-          }
-        />
+        <PostInfo profile={profile} post={post} space={space} />
         {post.content.title && (
           <Link
             href={getUrl({

@@ -19,17 +19,17 @@ import ReactMarkdown from 'react-markdown';
 import { TitleSizes } from 'src/models/common/typography';
 import Embed from '../../common/Embed';
 import ButtonShare from '../../common/button/button-share/ButtonShare';
-import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
-import { getTime, getUrl, loadImgUrl, TypeUrl } from 'src/utils';
+import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
+import { DateService, getUrl, loadImgUrl, TypeUrl } from 'src/utils';
 import {
   PostWithSomeDetails,
   ReactionEnum,
-} from '@subsocial/api/flat-subsocial/dto';
+} from '@subsocial/types/dto';
 import { toShortAddress } from 'src/components/utils/address';
-import { useAppDispatch } from 'src/rtk/app/store';
+import { useAppDispatch } from 'src/store/app/store';
 import { ApiContext } from 'src/components/api';
-import { fetchPosts } from 'src/rtk/features/posts/postsSlice';
-import { useSelectPost } from 'src/rtk/app/hooks';
+import { fetchPosts } from 'src/store/features/posts/postsSlice';
+import { useSelectPost } from 'src/store/app/hooks';
 import ButtonVotes from '../../common/button/buttons-vote/ButtonVotes';
 import { PostFullProps } from 'src/models/post';
 import { TypeContent } from 'src/models/common/button';
@@ -40,6 +40,7 @@ import SharedPost from '../shared-post/SharedPost';
 import classNames from 'classnames';
 import { useAuth } from 'src/components/auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';
+import { useTranslation } from 'react-i18next';
 
 const PostFull: FC<PostFullProps> = (props) => {
   const { post, space } = props;
@@ -57,10 +58,12 @@ const PostFull: FC<PostFullProps> = (props) => {
   const postData = useSelectPost(rootPostId) as PostWithSomeDetails;
 
   const { isVisible, toggleModal } = useModal();
-  
+
   const { openSingInModal, status } = useAuth();
-  
+
   const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
+
+  const { t } = useTranslation();
 
   const onClickShare = () => {
     if (isAuthRequired) {
@@ -116,7 +119,7 @@ const PostFull: FC<PostFullProps> = (props) => {
                 >
                   <AvatarElement
                     src={profile?.content?.avatar}
-                    size={AvatarSizes.LARGE}
+                    size={AvatarSizes.MEDIUM}
                     id={profile?.id || post.struct.ownerId}
                   />
                 </Link>
@@ -169,14 +172,14 @@ const PostFull: FC<PostFullProps> = (props) => {
                       //@ts-ignore
                       space?.content.handle ||
                       //@ts-ignore
-                        postData?.space?.content.handle,
+                      postData?.space?.content.handle,
                       id: space?.struct.id || postData?.space?.struct.id,
                       //@ts-ignore
                       subTitle: post?.content.title,
                       subId: post.struct.id,
                     })}
                   >
-                    {getTime(post.struct.createdAtTime)}
+                    {DateService.getDate(post.struct.createdAtTime)}
                   </SmallLink>
                 </>
               }
@@ -197,7 +200,7 @@ const PostFull: FC<PostFullProps> = (props) => {
               type={TitleSizes.DETAILS}
               className={styles.title}
             >
-              {`In response to `}
+              {t('post.inResponseTo')}
               <Link
                 href={getUrl({
                   type: TypeUrl.Post,
@@ -259,7 +262,11 @@ const PostFull: FC<PostFullProps> = (props) => {
           reactionEnum={ReactionEnum.Downvote}
           withLabel
         />
-        <ButtonShare onClick={onClickShare} isShowLabel />
+        <ButtonShare
+          onClick={onClickShare}
+          isShowLabel
+          value={post.struct.sharesCount}
+        />
       </CardActions>
     </CardWrapper>
   );

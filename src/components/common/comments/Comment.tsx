@@ -9,21 +9,20 @@ import NewComment from './NewComment';
 import ButtonOptions from '../button/button-options/ButtonOptions';
 import Link from 'src/components/common/links/link/Link';
 import SmallLink from '../links/small-link/SmallLink';
-import { CommentContent } from '@subsocial/api/flat-subsocial/dto';
-import { useSelectPost } from 'src/rtk/features/posts/postsHooks';
+import { CommentContent, PostData } from '@subsocial/types/dto';
+import { useSelectPost } from 'src/store/features/posts/postsHooks';
 import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
-import { useSelectProfile } from 'src/rtk/features/profiles/profilesHooks';
-import { getTime, getUrl, TypeUrl } from 'src/utils';
+import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
+import { DateService, getUrl, transformCount, TypeUrl } from 'src/utils';
 import Text from '../text/Text';
 import { CommentProps } from 'src/models/comments';
 import {
   fetchPostReplyIds,
-  selectReplyIds,
-} from 'src/rtk/features/replies/repliesSlice';
+  selectReplyIds, upsertReplyIdsByPostId,
+} from 'src/store/features/replies/repliesSlice';
 import { useApi } from '../../api';
 import { shallowEqual } from 'react-redux';
-import { useAppDispatch, useAppSelector } from 'src/rtk/app/store';
-import { pluralize } from '@subsocial/utils';
+import { useAppDispatch, useAppSelector } from 'src/store/app/store';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import KeyboardArrowUpRounded from '@mui/icons-material/KeyboardArrowUpRounded';
 import { toShortAddress } from '../../utils/address';
@@ -31,11 +30,12 @@ import useLoader from '../../../hooks/useLoader';
 import Loader from '../loader/Loader';
 import CommentAction from './CommentAction';
 import HiddenComponent from '../hidden-component/HiddenComponent';
-import { useMyAddress } from '../../../rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from '../../../store/features/myAccount/myAccountHooks';
 import ReactMarkdown from 'react-markdown';
 import { TypeContent } from 'src/models/common/button';
 import EditComment from './EditComment';
-import { PostData } from '@subsocial/types';
+import { useTranslation } from 'react-i18next';
+import { upsertPost } from '../../../store/features/posts/postsSlice';
 
 const Comment: FC<Omit<CommentProps, 'commentDetails'>> = ({ commentId }) => {
   const commentDetails = useSelectPost(commentId);
@@ -46,16 +46,18 @@ const Comment: FC<Omit<CommentProps, 'commentDetails'>> = ({ commentId }) => {
 };
 
 const CommentView: FC<CommentProps> = ({ commentDetails }) => {
-  const [isShowReply, setIsShowReply] = useState(false);
-  const [isShowAllReplies, setIsShowAllReplies] = useState(false);
-  const [isShowEditComment, setIsShowEditComment] = useState(false);
+  const [ isShowReply, setIsShowReply ] = useState(false);
+  const [ isShowAllReplies, setIsShowAllReplies ] = useState(false);
+  const [ isShowEditComment, setIsShowEditComment ] = useState(false);
   const dispatch = useAppDispatch();
   const { isLoader, toggleLoader } = useLoader();
   const address = useMyAddress();
   const { api } = useApi();
   const { post: comment } = commentDetails;
-  const hasReplies = comment?.struct.visibleRepliesCount > 0;
   const profile = useSelectProfile(comment.struct.ownerId.toString());
+  const { t } = useTranslation();
+  const { visibleRepliesCount = 0 } = useSelectPost(comment.id)?.post.struct || {};
+  const hasReplies = visibleRepliesCount > 0;
 
   useEffect(() => {
     toggleLoader();
@@ -67,10 +69,10 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
   }, []);
 
   const { replyIds = [] } =
-    useAppSelector(
-      (state) => selectReplyIds(state, comment.id),
-      shallowEqual
-    ) || {};
+  useAppSelector(
+    (state) => selectReplyIds(state, comment.id),
+    shallowEqual
+  ) || {};
 
   const commentStruct = asCommentStruct(comment.struct);
 
@@ -85,10 +87,17 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
     setIsShowReply(false);
   };
 
+  const addNewComment = (id: string) => {
+    dispatch(upsertPost({ ...comment.struct, visibleRepliesCount: visibleRepliesCount + 1 }));
+    dispatch(upsertReplyIdsByPostId({ id: comment.id, replyIds: [ id, ...replyIds ] }));
+    setIsShowAllReplies(true);
+    if (isLoader) toggleLoader();
+  };
+
   const toggleEdit = () => setIsShowEditComment((current) => !current);
 
   return isLoader && isShowAllReplies ? (
-    <Loader label={'Loading...'} />
+    <Loader label={t('content.loading')} />
   ) : isShowEditComment ? (
     <EditComment
       comment={comment as unknown as PostData}
@@ -107,7 +116,7 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
       >
         <AvatarElement
           src={profile?.content?.avatar}
-          size={AvatarSizes.MEDIUM}
+          size={AvatarSizes.SMALL}
           id={comment.struct.ownerId}
         />
       </Link>
@@ -126,7 +135,7 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
             >
               <Title type={TitleSizes.PROFILE}>
                 {profile?.content?.name ||
-                  toShortAddress(comment.struct.ownerId)}
+                toShortAddress(comment.struct.ownerId)}
               </Title>
             </Link>
             <span>&nbsp;·&nbsp;</span>
@@ -139,7 +148,7 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
               className={styles.time}
             >
               <Text type={TextSizes.NORMAL}>
-                {getTime(commentStruct.createdAtTime)}
+                {DateService.getDate(commentStruct.createdAtTime)}
               </Text>
             </SmallLink>
             <ButtonOptions
@@ -163,10 +172,11 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
         {isShowReply && (
           <NewComment
             parentStruct={comment.struct}
-            placeholder={'Add a reply...'}
+            placeholder={t('forms.placeholder.addReply')}
             className={styles.new}
             autofocus
             onClickCancel={handleCancel}
+            addNewComment={addNewComment}
           />
         )}
         {hasReplies && (
@@ -177,12 +187,11 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
               onClick={toggleReplies}
               component={'button'}
             >
-              {isShowAllReplies ? 'Hide ' : 'View '}
-              {pluralize({
-                count: comment?.struct.visibleRepliesCount,
-                singularText: 'reply',
-                pluralText: 'replies',
-              })}
+              {isShowAllReplies ? t('buttons.hide') : t('buttons.view')}
+              {' '}
+              {transformCount(visibleRepliesCount)}
+              {' '}
+              {t('plural.reply', { count: visibleRepliesCount || 0 })}
               {isShowAllReplies ? (
                 <KeyboardArrowUpRounded />
               ) : (
@@ -190,8 +199,9 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
               )}
             </Text>
 
-            {isShowAllReplies &&
-              replyIds.map((id) => <Comment commentId={id} key={id} />)}
+            {isShowAllReplies && <>
+              {replyIds.map((id) => <Comment commentId={id} key={id} />)}
+            </>}
           </Box>
         )}
       </div>

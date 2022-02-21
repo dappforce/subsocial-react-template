@@ -8,13 +8,13 @@ import Address from '../common/address/Address';
 import Balance from '../common/balance/Balance';
 import { List, ListItem, ListItemAvatar } from '@mui/material';
 import { TitleSizes } from '../../models/common/typography';
-import { useAppDispatch } from '../../rtk/app/store';
-import { setMyAddress } from '../../rtk/features/myAccount/myAccountSlice';
-import { useSelectProfile } from '../../rtk/features/profiles/profilesHooks';
+import { useAppDispatch } from '../../store/app/store';
+import { setMyAddress } from '../../store/features/myAccount/myAccountSlice';
+import { useSelectProfile } from '../../store/features/profiles/profilesHooks';
 import { Account, AccountsProps } from '../../models/account';
-import { useMyAddress } from '../../rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from '../../store/features/myAccount/myAccountHooks';
 
-const SwitchAccountsExtensionItem: FC<Account> = (props) => {
+export const SwitchAccountsExtensionItem: FC<Account> = (props) => {
   const [isCopy, setIsCopy] = useState(false);
   const dispatch = useAppDispatch();
   const profile = useSelectProfile(props.address);
@@ -33,13 +33,13 @@ const SwitchAccountsExtensionItem: FC<Account> = (props) => {
       <ListItemAvatar>
         <AvatarElement
           src={profile?.content?.avatar}
-          size={AvatarSizes.LARGE}
+          size={AvatarSizes.MEDIUM}
           id={props.address}
         />
       </ListItemAvatar>
 
       <div className={styles.info}>
-        <Title type={TitleSizes.PROFILE}>
+        <Title type={TitleSizes.PROFILE} className={styles.name}>
           {profile?.content?.name || props.name}
         </Title>
         <Address

@@ -2,8 +2,11 @@ import {
   PostData,
   PostWithAllDetails,
   PostWithSomeDetails,
-} from '@subsocial/api/flat-subsocial/dto';
-import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners';
+  PostStruct,
+  ProfileData,
+  SpaceData
+} from '@subsocial/types/dto';
+import { IpfsCid } from '@subsocial/types';
 
 export type PostActionsProps = {
   toggleComments: () => void;
@@ -24,10 +27,30 @@ export interface EditorPostProps {
 interface PostDataWithRootPostId extends PostData {
   struct: PostStruct & { rootPostId?: string };
 }
+
 export interface PostFullProps extends PostWithSomeDetails {
   post: PostDataWithRootPostId;
 }
 
 export interface PostStructWithHidden extends PostStruct {
   hidden: boolean;
+}
+
+export enum TypePostTabs {
+  Article = 'article',
+  Video = 'video',
+}
+
+export interface dataPost {
+  title: string;
+  body: string;
+  tags: string[];
+  image?: string | IpfsCid;
+  link?: string;
+}
+
+export interface PostInfoProps {
+  profile: ProfileData;
+  post: PostData;
+  space: SpaceData;
 }

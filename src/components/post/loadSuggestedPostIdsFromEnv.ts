@@ -1,7 +1,7 @@
 import { getPageOfIds } from '../utils/getIds';
 import { AnySpaceId } from '@subsocial/types';
 import { bnsToIds } from '@subsocial/utils';
-import { PostId, SpaceId } from '@subsocial/api/flat-subsocial/dto';
+import { PostId, SpaceId } from '@subsocial/types/dto';
 import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
 
 let suggestedPostIds: string[] | undefined = undefined;

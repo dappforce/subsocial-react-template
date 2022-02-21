@@ -8,12 +8,13 @@ import Title from '../../common/title/Title';
 import NoExtension from './NoExtension';
 import NoAccount from './NoAccount';
 import Accounts from './Accounts';
-import { useAppSelector } from 'src/rtk/app/store';
+import { useAppSelector } from 'src/store/app/store';
 import { ACCOUNT_STATUS } from 'src/models/auth';
 import Link from '../../common/links/link/Link';
 import Text from '../../common/text/Text';
 import { useAuth } from '../../auth/AuthContext';
 import Tokens from './Tokens';
+import { useTranslation } from 'react-i18next';
 
 const PolkadotLink = () => (
   <Link
@@ -33,6 +34,7 @@ const ModalSignIn: FC<ModalSignInProps> = ({
 }) => {
   const { accounts } = useAppSelector((state) => state.myAccount);
   const { hasToken } = useAuth();
+  const { t } = useTranslation();
 
   const getContent = () => {
     const content: ModalSignInContent = {
@@ -41,33 +43,34 @@ const ModalSignIn: FC<ModalSignInProps> = ({
     };
 
     if (isAlert) {
-      content.title = 'Wait a sec...';
+      content.title = t('modals.login.title-wait');
 
       switch (status) {
         case ACCOUNT_STATUS.EXTENSION_NOT_FOUND:
           content.body = <NoExtension />;
           content.text = (
             <>
-              To continue connect with <PolkadotLink />. Enable extension with
-              the button below.
+              {t('modals.login.noExtension.toContinueConnectWith')}
+              <PolkadotLink />
+              {t('modals.login.noExtension.EnableExtension')}
             </>
           );
           break;
         case ACCOUNT_STATUS.ACCOUNTS_NOT_FOUND:
           content.body = <NoAccount />;
-          content.text = 'You need to sign in to access this functionality.';
+          content.text = t('modals.login.accountScreen.notLoginMessage');
           break;
         case ACCOUNT_STATUS.UNAUTHORIZED:
           content.body = (
             <Accounts accounts={accounts || []} onClose={onClose} />
           );
           content.text =
-            'You need to sign in to access this functionality. Click on your account below:';
+            `${t('modals.login.accountScreen.notLoginMessage')} ${t('modals.login.accountScreen.message')}`;
           break;
         case ACCOUNT_STATUS.AUTHORIZED:
           if (!hasToken) {
             content.body = <Tokens />;
-            content.text = 'You need some tokens to continue.';
+            content.text = t('modals.noToken.message');
           }
           break;
         default:
@@ -77,15 +80,16 @@ const ModalSignIn: FC<ModalSignInProps> = ({
       return content;
     }
 
-    content.title = 'Sign in';
+    content.title = t('modals.login.title');
 
     switch (status) {
       case ACCOUNT_STATUS.EXTENSION_NOT_FOUND:
         content.body = <NoExtension />;
         content.text = (
           <>
-            <PolkadotLink /> was not found or disabled. Install the extension
-            with the button below.
+            <PolkadotLink /> {t('modals.login.noExtension.wasNotFound')}
+            <br/>
+            {t('modals.login.noExtension.installExt')}
           </>
         );
         break;
@@ -94,7 +98,7 @@ const ModalSignIn: FC<ModalSignInProps> = ({
         break;
       case ACCOUNT_STATUS.UNAUTHORIZED:
         content.body = <Accounts accounts={accounts || []} onClose={onClose} />;
-        content.text = 'Click on your account to sign in:';
+        content.text = t('modals.login.accountScreen.message');
         break;
       default:
         break;

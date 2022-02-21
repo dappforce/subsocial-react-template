@@ -15,6 +15,9 @@ const Balance: FC<BalanceProps> = ({
     : styles.balance;
   const { api } = useApi();
   const [balance, setBalance] = useState<string[]>(['0', '0000']);
+  const { substrateApi } = useApi();
+  const { registry } = substrateApi;
+  const decimals = registry?.chainDecimals[0];
 
   useEffect(() => {
     if (!address) return;
@@ -37,14 +40,14 @@ const Balance: FC<BalanceProps> = ({
       unsub && unsub();
       isMounted = false;
     };
-  }, [address, api]);
+  }, [address, api, decimals]);
 
   const getFormattedBalance = (balance: BalanceType | undefined) => {
     const [prefix, postfix] = balance
       ? formatBalance(balance, {
           forceUnit: '-',
           withSi: false,
-          decimals: 11,
+          decimals,
         }).split('.')
       : ['0', undefined];
 
@@ -54,10 +57,10 @@ const Balance: FC<BalanceProps> = ({
   return (
     <div className={className}>
       {isIcon && <MonetizationOnOutlinedIcon />}
-      <p>
+      <div>
         <span>{balance[0]}</span>
         <span className={styles.gray}>.{balance[1].slice(0, 4)}</span> SUB
-      </p>
+      </div>
     </div>
   );
 };

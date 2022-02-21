@@ -1,7 +1,7 @@
-import { SpaceStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { SpaceStruct } from '@subsocial/types/dto';
 import { isDef } from '@subsocial/utils';
 import { asAccountId } from '@subsocial/api';
-import { useMyAddress } from '../rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from '../store/features/myAccount/myAccountHooks';
 import { AnyAccountId } from '@subsocial/types';
 
 export const useIsMySpace = (space?: SpaceStruct) =>

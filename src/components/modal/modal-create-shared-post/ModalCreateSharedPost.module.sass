@@ -10,6 +10,7 @@
   flex-direction: column
   gap: $space_big
   max-width: 780px
+  min-height: 200px
   max-height: 90%
   width: 100%
   position: relative
@@ -33,7 +34,7 @@
   gap: $space_normal
 
 .post
-  border: $border_grey_color
+  border: 1px solid $color_line_outline
 
   & :global(.MuiCardContent-root)
     padding-bottom: $space_tiny
@@ -48,3 +49,4 @@
 
 .button
   padding: $space_tiny $space_large
+  width: max-content

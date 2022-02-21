@@ -1,10 +1,10 @@
-import { EntityId } from '@subsocial/api/flat-subsocial/dto';
+import { EntityId } from '@subsocial/types/dto';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useApi } from 'src/components/api';
-import { useSelectPost } from 'src/rtk/app/hooks';
-import { useAppDispatch } from 'src/rtk/app/store';
-import { fetchPosts } from 'src/rtk/features/posts/postsSlice';
+import { useSelectPost } from 'src/store/app/hooks';
+import { useAppDispatch } from 'src/store/app/store';
+import { fetchPosts } from 'src/store/features/posts/postsSlice';
 import { EditorPost } from './EditorPost';
 
 export const UpsertPost = () => {
