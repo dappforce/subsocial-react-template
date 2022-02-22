@@ -2,6 +2,9 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+>In order to correctly build the application, Yarn needs to be used. 
+>If you try to use NPM, you may face issues with some NPM packages.
+
 ## Install package
 
 Run `yarn install`

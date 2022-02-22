@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import Layout from '../../layout/Layout';
 import ProfileAccount from '../profile-account/ProfileAccount';
-import { getInitialPropsWithRedux } from 'src/rtk/app';
+import { getInitialPropsWithRedux } from 'src/store/app';
 import {
   fetchProfile,
   selectProfile,
-} from 'src/rtk/features/profiles/profilesSlice';
+} from 'src/store/features/profiles/profilesSlice';
 import React, { FC, useState } from 'react';
 import { asString } from '@subsocial/utils';
 import {
@@ -14,7 +14,7 @@ import {
   ProfileTabValues,
 } from 'src/models/profile';
 import SpaceList from '../../space/space-list/space-list';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import PostList from '../../post/post-list/post-list';
 
 const Content: FC<ProfileContentProps> = ({ ids, activeTab, address }) => {

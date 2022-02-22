@@ -1,9 +1,10 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { DEFAULT_PAGE_SIZE } from 'src/config/ListData.config';
+import { config } from 'src/config'
 import Loader from '../../common/loader/Loader';
 import VoteUserItem from '../../common/vote-user-item/VoteUserItem';
 import styles from './ModalReactions.module.sass';
 import { ModalReactionsListProps } from 'src/models/modal';
+import { useTranslation } from 'react-i18next';
 
 const ModalReactionsList: FC<ModalReactionsListProps> = ({
   dataSource,
@@ -16,9 +17,10 @@ const ModalReactionsList: FC<ModalReactionsListProps> = ({
   const [data, setData] = useState<string[]>([]);
   const [fetching, setFetching] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const handleInfiniteOnLoad = async () => {
-    const newData = page === 1 ? [] : await loadMore(page, DEFAULT_PAGE_SIZE);
+    const newData = page === 1 ? [] : await loadMore(page, config.infinityScrollOffset);
     setData((current: any) => [...current, ...newData]);
     setPage(page + 1);
   };
@@ -71,10 +73,18 @@ const ModalReactionsList: FC<ModalReactionsListProps> = ({
 
   return (
     <div ref={ref} className={styles.scroll}>
-      {data.map((id: string) => (
-        <VoteUserItem id={id} key={id} onClose={onClose} />
-      ))}
-      {fetching && <Loader label={'Loading...'} />}
+      {totalCount > 0 ? (
+        data.map((id: string) => (
+          <VoteUserItem id={id} key={id} onClose={onClose} />
+        ))
+      ) : (
+        <div
+          className={styles.noData}
+        >
+          No data yet
+        </div>
+      )}
+      {fetching && <Loader label={t('content.loading')} />}
     </div>
   );
 };

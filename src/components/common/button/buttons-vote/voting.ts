@@ -1,8 +1,7 @@
 import BN from 'bn.js';
 import { SubmittableResult } from '@polkadot/api';
-import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners';
-import { ReactionType } from '@subsocial/api/flat-subsocial/dto';
-import { Reaction } from 'src/rtk/features/reactions/myPostReactionsSlice';
+import { ReactionType, PostStruct } from '@subsocial/types/dto';
+import { Reaction } from 'src/store/features/reactions/myPostReactionsSlice';
 
 type Props = {
   post: PostStruct;

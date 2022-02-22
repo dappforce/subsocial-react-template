@@ -3,26 +3,25 @@ import {
   getSuggestedPostIdsByPage,
   loadSuggestedPostIds,
 } from '../loadSuggestedPostIdsFromEnv';
-import {
-  DEFAULT_FIRST_PAGE,
-  DEFAULT_PAGE_SIZE,
-  IS_OFFCHAIN,
-} from 'src/config/ListData.config';
-import { fetchPosts } from 'src/rtk/features/posts/postsSlice';
+import { config } from 'src/config'
+import { fetchPosts } from 'src/store/features/posts/postsSlice';
 import { useApi } from 'src/components/api';
-import { useAppDispatch } from 'src/rtk/app/store';
+import { useAppDispatch } from 'src/store/app/store';
 import InfinityListScroll from '../../common/infinity-list/InfinityListScroll';
 import Post from '../post-item/Post';
-import { AccountId, SpaceId } from '@subsocial/api/flat-subsocial/dto';
-import { HasHiddenVisibility } from 'src/rtk/app/helpers';
+import { AccountId, SpaceId } from '@subsocial/types/dto';
+import { HasHiddenVisibility } from 'src/store/app/helpers';
 import {
   InnerLoadMoreFn,
   loadMoreValuesArgs,
 } from '../../../models/infinity-scroll';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+
 import { getFeedCount, getNewsFeed } from 'src/components/utils/OffchainUtils';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
+import { useTranslation } from 'react-i18next';
+import { ListType } from 'src/components/home/HomePage';
+import infinityListScroll from "../../common/infinity-list/InfinityListScroll";
 
 const loadMorePostsFn = async (loadMoreValues: loadMoreValuesArgs) => {
   const { size, page, api, dispatch, visibility, myAddress, ids, withSpace } =
@@ -30,9 +29,7 @@ const loadMorePostsFn = async (loadMoreValues: loadMoreValuesArgs) => {
 
   let postIds: string[];
 
-  if (IS_OFFCHAIN && myAddress && Router.query.tab === 'feeds') {
-    console.log('offchain');
-
+  if (config.isOffChainFeed && myAddress && Router.query.tab === 'feeds') {
     const data = await getNewsFeed(myAddress, (page - 1) * size, size).then(
       (res) => res
     );
@@ -62,17 +59,23 @@ type PostListProps = {
   visibility?: HasHiddenVisibility;
   myAddress?: AccountId;
   withSpace?: boolean;
+  type?: ListType;
 };
 
-const PostList: FC<PostListProps> = ({ ids, visibility, withSpace = true }) => {
+const PostList: FC<PostListProps> = ({
+  ids,
+  visibility,
+  withSpace = true,
+  type = ListType.posts,
+  myAddress,
+}) => {
   const [postsData, setPostsData] = useState<string[]>([]);
   const dispatch = useAppDispatch();
   const { api } = useApi();
   const [totalCount, setTotalCount] = useState(0);
   const [isEmpty, setIsEmpty] = useState(false);
   const router = useRouter();
-
-  const myAddress = useMyAddress();
+  const { t } = useTranslation();
 
   const loadMore: InnerLoadMoreFn = (page, size) =>
     loadMorePostsFn({
@@ -87,11 +90,16 @@ const PostList: FC<PostListProps> = ({ ids, visibility, withSpace = true }) => {
     });
 
   useEffect(() => {
-    if (totalCount) return;
+    setTotalCount(0);
+    setIsEmpty(false);
+  }, [myAddress]);
+
+  useEffect(() => {
+    if (totalCount || isEmpty) return;
 
     let isMounted = true;
-    if (IS_OFFCHAIN && isMounted) {
-      if (router.query.tab === 'feeds') {
+    if (config.isOffChainFeed && isMounted) {
+      if (type === ListType.feeds) {
         myAddress &&
           getFeedCount(myAddress).then(
             (res) => {
@@ -105,7 +113,9 @@ const PostList: FC<PostListProps> = ({ ids, visibility, withSpace = true }) => {
             },
             (err) => console.log('error', err)
           );
-        loadMore(DEFAULT_FIRST_PAGE, DEFAULT_PAGE_SIZE);
+        loadMore(config.infinityScrollFirstPage, config.infinityScrollOffset).then((ids) =>
+          setPostsData(ids)
+        );
       } else {
         loadSuggestedPostIds(api, ids).then((ids) => {
           setTotalCount(ids.length);
@@ -114,20 +124,20 @@ const PostList: FC<PostListProps> = ({ ids, visibility, withSpace = true }) => {
           } else {
             setIsEmpty(false);
           }
-          loadMore(DEFAULT_FIRST_PAGE, DEFAULT_PAGE_SIZE).then((ids) =>
+          loadMore(config.infinityScrollFirstPage, config.infinityScrollOffset).then((ids) =>
             setPostsData(ids)
           );
         });
       }
     }
-    if (!IS_OFFCHAIN && isMounted) {
+    if (!config.isOffChainFeed && isMounted) {
       loadSuggestedPostIds(api, ids).then((ids) => {
         setTotalCount(ids.length);
         if (!ids.length) {
           setIsEmpty(true);
         }
 
-        loadMore(DEFAULT_FIRST_PAGE, DEFAULT_PAGE_SIZE).then((ids) => {
+        loadMore(config.infinityScrollFirstPage, config.infinityScrollOffset).then((ids) => {
           setIsEmpty(false);
           setPostsData(ids);
         });
@@ -137,7 +147,7 @@ const PostList: FC<PostListProps> = ({ ids, visibility, withSpace = true }) => {
     return () => {
       isMounted = false;
     };
-  }, [loadMore, myAddress, router, totalCount]);
+  }, [loadMore, router, totalCount]);
 
   return (
     <InfinityListScroll
@@ -146,8 +156,8 @@ const PostList: FC<PostListProps> = ({ ids, visibility, withSpace = true }) => {
       totalCount={totalCount}
       emptyText={
         Router.query.tab === 'feeds'
-          ? 'Your feed is empty. Try to follow more spaces ;)'
-          : 'No posts yet'
+          ? t('generalMessages.emptyFeed')
+          : t('content.noPosts')
       }
       renderItem={(id) => <Post postId={id} key={id} withSpace={withSpace} />}
       isEmpty={isEmpty}

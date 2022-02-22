@@ -3,41 +3,46 @@
 .bar
   box-shadow: 0 3px 10px rgba(153, 153, 153, 0.12), 0 3px 9px rgba(153, 153, 153, 0.12), 0 1px 20px rgba(153, 153, 153, 0.2)
 
+  @include tablet
+    box-shadow: none
+
+.barWithMenu
+  z-index: 1201
+  box-shadow: none
+
 .header
   display: flex
   justify-content: space-between
   width: 100%
   grid-template-columns: 1fr minmax(0, 765px) 1fr
+  padding-left: 0
 
-  @media (max-width: 1100px)
+  @include tablet
     padding: 0
     grid-template-columns: 1fr 1fr
     grid-template-rows: 1fr 1fr
 
 .icon
   height: min-content
-  margin-right: 1.125rem
   margin-left: 0
-
-  @media (max-width: 1100px)
-    margin-right: $space_normal
+  color: $color_text_secondary
 
 .label
-  color: $color_black
+  color: $color_text_secondary
 
   a
     white-space: nowrap
 
-  @media (max-width: 1100px)
+  @include tablet
     grid-area: 2 / 1 / 2 / 3
     justify-self: center
     max-width: 100%
 
   & :global(.MuiButtonBase-root.MuiTab-root)
-    min-height: 56px
+    height: $header_height_on_desktop
 
-    @media (max-width: 1100px)
-      min-height: 48px
+    @include tablet
+      height: $header_height_on_mobile
 
   & button:first-child
     margin-left: 1px
@@ -52,55 +57,15 @@
   column-gap: $space_normal
   cursor: pointer
 
-  .spaceButton
-    height: 36px
-    font-size: $font_normal
-    letter-spacing: 0
-    padding: 0 $space_normal
-
-    span
-      padding-right: 0.5rem
-
-  .postButton
-    color: $color_black
-    border-color: $color_light_border
-
-
-  @media (max-width: 1100px)
+  @include tablet
     padding-right: 1.1875rem
-
-.account
-  display: flex
-  align-items: center
-  column-gap: $space_tiny
-  padding: 0
-  cursor: pointer
 
 .menu
   display: flex
+  gap: $space_small
   align-items: center
+  padding-left: $space_small
 
-  @media (max-width: 1100px)
-    padding-left: 1.1875rem
-
-.name
-  display: block
-  text-align: left
-  white-space: nowrap
-  color: $color_dark
-  font-weight: 500
-  line-height: 1.065rem !important
-
-.button
-  min-width: auto
-  padding-left: 0
-  padding-right: 0
-
-  svg
-    fill: $color_font_secondary !important
-
-.balance
-  font-size: $font_small !important
-  *
-    color: $color_font_secondary !important
-    line-height: 1.065rem !important
+  @include tablet
+    gap: $space_normal
+    padding-left: $space_normal

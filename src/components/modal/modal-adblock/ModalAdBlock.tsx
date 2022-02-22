@@ -9,10 +9,13 @@ import { ModalAdBlockProps } from 'src/models/modal';
 import ButtonComponent from 'src/components/common/button/button-component/ButtonComponent';
 import Text from '../../common/text/Text';
 import Image from 'src/components/common/image/Image';
+import { useTranslation } from 'react-i18next';
 
 const ModalAdBlock: FC<ModalAdBlockProps> = ({ open, ...props }) => {
   const router = useRouter();
   const onClick = () => router.reload();
+  const { t } = useTranslation();
+
   return (
     //@ts-ignore
     <MaterialModal open={open} className={styles.modal} {...props}>
@@ -34,18 +37,17 @@ const ModalAdBlock: FC<ModalAdBlockProps> = ({ open, ...props }) => {
 
         <Box className={styles.content}>
           <Text type={TextSizes.NORMAL} className={styles.main_text}>
-            Uh oh, it looks like you are using an ad blocker.
+            {t('modals.adblock.title')}
           </Text>
           <Text type={TextSizes.SECONDARY} className={styles.secondary_text}>
-            This may affect the display of content on our site. We recommend
-            turning it off to use the entire functionality of the site.
+            {t('modals.adblock.subtitle')}
           </Text>
           <ButtonComponent
             variant={'contained'}
             onClick={onClick}
             className={styles.button}
           >
-            Done! Reload page
+            {t('modals.adblock.button')}
           </ButtonComponent>
         </Box>
       </Box>

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
-import { HasHiddenVisibility } from '../rtk/app/helpers';
-import { AccountId } from '@subsocial/api/flat-subsocial/dto';
+import { HasHiddenVisibility } from '../store/app/helpers';
+import { AccountId } from '@subsocial/types/dto';
 
 export type RenderItemFn = (item: string) => ReactNode;
 

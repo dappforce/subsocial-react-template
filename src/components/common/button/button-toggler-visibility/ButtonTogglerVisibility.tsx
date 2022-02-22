@@ -2,7 +2,7 @@ import {
   ButtonTogglerVisibilityProps,
   TypeContent,
 } from 'src/models/common/button';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import TxButton from '../TxButton';
 import styles from './ButtonsTogglerVisibility.module.sass';
 import Router from 'next/router';

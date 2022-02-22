@@ -1,36 +1,54 @@
 {
-  "imageShouldBeLessThan": "Image should be less than {{limit}} MB",
+  "imageShouldBeLessThan": "Image should be less than {limit} MB",
   "general": {
-    "title": "Subsocial Angular",
+    "title": "rSocial",
     "post": "post",
-    "Post": "Post",
     "space": "space",
     "comment": "comment",
-    "edit": "Edit",
-    "new": "New",
-    "follower": "Follower",
-    "followers": "Followers",
-    "following": "Following",
     "profile": "profile",
-    "reply": "reply",
     "seeMore": "See More",
     "seeLess": "See Less",
-    "create": "Create"
+    "create": "Create",
+    "person": "person",
+    "people": "people"
+  },
+  "plural": {
+    "reaction_one": "Reaction",
+    "reaction_few": "Reactions",
+    "reaction_many": "Reactions",
+    "aggregate_one": "person",
+    "aggregate_few": "people",
+    "aggregate_many": "people",
+    "follower_one": "Подписчик",
+    "follower_few": "Подписчика",
+    "follower_many": "Подписчиков",
+    "following_one": "Подписка",
+    "following_few": "Подписки",
+    "following_many": "Подписок",
+    "post_one": "Пост",
+    "post_few": "Поста",
+    "post_many": "Постов",
+    "comment_one": "Комментарий",
+    "comment_few": "Комментария",
+    "comment_many": "Комментариев",
+    "reply_one": "ответ",
+    "reply_few": "ответа",
+    "reply_many": "ответов"
   },
   "tabs": {
     "following": "following",
     "followers": "followers",
     "upvotes": "upvotes",
     "downvotes": "downvotes",
-    "posts": "посты",
-    "spaces": "сообщества",
+    "posts": "posts",
+    "spaces": "spaces",
     "article": "article",
     "video": "video",
-    "feed": "мои фиды"
+    "feed": "my feed"
   },
   "buttons": {
-    "cancel": "Отмена",
-    "save": "Сохранить",
+    "cancel": "Cancel",
+    "save": "Save",
     "close": "Close",
     "copy": "Copy",
     "newPost": "New post",
@@ -51,10 +69,11 @@
     "signIn": "Sign In",
     "hide": "Hide",
     "show": "Show",
+    "view": "View",
     "makeVisible": "Make visible",
-    "hideComment": "Hide Comment",
-    "hidePost": "Hide Post",
-    "hideSpace": "Hide Space",
+    "hideComment": "Hide comment",
+    "hidePost": "Hide post",
+    "hideSpace": "Hide space",
     "upvote": "Upvote",
     "downvote": "Downvote",
     "writePost": "Write post",
@@ -69,13 +88,26 @@
     "uploadImage": "Upload cover image",
     "myProfile": "My profile",
     "editMyProfile": "Edit my profile",
-    "settings": "Settings"
+    "settings": "Settings",
+    "Language": "Language",
+    "createMyFirstSpace": "Create my first space",
+    "getTokens": "Get tokens",
+    "landingPage": "Landing page",
+    "legalDocuments": "Legal Documents",
+    "github": "Github",
+    "whatIsSubsocial": "What is Subsocial?",
+    "reactApp": "React app",
+    "angularApp": "Angular app",
+    "vueApp": "Vue app",
+    "subsocialApp": "Subsocial app"
   },
   "modals": {
     "tips": {
-      "title": "Send tips to",
+      "title": "Tip",
       "availableBalance": "Available Balance",
-      "inputPlaceholder": "Enter amount"
+      "inputPlaceholder": "Enter amount",
+      "recipient": "Recipient",
+      "error": "The amount must be less than the available balance"
     },
     "adblock": {
       "title": "Uh oh, it looks like you are using an ad blocker.",
@@ -84,6 +116,10 @@
     },
     "connections": {
       "connections": "Connections"
+    },
+    "infinityScroll": {
+      "noReactionsYet": "No reactions yet",
+      "noDataYet": "No data yet"
     },
     "likes": {
       "reactions": "Reactions",
@@ -94,8 +130,10 @@
     },
     "login": {
       "title": "Sign In",
+      "title-wait": "Wait a sec...",
       "accountScreen": {
-        "message": "Click on your account to sign in:"
+        "message": "Click on your account to sign in:",
+        "notLoginMessage": "You need to sign in to access this functionality. Click on your account below:"
       },
       "noAccountScreen": {
         "privacyPolicy": "Privacy Policy",
@@ -103,16 +141,25 @@
         "noAccountFound": "No accounts found. Please open your",
         "createNew": "and create a new account",
         "importExisting": "or import existing. Then reload this page.",
+        "notLoginMessage": "You need to sign in to access this functionality.",
         "message": "No accounts found. Please open your <b>Polkadot extension</b> and create a new account or import existing. Then reload this page."
       },
       "noExtension": {
+        "message": "<span>Polkadot Extension</span> was not found or disabled. Install the extension with the button below.",
         "wasNotFound": "was not found or disabled.",
         "installExt": "Install the extension with the button below.",
         "installForChrome": "Install for Chrome",
         "installForFirefox": "Install for Firefox",
         "needHelp": "Need help? Read our",
-        "signInGuide": "Sign In Guide"
+        "signInGuide": "Sign In Guide",
+        "toContinueConnectWith": "To continue connect with ",
+        "EnableExtension": ". Enable extension with the button below.",
+        "notLoginMessage": "To continue connect with <span>Polkadot Extension</span>. </br>Enable extension with the button below."
       }
+    },
+    "noToken": {
+      "message": "You need some tokens to continue.",
+      "button": "Get tokens"
     }
   },
   "snackbars": {
@@ -120,11 +167,21 @@
     "cannotCopy": "Cannot copy"
   },
   "post": {
-    "sharePost": "Share post"
+    "sharePost": "Share post",
+    "inResponseTo": "In response to "
+  },
+  "serverApp": {
+    "social": "Our social links:"
   },
   "forms": {
     "titles": {
-      "chooseSpace": "Choose a space for a new post"
+      "chooseSpace": "Choose a space for a new post",
+      "newSpace": "New Space",
+      "editSpace": "Edit Space",
+      "newPost": "New Post",
+      "editPost": "Edit Post",
+      "newProfile": "New Profile",
+      "editProfile": "Edit Profile"
     },
     "validations": {
       "required": "This field is required",
@@ -139,7 +196,7 @@
       "tags": "Press 'Enter' or 'Tab' key to add tags",
       "profileName": "Profile name",
       "about": "About",
-      "vireoUrl": "Video URL",
+      "videoUrl": "Video URL",
       "postTitle": "Post title",
       "spaceName": "Space name",
       "description": "Description",
@@ -158,9 +215,12 @@
   },
   "generalMessages": {
     "hiddenPostBySpace": "This post is not visible because its space is hidden",
-    "hiddenMessage": "This {{type}} is unlisted and only you can see it",
+    "hiddenPost": "This post is unlisted and only you can see it",
+    "hiddenSpace": "This space is unlisted and only you can see it",
+    "hiddenComment": "This comment is unlisted and only you can see it",
     "emptyFeed": "Your feed is empty. Try to follow more spaces ;)",
-    "createSpaceFirst": "Please create your space first"
+    "createSpaceFirst": "Please create your space first",
+    "dontHavePermission": "You do not have permission to edit this {type}"
   },
   "formHints": {
     "whoCanPost": {
@@ -182,7 +242,7 @@
     "CommentShared": "shared your comment on",
     "PostReactionCreated": "reacted to your post",
     "CommentReactionCreated": "reacted to your comment on",
-    "aggregate": "and {{count}} other people"
+    "aggregate": "and {count} other {message} "
   },
   "activities": {
     "AccountFollowed": "followed the account",
@@ -241,6 +301,24 @@
     "morePost": "Loading more posts...",
     "moreSpaces": "Loading more spaces...",
     "moreProfiles": "Loading more profiles...",
-    "loadingSpace": "Loading spaces..."
+    "loadingSpace": "Loading spaces...",
+    "loading": "Loading..."
+  },
+  "dayjs": {
+    "relativeTime": {
+      "d": "день",
+      "dd": "{unit}д",
+      "future": "в {unit}",
+      "h": "час",
+      "hh": "{unit}ч",
+      "m": "минуту",
+      "M": "месяц",
+      "mm": "{unit}м",
+      "MM": "{unit} месяцев",
+      "past": "{unit} назад",
+      "s": "несколько секунд",
+      "y": "год",
+      "yy": "{unit} лет"
+    }
   }
 }

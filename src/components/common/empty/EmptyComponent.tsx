@@ -8,7 +8,9 @@ import styles from './EmptyComponent.module.sass';
 const EmptyComponent: FC<EmptyProps> = ({ text }) => {
   return (
     <CardWrapper className={styles.empty}>
-      <Text type={TextSizes.NORMAL}>{text}</Text>
+      <Text type={TextSizes.NORMAL} className={styles.text}>
+        {text}
+      </Text>
     </CardWrapper>
   );
 };

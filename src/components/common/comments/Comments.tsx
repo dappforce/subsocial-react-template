@@ -4,24 +4,29 @@ import Comment from './Comment';
 import CardWrapper from '../card-wrapper/CardWrapper';
 import NewComment from './NewComment';
 import { FC, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'src/rtk/app/store';
+import { useAppDispatch, useAppSelector } from 'src/store/app/store';
 import {
   fetchPostReplyIds,
   selectReplyIds,
-} from 'src/rtk/features/replies/repliesSlice';
+  upsertReplyIdsByPostId,
+} from 'src/store/features/replies/repliesSlice';
 import { shallowEqual } from 'react-redux';
 import Title from '../title/Title';
 import { TitleSizes } from 'src/models/common/typography';
-import { pluralize } from '@subsocial/utils';
 import { useApi } from '../../api';
 import { CommentsProps } from 'src/models/comments';
 import { Box } from '@mui/system';
 import useLoader from '../../../hooks/useLoader';
 import Loader from '../loader/Loader';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
+import { useTranslation } from 'react-i18next';
+import { transformCount } from "../../../utils";
+import { upsertPost } from "../../../store/features/posts/postsSlice";
+import { useSelectPost } from "../../../store/features/posts/postsHooks";
 
 const Comments: FC<CommentsProps> = ({ parentStruct }) => {
-  const { id: parentId, visibleRepliesCount } = parentStruct;
+  const { id: parentId } = parentStruct;
+  const { visibleRepliesCount = 0} = useSelectPost(parentId)?.post.struct || {}
   const dispatch = useAppDispatch();
   const { replyIds = [] } =
     useAppSelector((state) => selectReplyIds(state, parentId), shallowEqual) ||
@@ -29,6 +34,12 @@ const Comments: FC<CommentsProps> = ({ parentStruct }) => {
   const { api } = useApi();
   const address = useMyAddress();
   const { isLoader, toggleLoader } = useLoader();
+  const { t } = useTranslation();
+
+  const addNewComment = (id: string) => {
+    dispatch(upsertPost({...parentStruct, visibleRepliesCount: visibleRepliesCount + 1 }))
+    dispatch(upsertReplyIdsByPostId({id: parentId, replyIds: [id, ...replyIds]}))
+  }
 
   useEffect(() => {
     toggleLoader();
@@ -38,29 +49,30 @@ const Comments: FC<CommentsProps> = ({ parentStruct }) => {
   }, []);
 
   return (
-    <CardWrapper>
+    <CardWrapper className={styles.wrapper}>
       <CardContent>
         <Title type={TitleSizes.PREVIEW} className={styles.title}>
-          {pluralize({
-            count: visibleRepliesCount,
-            singularText: 'comment',
-            pluralText: 'comments',
-          })}
+          {transformCount(visibleRepliesCount)}
+          {' '}
+          {t('plural.comment', { count: visibleRepliesCount })}
         </Title>
         <NewComment
           parentStruct={parentStruct}
-          placeholder={'Add a comment...'}
+          placeholder={t('forms.placeholder.addComment')}
+          addNewComment={addNewComment}
         />
         {isLoader ? (
-          <Loader label={'Loading...'} />
+          <Loader label={t('content.loading')} />
         ) : (
-          !!replyIds.length && (
-            <Box className={styles.commentsBox}>
-              {replyIds.map((id) => (
-                <Comment commentId={id} key={id} />
-              ))}
-            </Box>
-          )
+          <>
+            {!!replyIds.length && (
+              <Box className={styles.commentsBox}>
+                {replyIds.map((id) => (
+                  <Comment commentId={id} key={id}/>
+                ))}
+              </Box>
+            )}
+          </>
         )}
       </CardContent>
     </CardWrapper>

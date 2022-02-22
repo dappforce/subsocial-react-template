@@ -12,7 +12,7 @@ body
 
 body
   padding-top: 56px
-  background-color: $color-page_bg
+  background-color: $color_page_bg
 
 a
   color: inherit
@@ -28,20 +28,20 @@ button
 *
   box-sizing: border-box
   &::selection
-    color: $color_white
-    background-color: $color_primary
+    color: $color_text_white
+    background-color: $color_selection_bg
 
 .MuiToolbar-regular
-  background-color: $color_white
+  background-color: $color_main_bg
 
 .MuiBox-root
-  background-color: $color_white
+  background-color: $color_main_bg
 
 .MuiAppBar-colorPrimary
-  background-color: $color_white
+  background-color: $color_main_bg
 
   [data-testid="MenuIcon"]
-    fill: $color_black
+    fill: $color_icon_black
 
 .MuiIconButton-root
   padding: 0 !important
@@ -73,7 +73,7 @@ button
   padding-bottom: 0.875rem
 
 .MuiButton-text
-  color: $color_black !important
+  color: $color_text_secondary !important
 
 .MuiCardActions-root > :not(:first-of-type)
   margin-left: 0 !important
@@ -85,24 +85,16 @@ button
     min-height: 56px !important
 
 .Mui-selected
-  color: $color_primary !important
+  color: $color_text_primary !important
 
 .MuiTabs-indicator
-  background-color: $color_primary !important
-
-[data-testid="ThumbDownAltOutlinedIcon"]
-  transform: scale(-1, 1)
-
-.MuiDrawer-paper
-  max-width: 425px !important
-  width: 100% !important
-  overflow: hidden
+  background-color: $color_line_outline_primary !important
 
 .MuiListItemIcon-root
   min-width: 36px
 
 .MuiInputLabel-root.MuiInputLabel-formControl.Mui-focused
-  color: $color_medium_gray !important
+  color: $color_text_dark_gray !important
 
 .MuiCircularProgress-root
   display: inline-block
@@ -121,7 +113,7 @@ button
     padding: 6.5px 11px
 
   .CodeMirror-scroll
-    min-height: 5rem !important
+    min-height: 4.25rem !important
 
   .CodeMirror.cm-s-easymde.CodeMirror-wrap.CodeMirror-fullscreen
     z-index: 10000
@@ -130,14 +122,14 @@ button
     z-index: 10000
 
   .markdown-body
-    background-color: $color_white !important
+    background-color: $color_main_bg !important
     padding: $space_normal !important
     a
-      color: $color_primary !important
+      color: $color_text_primary !important
 
   .editor-toolbar
-    border-color: $color_light_border
-    color: $color_font_secondary
+    border-color: $color_input_outline
+    color: $color_text_dark_gray
 
     &.fullscreen
       z-index: 10000
@@ -150,7 +142,7 @@ button
       border-radius: 5px
 
   &:hover .editor-toolbar
-    color: $color_font_normal
+    color: $color_text_secondary
 
   .editor-statusbar
     display: none

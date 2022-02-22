@@ -13,11 +13,16 @@ import Title from 'src/components/common/title/Title';
 import Post from 'src/components/post/post-item/Post';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
-import { TxCallback } from 'src/models/common/button';
+import { TxCallback, TxFailedCallback } from 'src/models/common/button';
 import { TitleSizes } from 'src/models/common/typography';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import MaterialModal from '@mui/material/Modal';
 import styles from './ModalCreateSharedPost.module.sass';
+import { useSelectPost } from "../../../store/features/posts/postsHooks";
+import { SharedPostStruct } from "@subsocial/types/dto";
+import ButtonComponent from "../../common/button/button-component/ButtonComponent";
+import { useTranslation } from 'react-i18next';
+import { unpinIpfsCid } from "../../utils/unpinIpfsCid";
 
 interface ModalCreateSharedPostProps {
   postId: string;
@@ -33,14 +38,16 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
   const [body, setBody] = useState('');
   const [mySpaceIds, setMySpaceIds] = useState<string[]>([]);
   const [spaceId, setSpaceId] = useLocalStorage('spaceId', mySpaceIds[0] || '');
-  const [ipfsCid, setIpfsCid] = useState<IpfsCid>();
   const address = useMyAddress();
   const { api } = useApi();
   const router = useRouter();
-
+  const postData = useSelectPost(postId);
+  const { isSharedPost, sharedPostId } = postData?.post.struct  as SharedPostStruct || {};
+  const hasSpace = !!mySpaceIds.length;
+  const { t } = useTranslation();
   const json = { body };
 
-  const sharedPostExtension = { SharedPost: postId };
+  const sharedPostExtension = { SharedPost: isSharedPost ? sharedPostId : postId };
 
   const newTxParams = (cid: IpfsCid) => {
     return [spaceId, sharedPostExtension, { IPFS: cid }];
@@ -58,9 +65,12 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
     router.push(`/${spaceId}/${id}`);
   };
 
-  const options = {
-    placeholder: 'Add comment...',
-    autofocus: true,
+  const onFailed: TxFailedCallback = (txResult, newCid) => {
+    newCid &&
+    unpinIpfsCid(
+      api.subsocial.ipfs,
+      newCid,
+    );
   };
 
   useEffect(() => {
@@ -78,42 +88,63 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
       <Box className={styles.box}>
         <div className={styles.header}>
           <Title type={TitleSizes.PREVIEW} className={styles.title}>
-            Shared post
+            {t('post.sharePost')}
           </Title>
           <ButtonClose onClick={onClose} className={styles.buttonClose} />
         </div>
-        <Box component={'form'} className={styles.form}>
+        {hasSpace ? (
+          <Box component={'form'} className={styles.form}>
           <SelectSpaces
             spaceIds={mySpaceIds}
             initialId={spaceId}
             onChange={setSpaceId}
             className={styles.select}
           />
-          <Editor value={body} onChange={handleChange} options={options} />
-          <Post postId={postId} isShowActions={false} className={styles.post} />
+          <Editor
+            value={body}
+            onChange={handleChange}
+            placeholder={t('forms.placeholder.addComment')}
+            autofocus
+          />
+          <Post
+            postId={isSharedPost ? sharedPostId : postId}
+            isShowActions={false}
+            className={styles.post}
+          />
           <div className={styles.buttons}>
             <ButtonCancel onClick={onClose} className={styles.buttonCancel}>
-              Cancel
+              {t('buttons.cancel')}
             </ButtonCancel>
             <TxButton
-              label={'Create a post'}
+              label={t('buttons.createAPost')}
               accountId={address}
               tx={'posts.createPost'}
               params={() =>
                 getTxParams({
                   json,
                   ipfs: api.subsocial.ipfs,
-                  setIpfsCid,
                   buildTxParamsCallback: newTxParams,
                 })
               }
               onSuccess={onSuccess}
+              onFailed={onFailed}
               variant={'contained'}
               className={styles.button}
               withLoader
             />
           </div>
         </Box>
+        ) : (
+          <ButtonComponent
+            variant={'outlined'}
+            className={styles.button}
+            onClick={() => {
+              router.push('/new');
+            }}
+          >
+            {t('buttons.createMyFirstSpace')}
+          </ButtonComponent>
+        )}
       </Box>
     </MaterialModal>
   );

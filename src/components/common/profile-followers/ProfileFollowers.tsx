@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 import styles from './ProfileFollowers.module.sass';
 import { useModal } from 'src/hooks/useModal';
-import { pluralize } from '@subsocial/utils';
 import Modal from '../../modal/Modal';
 import ModalConnections from '../../modal/modal-reactions/ModalConnections';
 import { transformCount } from 'src/utils';
 import { ProfileFollowersProps } from 'src/models/common/profile-followers';
+import { useTranslation } from 'react-i18next';
 
 const ProfileFollowers: FC<ProfileFollowersProps> = ({
   className: inputClassName,
@@ -17,14 +17,10 @@ const ProfileFollowers: FC<ProfileFollowersProps> = ({
     ? `${inputClassName} ${styles.follow}`
     : styles.follow;
   const { isVisible, toggleModal } = useModal();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'following' | 'followers'>(
     'following'
   );
-  const [followerCount, followerLabel] = pluralize({
-    count: followers,
-    singularText: 'Follower',
-    pluralText: 'Followers',
-  }).split(' ');
 
   const openModalWithTab = (tab: 'following' | 'followers') => {
     toggleModal();
@@ -42,13 +38,13 @@ const ProfileFollowers: FC<ProfileFollowersProps> = ({
           onClose={toggleModal}
         />
       </Modal>
-      <button onClick={() => openModalWithTab('following')}>
+      <button onClick={() => openModalWithTab('following')} >
         <span className={styles.bold}>{transformCount(following)}</span>{' '}
-        Following
+        {t('plural.following', { count: following || 0 })}
       </button>
       <button onClick={() => openModalWithTab('followers')}>
-        <span className={styles.bold}>{transformCount(+followerCount)}</span>{' '}
-        {followerLabel}
+        <span className={styles.bold}>{transformCount(followers)}</span>{' '}
+        {t('plural.follower', { count: followers || 0 })}
       </button>
     </div>
   );

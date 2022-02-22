@@ -2,10 +2,11 @@ import Drawer from '@mui/material/Drawer';
 import ButtonClose from '../common/button/button-close/ButtonClose';
 import styles from './SwitchAccount.module.sass';
 import Modal from '../modal/Modal';
-import { useAppDispatch, useAppSelector } from 'src/rtk/app/store';
-import { toggleAccount } from 'src/rtk/features/mainSlice';
+import { useAppDispatch, useAppSelector } from 'src/store/app/store';
+import { toggleAccount } from 'src/store/features/mainSlice';
 import SwitchAccountContent from './SwitchAccountContent';
 import { useResponsiveSize } from '../responsive/ResponsiveContext';
+
 export const SwitchAccount = () => {
   const { isOpenAccount } = useAppSelector((state) => state.main);
   const dispatch = useAppDispatch();

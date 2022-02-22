@@ -3,7 +3,7 @@ import {
   ProfileData,
   SpaceData,
   SpaceId,
-} from '@subsocial/api/flat-subsocial/dto';
+} from '@subsocial/types/dto';
 import { AnyAccountId } from '@subsocial/types';
 
 export interface SpaceIds {

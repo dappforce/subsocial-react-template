@@ -13,7 +13,7 @@ const regexEqual = (x, y) => {
 
 module.exports = {
     reactStrictMode: true,
-    webpack: (config, {isServer}) => {
+    webpack: (config, { isServer }) => {
         const oneOf = config.module.rules.find(
             (rule) => typeof rule.oneOf === 'object'
         )
@@ -24,7 +24,7 @@ module.exports = {
             )
 
             if (moduleCssRule) {
-                const cssLoader = moduleCssRule.use.find(({loader}) =>
+                const cssLoader = moduleCssRule.use.find(({ loader }) =>
                     loader.includes('css-loader')
                 )
                 if (cssLoader) {

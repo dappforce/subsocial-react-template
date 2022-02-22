@@ -3,8 +3,8 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { Alert } from '@mui/material';
 import { ButtonTogglerVisibility } from '../button/button-toggler-visibility/ButtonTogglerVisibility';
 import { TypeContent } from 'src/models/common/button';
-import { PostStruct } from '@subsocial/api/flat-subsocial/flatteners';
-import { PostData, SpaceData } from '@subsocial/api/flat-subsocial/dto';
+import { PostData, PostStruct, SpaceData } from '@subsocial/types/dto';
+import { useTranslation } from 'react-i18next';
 
 const HiddenComponent = ({
   data,
@@ -12,7 +12,22 @@ const HiddenComponent = ({
 }: {
   data: PostData | SpaceData;
   typeContent: TypeContent;
-}) => (
+}) => {
+  const { t } = useTranslation();
+  const message = ((): string => {
+    switch (typeContent) {
+      case TypeContent.Post:
+        return t('generalMessages.hiddenPost');
+      case TypeContent.Space:
+        return t('generalMessages.hiddenSpace');
+      case TypeContent.Comment:
+        return t('generalMessages.hiddenComment');
+      default:
+        return '';
+    }
+  })();
+
+  return (
   <Alert
     className={styles.warning}
     severity={'warning'}
@@ -23,10 +38,10 @@ const HiddenComponent = ({
         withLoader
       />
     }
-    icon={<ErrorIcon />}
+    icon={<ErrorIcon/>}
   >
-    {`This ${typeContent} is unlisted and only you can see it`}
+    {message}
   </Alert>
-);
+)};
 
 export default HiddenComponent;

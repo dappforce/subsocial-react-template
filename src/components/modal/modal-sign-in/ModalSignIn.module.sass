@@ -8,7 +8,7 @@
 
 .title
     text-align: center
-    color: $color_font_secondary
+    color: $color_text_dark_gray
 
 .button
     white-space: nowrap
@@ -24,16 +24,16 @@
     font-weight: 500
 
     &.black
-        color: $color_black
+        color: $color_text_secondary
 
 .hint
-    color: $color_font_secondary
+    color: $color_text_dark_gray
 
 .info
     display: flex
     column-gap: 1rem
     justify-content: center
-    color: $color_font_secondary
+    color: $color_text_dark_gray
 
     span:after
         content: "|"
@@ -55,18 +55,24 @@
         padding: 0 $space_normal
 
         &:hover
-            background-color: $color_light_gray
+            background-color: $color_menu-item_bg_hover
+
+.name
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
 
 .address
-    color: $color_font_secondary
+    color: $color_text_dark_gray
+    white-space: nowrap
 
 .balance
     font-size: $font_small !important
 
     p
-        color: $color_font_secondary
+        color: $color_text_dark_gray
         span:first-child
-            color: $color_black
+            color: $color_text_secondary
 
 .alert
     font-size: $font_normal

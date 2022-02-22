@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    webpackFinal: async (baseConfig, options) => {
+    webpackFinal: async (baseConfig) => {
         const { module = {} } = baseConfig;
 
         const newConfig = {
@@ -27,13 +27,6 @@ module.exports = {
             ],
         });
         newConfig.resolve.extensions.push('.ts', '.tsx');
-
-        // SCSS
-        newConfig.module.rules.push({
-            test: /\.(s*)css$/,
-            loaders: ['style-loader', 'css-loader', 'sass-loader'],
-            include: path.resolve(__dirname, '../styles/common.sass'),
-        });
 
         return newConfig;
     },

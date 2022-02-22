@@ -8,7 +8,8 @@ import sanitizeHtml from 'sanitize-html';
 import classNames from 'classnames';
 
 const Editor: FC<EditorProps> = ({
-  options: inputOptions,
+  placeholder,
+  autofocus,
   className: inputClassName,
   toolbar = true,
   ...props
@@ -20,7 +21,8 @@ const Editor: FC<EditorProps> = ({
 
   const options = useMemo(
     () => ({
-      ...inputOptions,
+      placeholder,
+      autofocus,
       spellChecker: false,
       renderingConfig: {
         sanitizerFunction: (html: string) => sanitizeHtml(html),

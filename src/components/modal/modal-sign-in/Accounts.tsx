@@ -3,11 +3,11 @@ import { Divider, List } from '@mui/material';
 import styles from './ModalSignIn.module.sass';
 import ModalListUserItem from './ModalListUserItem';
 import ModalSignInInfo from './ModalSignInInfo';
-import { fetchProfile } from 'src/rtk/features/profiles/profilesSlice';
-import { setMyAddress } from 'src/rtk/features/myAccount/myAccountSlice';
+import { fetchProfile } from 'src/store/features/profiles/profilesSlice';
+import { setMyAddress } from 'src/store/features/myAccount/myAccountSlice';
 import { useApi } from '../../api';
 import { AccountsModalProps } from 'src/models/account';
-import { useAppDispatch } from 'src/rtk/app/store';
+import { useAppDispatch } from 'src/store/app/store';
 
 const Accounts: FC<AccountsModalProps> = (props) => {
   const dispatch = useAppDispatch();

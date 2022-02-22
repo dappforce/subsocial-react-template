@@ -6,11 +6,11 @@ import { Typography } from '@mui/material';
 const Text: FC<TextProps> = ({
   type,
   children,
-  className: inputCalssName,
+  className: inputClassName,
   ...props
 }) => {
-  const className = inputCalssName
-    ? `${styles.text} ${styles[type]} ${inputCalssName}`
+  const className = inputClassName
+    ? `${styles.text} ${styles[type]} ${inputClassName}`
     : `${styles.text} ${styles[type]}`;
 
   return (

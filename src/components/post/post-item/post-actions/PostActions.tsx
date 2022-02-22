@@ -5,7 +5,7 @@ import ButtonShare from '../../../common/button/button-share/ButtonShare';
 import { PostActionsProps } from 'src/models/post';
 import styles from '../Post.module.sass';
 import ButtonVotes from '../../../common/button/buttons-vote/ButtonVotes';
-import { ReactionEnum } from '@subsocial/api/flat-subsocial/dto';
+import { ReactionEnum } from '@subsocial/types/dto';
 import { useModal } from 'src/hooks/useModal';
 import ModalCreateSharedPost from 'src/components/modal/modal-create-shared-post/ModalCreateSharedPost';
 import { useAuth } from 'src/components/auth/AuthContext';
@@ -13,11 +13,11 @@ import { ACCOUNT_STATUS } from 'src/models/auth';
 
 const PostActions: FC<PostActionsProps> = (props) => {
   const { post, isSharedPost = 0 } = props;
-
+  const { visibleRepliesCount, sharesCount } = post.struct
   const { isVisible, toggleModal } = useModal();
 
   const { openSingInModal, status } = useAuth();
-  
+
   const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
 
   const onClickShare = () => {
@@ -45,9 +45,12 @@ const PostActions: FC<PostActionsProps> = (props) => {
         <ButtonVotes post={post.struct} reactionEnum={ReactionEnum.Downvote} />
         <ButtonComment
           onClick={props.toggleComments}
-          value={post.struct.visibleRepliesCount}
+          value={visibleRepliesCount}
         />
-        <ButtonShare onClick={onClickShare} />
+        <ButtonShare
+          onClick={onClickShare}
+          value={sharesCount}
+        />
       </CardActions>
     </>
   );

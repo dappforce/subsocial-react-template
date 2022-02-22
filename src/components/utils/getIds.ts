@@ -1,8 +1,5 @@
 import BN from 'bn.js';
-import {
-  DEFAULT_FIRST_PAGE,
-  DEFAULT_PAGE_SIZE,
-} from 'src/config/ListData.config';
+import { config } from 'src/config'
 import { nonEmptyStr } from '@subsocial/utils';
 
 const tryParseInt = (maybeNum: string | number, def: number): number => {
@@ -29,14 +26,14 @@ export type ParsedPaginationQuery = {
 export const parsePageQuery = (
   props: PaginationQuery
 ): ParsedPaginationQuery => {
-  let { page = DEFAULT_FIRST_PAGE, size = DEFAULT_PAGE_SIZE } = props;
+  let { page = config.infinityScrollFirstPage, size = config.infinityScrollOffset } = props;
 
   if (nonEmptyStr(page)) {
-    page = tryParseInt(page, DEFAULT_FIRST_PAGE);
+    page = tryParseInt(page, config.infinityScrollFirstPage);
   }
 
   if (nonEmptyStr(size)) {
-    size = tryParseInt(size, DEFAULT_PAGE_SIZE);
+    size = tryParseInt(size, config.infinityScrollOffset);
   }
 
   return {

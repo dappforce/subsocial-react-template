@@ -2,32 +2,31 @@ import styles from './SpaceHiddenComponent.module.sass';
 import { Alert } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 import { TypeContent } from 'src/models/common/button';
-import { useSelectSpace } from 'src/rtk/app/hooks';
-import { PostData } from '@subsocial/api/flat-subsocial/dto';
+import { useSelectSpace } from 'src/store/app/hooks';
+import { PostData, SpaceStruct } from '@subsocial/types/dto';
 import { ButtonTogglerVisibility } from '../button/button-toggler-visibility/ButtonTogglerVisibility';
-import { SpaceStruct } from '@subsocial/api/flat-subsocial/flatteners';
 import { useEffect } from 'react';
-import { useAppDispatch } from 'src/rtk/app/store';
+import { useAppDispatch } from 'src/store/app/store';
 import { useApi } from 'src/components/api';
-import { fetchSpaces } from 'src/rtk/features/spaces/spacesSlice';
+import { fetchSpaces } from 'src/store/features/spaces/spacesSlice';
 import { EntityId } from '@reduxjs/toolkit';
+import { useTranslation } from 'react-i18next';
 
 const SpaceHiddenComponent = ({ content }: { content: PostData }) => {
   const space = useSelectSpace(content?.struct?.spaceId as string);
   const dispatch = useAppDispatch();
   const { api } = useApi();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    if (!space) {
-      dispatch(
-        fetchSpaces({
-          api,
-          ids: [content?.struct?.spaceId as unknown as EntityId],
-          withUnlisted: true,
-        })
-      );
-    }
-  });
+    dispatch(
+      fetchSpaces({
+        api,
+        ids: [content?.struct?.spaceId as unknown as EntityId],
+        withUnlisted: true,
+      })
+    );
+  }, [api, dispatch, content?.struct?.spaceId]);
 
   if (!space?.struct?.hidden) return null;
   return (
@@ -43,7 +42,7 @@ const SpaceHiddenComponent = ({ content }: { content: PostData }) => {
       }
       icon={<ErrorIcon />}
     >
-      {'This post is not visible because its space is hidden'}
+      {t('generalMessages.hiddenPostBySpace')}
     </Alert>
   );
 };

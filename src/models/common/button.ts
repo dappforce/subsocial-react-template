@@ -1,20 +1,21 @@
 import { IconButtonProps } from '@mui/material/IconButton/IconButton';
-import { EntityId, ReactionEnum } from '@subsocial/api/flat-subsocial/dto';
+import { EntityId, ReactionEnum, PostStruct, SpaceStruct, } from '@subsocial/types/dto';
 import { SubmittableResult } from '@polkadot/api';
 import { ButtonProps } from '@mui/material/Button/Button';
-import {
-  PostStruct,
-  SpaceStruct,
-} from '@subsocial/api/flat-subsocial/flatteners';
-import { ReactionStruct } from 'src/rtk/features/reactions/myPostReactionsSlice';
+import { ReactionStruct } from 'src/store/features/reactions/myPostReactionsSlice';
 import React, { FunctionComponent } from 'react';
-import { AnyAccountId } from '@subsocial/types';
+import { AnyAccountId, IpfsCid } from '@subsocial/types';
+
 
 export type GetTxParamsFn = () => any[];
 export type GetTxParamsAsyncFn = () => Promise<any[]>;
 
-export type TxCallback = (status: SubmittableResult) => void;
-export type TxFailedCallback = (status: SubmittableResult | null) => void;
+export type TxCallback = (status: SubmittableResult, newCid: IpfsCid) => void;
+export type TxSuccessCallback = (status: SubmittableResult) => void;
+export type TxFailedCallback = (
+  status: SubmittableResult | null,
+  newCid: IpfsCid
+) => void;
 
 export interface ButtonCancelProps {
   onClick?: () => void;
@@ -35,11 +36,10 @@ export interface ButtonComponentProps extends ButtonProps {
 export interface ButtonShareProps {
   onClick?: () => void;
   isShowLabel?: boolean;
+  value?: number;
 }
 
 export interface ButtonVoteProps {
-  isActive?: boolean;
-  value?: number;
   withLabel?: boolean;
   onClick?: () => void;
   post: PostStruct;
@@ -80,18 +80,20 @@ export interface ButtonFollowAccountProps
 
 export interface ButtonReplyProps {
   onClick?: () => void;
+  withLabel?: boolean;
 }
 
 export enum TypeContent {
   Space = 'Space',
   Post = 'Post',
   Comment = 'Comment',
+  Profile = 'MyProfile',
 }
 
 export interface ButtonOptionsProps extends IconButtonProps {
   withReactions?: boolean;
-  withHidden?: boolean;
   withFollowing?: boolean;
+  withHidden?: boolean;
   typeContent?: TypeContent;
   contentStruct?: PostStruct | SpaceStruct;
   onClickEdit?: () => void;
@@ -104,4 +106,17 @@ export interface ButtonTogglerVisibilityProps {
   component?: FunctionComponent<{}>;
   withLoader: boolean;
   children?: React.ReactNode;
+}
+
+export interface ButtonEntityProps extends ButtonProps {
+  typeEntity: 'post' | 'space',
+}
+
+
+export interface ButtonNotificationProps {
+  value?: number;
+}
+
+export interface ButtonQrProps extends ButtonProps {
+  sizeIcon?: number;
 }

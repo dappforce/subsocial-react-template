@@ -3,6 +3,7 @@ import Input from '../input/Input';
 import styles from './TagsInput.module.sass';
 import Tag from '../../tag/Tag';
 import { TagsInputProps } from 'src/models/common/input';
+import { useTranslation } from 'react-i18next';
 
 const INVALID_CHARS = /[^a-zA-Z0-9 ]/g;
 const KEY = {
@@ -12,6 +13,7 @@ const KEY = {
 };
 
 const TagsInput: FC<TagsInputProps> = (props) => {
+  const { t } = useTranslation();
   const onKeyDown = (event: any) => {
     const keyPressed = event.which;
 
@@ -66,11 +68,11 @@ const TagsInput: FC<TagsInputProps> = (props) => {
   return (
     <div className={styles.tags}>
       <Input
-        label={'Tags'}
+        label={t('forms.fieldName.tags')}
         onKeyDown={onKeyDown}
         onKeyUp={clearInvalidChars}
         isMultiline={true}
-        placeholder={"Press 'Enter' or 'Tab' key to add tags"}
+        placeholder={t('forms.placeholder.tags')}
         InputProps={{
           startAdornment: (
             <>

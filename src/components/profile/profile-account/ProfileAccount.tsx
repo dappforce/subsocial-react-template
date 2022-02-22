@@ -7,7 +7,7 @@ import Account from '../../account/Account';
 import { ProfileAccountProps } from 'src/models/profile';
 import { toShortAddress } from '../../utils/address';
 import ButtonFollowAccount from '../../common/button/button-follow/ButtonFollowAccount';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import { useApi } from 'src/components/api';
 import { useIsMyAddress } from 'src/hooks/useIsMySpace';
 import { useRouter } from 'next/router';
@@ -17,6 +17,14 @@ import { Tooltip } from '@mui/material';
 import ButtonEdit from 'src/components/common/button/button-edit/ButtonEdit';
 import { useAuth } from 'src/components/auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';
+import ModalSendTips from "../../modal/modal-send-tips/ModalSendTips";
+import { useModal } from "../../../hooks/useModal";
+import { useTranslation } from 'react-i18next';
+import { useResponsiveSize } from "../../responsive/ResponsiveContext";
+import { TypeContent } from "../../../models/common/button";
+import ButtonSendTips from '../../common/button/button-send-tips/ButtonSendTips';
+import ButtonWritePost from '../../common/button/button-wtire-post/ButtonWritePost';
+import { config } from 'src/config';
 
 const ProfileAccount: FC<ProfileAccountProps> = (props) => {
   const { content, struct, id } = props;
@@ -27,7 +35,15 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
   const [hasSpace, setHasSpace] = useState(false);
   const [spaceId, setSpaceId] = useLocalStorage<string>('spaceId', '');
   const { status } = useAuth();
+  const { t } = useTranslation();
   const isAuthRequired = status !== ACCOUNT_STATUS.AUTHORIZED;
+  const { isVisible, toggleModal} = useModal();
+  const { isDesktop } = useResponsiveSize()
+
+  const onClickEdit = () => {
+    router.push(`/accounts/${address}/edit`)
+  }
+
   const tabs = [
     { label: 'Posts', tabValue: 'userPosts' },
     { label: 'Spaces', tabValue: 'userSpaces' },
@@ -67,51 +83,48 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
                 router.push('/new');
               }}
             >
-              Create Space
+              {t('buttons.createSpace')}
             </ButtonComponent>
             <Tooltip
-              title={hasSpace ? '' : 'Please create your space first'}
+              title={hasSpace ? '' : `${t('generalMessages.createSpaceFirst')}`}
               className={styles.tooltip}
               placement="top"
               arrow
             >
               <div>
-                <ButtonComponent
-                  variant={'contained'}
-                  className={styles.button}
-                  onClick={() => {
-                    setSpaceId(id);
-                    router.push('/posts/new');
-                  }}
+                <ButtonWritePost
+                  onClick={() => setSpaceId(id)}
                   disabled={!hasSpace}
-                  data-tooltip={'test'}
-                >
-                  Write post
-                </ButtonComponent>
+                  className={styles.button}
+                />
               </div>
             </Tooltip>
           </>
         ) : (
           <>
-            <ButtonComponent
-              variant={'outlined'}
-              className={`${styles.button} ${styles.buttonGrey}`}
-              disabled={isAuthRequired}
-            >
-              Send tips
-            </ButtonComponent>
+            <ModalSendTips open={isVisible} toggleModal={toggleModal} ownerId={id}/>
+
+            <ButtonSendTips
+              onClick={toggleModal}
+              className={styles.button}
+              disabled={config.enableTips && isAuthRequired}
+            />
             <ButtonFollowAccount address={id} className={styles.button} />
           </>
         )
       }
       action={
         <>
-          {isMy && (
+          {isMy && isDesktop && (
             <ButtonEdit
               onClick={() => router.push(`/accounts/${address}/edit`)}
             />
           )}
-          <Options className={styles.option} />
+          <Options
+            className={styles.option}
+            onClickEdit={isDesktop ? undefined : onClickEdit}
+            typeContent={TypeContent.Profile}
+          />
         </>
       }
       about={content?.about}

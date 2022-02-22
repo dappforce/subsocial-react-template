@@ -6,15 +6,16 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { EntityId } from '@subsocial/api/flat-subsocial/dto';
+import { EntityId } from '@subsocial/types/dto';
 import { FC, useEffect } from 'react';
 import { useApi } from 'src/components/api';
 import { AvatarSizes } from 'src/models/common/avatar';
-import { useSelectSpaces } from 'src/rtk/app/hooks';
-import { useAppDispatch } from 'src/rtk/app/store';
-import { fetchSpaces } from 'src/rtk/features/spaces/spacesSlice';
+import { useSelectSpaces } from 'src/store/app/hooks';
+import { useAppDispatch } from 'src/store/app/store';
+import { fetchSpaces } from 'src/store/features/spaces/spacesSlice';
 import AvatarElement from '../avatar/AvatarElement';
 import styles from './SelectSpaces.module.sass';
+import { useTranslation } from 'react-i18next';
 
 interface SelectSpacesProps {
   className?: string;
@@ -32,6 +33,7 @@ const SelectSpaces: FC<SelectSpacesProps> = ({
   const spaces = useSelectSpaces(spaceIds);
   const dispatch = useAppDispatch();
   const { api } = useApi();
+  const { t } = useTranslation();
 
   useEffect(() => {
     (async () => {
@@ -42,11 +44,11 @@ const SelectSpaces: FC<SelectSpacesProps> = ({
   return (
     <div className={className}>
       <FormControl className={styles.form}>
-        <InputLabel id="select-label">{'Post in a space'}</InputLabel>
+        <InputLabel id="select-label">{t('forms.placeholder.postInSpace')}</InputLabel>
         <Select
           value={initialId}
           className={styles.select}
-          label="Post in a space"
+          label={t('forms.placeholder.postInSpace')}
           labelId="select-label"
           onChange={(e) => onChange(e.target.value)}
         >

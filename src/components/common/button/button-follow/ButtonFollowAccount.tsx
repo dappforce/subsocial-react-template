@@ -1,14 +1,14 @@
 import { FC } from 'react';
 import { ButtonFollowAccountProps } from 'src/models/common/button';
-import { useAppSelector } from 'src/rtk/app/store';
+import { useAppSelector } from 'src/store/app/store';
 import TxButton from '../TxButton';
-import { useMyAddress } from 'src/rtk/features/myAccount/myAccountHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import { shallowEqual } from 'react-redux';
 import {
   useCreateReloadAccountIdsByFollower,
   useCreateReloadProfile,
-} from 'src/rtk/app/hooks';
-import { selectAccountIdsByFollower } from 'src/rtk/features/profiles/followedAccountIdsSlice';
+} from 'src/store/app/hooks';
+import { selectAccountIdsByFollower } from 'src/store/features/profiles/followedAccountIdsSlice';
 import { useIsMyAddress } from 'src/hooks/useIsMySpace';
 import { MenuItem } from '@mui/material';
 import labelForMenuItem from 'src/components/utils/labelForMenuItem';

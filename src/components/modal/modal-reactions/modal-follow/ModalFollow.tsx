@@ -4,16 +4,14 @@ import { ModalFollowProps } from 'src/models/modal';
 import { transformCount } from 'src/utils';
 import { useApi } from '../../../api';
 import { asString } from '@subsocial/utils';
-import { fetchProfiles } from 'src/rtk/features/profiles/profilesSlice';
+import { fetchProfiles } from 'src/store/features/profiles/profilesSlice';
 import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
-import { PostId } from '@subsocial/api/flat-subsocial/dto';
+import { PostId } from '@subsocial/types/dto';
 import { getPageOfIds } from '../../../utils/getIds';
-import {
-  DEFAULT_FIRST_PAGE,
-  DEFAULT_PAGE_SIZE,
-} from 'src/config/ListData.config';
-import { useAppDispatch } from 'src/rtk/app/store';
+import { config } from 'src/config'
+import { useAppDispatch } from 'src/store/app/store';
 import { InnerLoadMoreFn } from '../../../../models/infinity-scroll';
+import { useTranslation } from 'react-i18next';
 
 export const getAccountsIdsByPage = (
   ids: PostId[],
@@ -49,6 +47,7 @@ const ModalFollow: FC<ModalFollowProps> = ({ count = 0, id }) => {
   const dispatch = useAppDispatch();
   const { api } = useApi();
   const [totalCount, setTotalCount] = useState(0);
+  const { t } = useTranslation();
 
   const loadMore: InnerLoadMoreFn = useCallback(
     (page, size) =>
@@ -65,7 +64,7 @@ const ModalFollow: FC<ModalFollowProps> = ({ count = 0, id }) => {
   useEffect(() => {
     loadSuggestedAccountIds(api, id).then((ids) => {
       setTotalCount(ids.length);
-      loadMore(DEFAULT_FIRST_PAGE, DEFAULT_PAGE_SIZE).then((ids) =>
+      loadMore(config.infinityScrollFirstPage, config.infinityScrollOffset).then((ids) =>
         setData(ids)
       );
     });
@@ -73,7 +72,7 @@ const ModalFollow: FC<ModalFollowProps> = ({ count = 0, id }) => {
 
   return (
     <ModalReactionsLayout
-      title={`${transformCount(count) || ''} Followers`}
+      title={`${transformCount(count) || ''} ${t('plural.follower', { count: count || 0 })}`}
       dataSource={data}
       loadMore={loadMore}
       totalCount={totalCount}

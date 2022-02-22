@@ -5,6 +5,7 @@ import { useModal } from '../../hooks/useModal';
 import Modal from '../modal/Modal';
 import ModalConnections from '../modal/modal-reactions/ModalConnections';
 import { transformCount } from '../../utils';
+import { useTranslation } from 'react-i18next';
 
 const AccountFollowers: FC<AccountFollowersProps> = ({
   className,
@@ -14,6 +15,7 @@ const AccountFollowers: FC<AccountFollowersProps> = ({
 }) => {
   const classname = className ? `${className} ${styles.follow}` : styles.follow;
   const { isVisible, toggleModal } = useModal();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'following' | 'followers'>(
     'following'
   );
@@ -34,13 +36,13 @@ const AccountFollowers: FC<AccountFollowersProps> = ({
           onClose={toggleModal}
         />
       </Modal>
-      <button onClick={() => openModalWithTab('following')}>
+      <button onClick={() => openModalWithTab('following')} className={styles.buttonModal}>
         <span className={styles.bold}>{transformCount(following)}</span>{' '}
-        Following
+        {t('plural.following', { count: following || 0 })}
       </button>
-      <button onClick={() => openModalWithTab('followers')}>
+      <button onClick={() => openModalWithTab('followers')} className={styles.buttonModal}>
         <span className={styles.bold}>{transformCount(followers)}</span>{' '}
-        Followers
+        {t('plural.follower', { count: followers || 0 })}
       </button>
     </div>
   );

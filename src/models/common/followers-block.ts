@@ -1,4 +1,4 @@
-import { AccountId, SpaceId } from '@subsocial/api/flat-subsocial/dto';
+import { AccountId, SpaceId } from '@subsocial/types/dto';
 
 export interface FollowersBlockProps {
   posts?: number;

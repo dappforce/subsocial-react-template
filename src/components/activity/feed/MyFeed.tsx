@@ -1,7 +1,24 @@
+import { AccountId } from '@subsocial/types/dto';
+import { ListType } from 'src/components/home/HomePage';
 import PostList from 'src/components/post/post-list/post-list';
 
-export const MyFeed = ({ ids }: { ids: string[] }) => {
-  return <PostList ids={ids} visibility={'onlyVisible'} />;
+export const MyFeed = ({
+  ids,
+  type,
+  address,
+}: {
+  ids: string[];
+  type: ListType;
+  address?: AccountId;
+}) => {
+  return (
+    <PostList
+      ids={ids}
+      visibility={'onlyVisible'}
+      type={type}
+      myAddress={address}
+    />
+  );
 };
 
 export default MyFeed;
