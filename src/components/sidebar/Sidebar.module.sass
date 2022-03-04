@@ -1,13 +1,13 @@
-@import '../../styles/_vars.sass'
+@import 'src/styles/_vars.sass'
 
 .drawer
   & :global(.MuiPaper-root)
-    width: $sidebar_min_width_on_desktop
-    transition: all 400ms ease-in-out !important
-    height: calc(100vh - #{$header_height_on_desktop} - 1px)
-    margin-top: calc(#{$header_height_on_desktop} + 1px)
     display: flex
     justify-content: space-between
+    width: $sidebar_min_width_on_desktop
+    transition: width 300ms ease-in-out, transform 300ms ease-in-out !important
+    height: calc(100vh - #{$header_height_on_desktop} - 1px)
+    margin-top: calc(#{$header_height_on_desktop} + 1px)
     border: none
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1)
     overflow-x: hidden
@@ -15,18 +15,30 @@
     &:hover
       width: $sidebar_max_width_on_desktop
 
-    @include tablet
-      width: 0
-
 .drawerOpenMobile
+  & :global(.MuiContainer-root)
+    color: gray
+
   & :global(.MuiPaper-root)
     width: $sidebar_width_on_mobile
+    animation: appear 200ms
+
+    &:hover
+      width: $sidebar_width_on_mobile
+
+@keyframes appear
+  0%
+    max-width: 0
+  100%
+    max-width: $sidebar_width_on_mobile
 
 .topBox
   width: $sidebar_max_width_on_desktop
 
   @include tablet
     width: $sidebar_width_on_mobile
+    animation: appear 300ms
+
 
 .list
   display: flex
@@ -37,8 +49,9 @@
 .item
   padding: 0.875rem 0
   height: 46px
+  white-space: nowrap
   color: $color_text_dark_gray
-  transition: all 0.5s linear
+  transition: all 0.3s linear
 
   &:hover
     color: $color_text_primary
@@ -60,14 +73,16 @@
 .divider
   width: $sidebar_min_width_on_desktop
   margin-left: 0.9375rem
+
   & :global(.MuiDivider-root)
     width: 1.5rem
     border-color: $color_line_outline
-    transition: width 0.5s linear
+    transition: width 0.2s linear
 
   @include tablet
     margin: 0 $space_large
     width: $sidebar_width_on_mobile !important
+
     & :global(.MuiDivider-root)
       width: 14.375rem !important
 
@@ -76,6 +91,7 @@
     .divider
       width: $sidebar_max_width_on_desktop
       margin-left: $space_normal
+
       & :global(.MuiDivider-root)
         width: 11.75rem
 
@@ -85,7 +101,6 @@
   flex-direction: column
   gap: $space_normal
   padding-bottom: $space_big
-  transition: width 0.5s linear
 
   @include tablet
     width: $sidebar_width_on_mobile !important
@@ -101,6 +116,7 @@
   text-align: center
   color: $color_text_dark_gray
   white-space: nowrap
+  transition: all 300ms ease-in-out !important
 
   @include tablet
     display: block
@@ -113,8 +129,12 @@
 .socialList
   display: flex
   gap: 0.9375rem
-  justify-content: center
-  padding: 0
+  justify-content: flex-start
+  padding-left: $space_small
+  transition: all 300ms ease-in-out !important
+
+  @include tablet
+    padding-left: 3.3rem
 
 .socialIcon
   min-width: 30px
@@ -138,6 +158,22 @@
 
 .drawer
   &:hover
-    .socialIcon
-      &:nth-child(n + 2)
+    .socialIcon:nth-child(n + 2)
         display: flex
+
+    .socialList
+      padding-left: $space_big
+
+      @include tablet
+        padding-left: 3.3rem
+
+.wrapper
+  display: flex
+  justify-content: space-between
+  flex-direction: column
+
+@keyframes appear
+  0%
+    max-width: 0
+  100%
+    max-width: $sidebar_width_on_mobile

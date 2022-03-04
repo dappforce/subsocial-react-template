@@ -18,7 +18,8 @@ import Text from '../text/Text';
 import { CommentProps } from 'src/models/comments';
 import {
   fetchPostReplyIds,
-  selectReplyIds, upsertReplyIdsByPostId,
+  selectReplyIds,
+  upsertReplyIdsByPostId,
 } from 'src/store/features/replies/repliesSlice';
 import { useApi } from '../../api';
 import { shallowEqual } from 'react-redux';
@@ -46,9 +47,9 @@ const Comment: FC<Omit<CommentProps, 'commentDetails'>> = ({ commentId }) => {
 };
 
 const CommentView: FC<CommentProps> = ({ commentDetails }) => {
-  const [ isShowReply, setIsShowReply ] = useState(false);
-  const [ isShowAllReplies, setIsShowAllReplies ] = useState(false);
-  const [ isShowEditComment, setIsShowEditComment ] = useState(false);
+  const [isShowReply, setIsShowReply] = useState(false);
+  const [isShowAllReplies, setIsShowAllReplies] = useState(false);
+  const [isShowEditComment, setIsShowEditComment] = useState(false);
   const dispatch = useAppDispatch();
   const { isLoader, toggleLoader } = useLoader();
   const address = useMyAddress();
@@ -56,7 +57,8 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
   const { post: comment } = commentDetails;
   const profile = useSelectProfile(comment.struct.ownerId.toString());
   const { t } = useTranslation();
-  const { visibleRepliesCount = 0 } = useSelectPost(comment.id)?.post.struct || {};
+  const { visibleRepliesCount = 0 } =
+    useSelectPost(comment.id)?.post.struct || {};
   const hasReplies = visibleRepliesCount > 0;
 
   useEffect(() => {
@@ -69,10 +71,10 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
   }, []);
 
   const { replyIds = [] } =
-  useAppSelector(
-    (state) => selectReplyIds(state, comment.id),
-    shallowEqual
-  ) || {};
+    useAppSelector(
+      (state) => selectReplyIds(state, comment.id),
+      shallowEqual
+    ) || {};
 
   const commentStruct = asCommentStruct(comment.struct);
 
@@ -88,8 +90,15 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
   };
 
   const addNewComment = (id: string) => {
-    dispatch(upsertPost({ ...comment.struct, visibleRepliesCount: visibleRepliesCount + 1 }));
-    dispatch(upsertReplyIdsByPostId({ id: comment.id, replyIds: [ id, ...replyIds ] }));
+    dispatch(
+      upsertPost({
+        ...comment.struct,
+        visibleRepliesCount: visibleRepliesCount + 1,
+      })
+    );
+    dispatch(
+      upsertReplyIdsByPostId({ id: comment.id, replyIds: [id, ...replyIds] })
+    );
     setIsShowAllReplies(true);
     if (isLoader) toggleLoader();
   };
@@ -127,30 +136,33 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
         )}
         <Box className={styles.comment}>
           <div className={styles.details}>
-            <Link
-              href={getUrl({
-                type: TypeUrl.Account,
-                id: comment.struct.ownerId,
-              })}
-            >
-              <Title type={TitleSizes.PROFILE}>
-                {profile?.content?.name ||
-                toShortAddress(comment.struct.ownerId)}
-              </Title>
-            </Link>
-            <span>&nbsp;·&nbsp;</span>
-            <SmallLink
-              href={getUrl({
-                type: TypeUrl.Comment,
-                subTitle: commentContent.body,
-                subId: commentStruct.id,
-              })}
-              className={styles.time}
-            >
-              <Text type={TextSizes.NORMAL}>
-                {DateService.getDate(commentStruct.createdAtTime)}
-              </Text>
-            </SmallLink>
+            <div className={styles.leftPart}>
+              <Link
+                href={getUrl({
+                  type: TypeUrl.Account,
+                  id: comment.struct.ownerId,
+                })}
+              >
+                <Title type={TitleSizes.PROFILE}>
+                  {profile?.content?.name ||
+                    toShortAddress(comment.struct.ownerId)}
+                </Title>
+              </Link>
+              <span>&nbsp;·&nbsp;</span>
+              <SmallLink
+                href={getUrl({
+                  type: TypeUrl.Comment,
+                  subTitle: commentContent.body,
+                  subId: commentStruct.id,
+                })}
+                className={styles.time}
+              >
+                <Text type={TextSizes.NORMAL}>
+                  {DateService.getDate(commentStruct.createdAtTime)}
+                </Text>
+              </SmallLink>
+            </div>
+
             <ButtonOptions
               className={styles.options}
               contentStruct={comment.struct}
@@ -187,10 +199,8 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
               onClick={toggleReplies}
               component={'button'}
             >
-              {isShowAllReplies ? t('buttons.hide') : t('buttons.view')}
-              {' '}
-              {transformCount(visibleRepliesCount)}
-              {' '}
+              {isShowAllReplies ? t('buttons.hide') : t('buttons.view')}{' '}
+              {transformCount(visibleRepliesCount)}{' '}
               {t('plural.reply', { count: visibleRepliesCount || 0 })}
               {isShowAllReplies ? (
                 <KeyboardArrowUpRounded />
@@ -199,9 +209,13 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
               )}
             </Text>
 
-            {isShowAllReplies && <>
-              {replyIds.map((id) => <Comment commentId={id} key={id} />)}
-            </>}
+            {isShowAllReplies && (
+              <>
+                {replyIds.map((id) => (
+                  <Comment commentId={id} key={id} />
+                ))}
+              </>
+            )}
           </Box>
         )}
       </div>

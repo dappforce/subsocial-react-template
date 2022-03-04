@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import CardWrapper from '../common/card-wrapper/CardWrapper';
 import AvatarElement from '../common/avatar/AvatarElement';
 import { AvatarSizes } from '../../models/common/avatar';
@@ -19,6 +19,7 @@ import ProfileFollowers from '../common/profile-followers/ProfileFollowers';
 const Account: FC<AccountProps> = (props) => {
   return (
     <CardWrapper>
+      {props.hiddenBlock}
       <CardHeader
         avatar={
           <AvatarElement

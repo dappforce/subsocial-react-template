@@ -11,11 +11,11 @@ import SeeMore from '../../common/links/see-more/SeeMore';
 import { TypeContent } from 'src/models/common/button';
 import HiddenComponent from 'src/components/common/hidden-component/HiddenComponent';
 import SpaceInfo from './SpaceInfo';
+import { useIsMySpace } from '../../../hooks/useIsMySpace';
 
 export const Space: FC<{ id: SpaceId | string, withUnlisted?: boolean }> = (props) => {
   const { id, withUnlisted } = props;
   const spaceData = useSelectSpace(id as string);
-
   if (!spaceData) return null;
 
   return <SpaceView spaceData={spaceData} withUnlisted={withUnlisted} />;
@@ -23,8 +23,13 @@ export const Space: FC<{ id: SpaceId | string, withUnlisted?: boolean }> = (prop
 
 const SpaceView: FC<{ spaceData: SpaceWithSomeDetails, withUnlisted?: boolean }> = (props) => {
   const { spaceData, withUnlisted } = props;
+  const isMySpace = useIsMySpace(spaceData.struct);
+  const isUnlistedAndNotMySpace = withUnlisted && !isMySpace && spaceData.struct.hidden;
+  const isVisibleAndHiddenSpace = !withUnlisted && spaceData.struct.hidden
 
-  if (!spaceData?.content || (!withUnlisted && spaceData.struct.hidden)) return null;
+  if (!spaceData?.content || isVisibleAndHiddenSpace || isUnlistedAndNotMySpace) {
+    return null;
+  }
 
   return (
     <CardWrapper>

@@ -2,6 +2,9 @@
 
 $letter_spacing: 0.15px
 
+.wrapper
+  max-width: 628px
+
 .title
   padding-bottom: 0
 
@@ -9,7 +12,7 @@ $letter_spacing: 0.15px
   border-bottom: 1px solid $color_button_outline
 
 .select
-  padding-top: $space_big
+  padding-top: $space_normal
 
 .file
   margin-top: $space_normal !important
@@ -17,8 +20,11 @@ $letter_spacing: 0.15px
 .form
   display: flex
   flex-direction: column
-  gap: 1.5rem
+  gap: $space_normal
   padding-top: $space_big
+
+  & :global(.mat-form-field-wrapper)
+    margin: 0
 
 .buttonCancel
   letter-spacing: $letter_spacing
@@ -34,6 +40,7 @@ $letter_spacing: 0.15px
   gap: $space_normal
   padding: 0
   justify-content: flex-end
+  margin-top: -$space_mini
 
 .post
   border: 1px solid $color_button_outline

@@ -78,10 +78,8 @@ const ModalReactionsList: FC<ModalReactionsListProps> = ({
           <VoteUserItem id={id} key={id} onClose={onClose} />
         ))
       ) : (
-        <div
-          className={styles.noData}
-        >
-          No data yet
+        <div className={styles.noData}>
+          {t('modals.infinityScroll.noDataYet')}
         </div>
       )}
       {fetching && <Loader label={t('content.loading')} />}

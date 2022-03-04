@@ -5,7 +5,6 @@ import {
   EntityId,
 } from '@reduxjs/toolkit';
 import {
-  createFetchOne,
   createSelectUnknownIds,
   FetchManyArgs,
   HasHiddenVisibility,
@@ -14,6 +13,7 @@ import {
   SelectOneArgs,
   ThunkApiConfig,
   Content,
+  createFetchOneSpace,
 } from 'src/store/app/helpers';
 import { RootState } from 'src/store/app/rootReducer';
 import {
@@ -48,6 +48,7 @@ type Args = {
   visibility?: SpaceVisibility;
   withContent?: boolean;
   withOwner?: boolean;
+  withUnlisted?: boolean;
 };
 
 export type SelectSpacesArgs = SelectManyArgs<Args>;
@@ -60,14 +61,14 @@ export function selectSpace(
   state: RootState,
   props: SelectSpaceArgs
 ): SpaceWithSomeDetails | undefined {
-  return getFirstOrUndefined(selectSpaces(state, { ids: [props.id] }));
+  return getFirstOrUndefined(selectSpaces(state, { ids: [ props.id ] }));
 }
 
 export function selectSpaces(
   state: RootState,
   props: SelectSpacesArgs
 ): SpaceWithSomeDetails[] {
-  const { ids /* withOwner = true */ } = props;
+  const { ids } = props;
   const spaces = _selectSpacesByIds(state, ids);
 
   return spaces;
@@ -77,11 +78,9 @@ type FetchSpacesArgs = FetchManyArgs<Args> & { withUnlisted?: boolean };
 
 const selectUnknownSpaceIds = createSelectUnknownIds(selectSpaceIds);
 
-export const fetchSpaces = createAsyncThunk<
-  SpaceStruct[],
+export const fetchSpaces = createAsyncThunk<SpaceStruct[],
   FetchSpacesArgs,
-  ThunkApiConfig
->(
+  ThunkApiConfig>(
   'spaces/fetchMany',
   async (
     {
@@ -129,7 +128,7 @@ export const fetchSpaces = createAsyncThunk<
   }
 );
 
-export const fetchSpace = createFetchOne(fetchSpaces);
+export const fetchSpace = createFetchOneSpace(fetchSpaces);
 
 const spaces = createSlice({
   name: 'spaces',

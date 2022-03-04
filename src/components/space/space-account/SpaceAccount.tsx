@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import styles from './SpaceAccount.module.sass';
 import Options from '../../common/button/button-options/ButtonOptions';
 import ButtonFollowSpace from '../../common/button/button-follow/ButtonFollowSpace';
@@ -13,15 +13,17 @@ import { useLocalStorage } from 'src/hooks/useLocalStorage';
 import { useAuth } from 'src/components/auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';
 import ModalSendTips from "../../modal/modal-send-tips/ModalSendTips";
-import { useModal } from "../../../hooks/useModal";
+import { useModal } from "src/hooks/useModal";
 import { useTranslation } from 'react-i18next';
 import ButtonSendTips from '../../common/button/button-send-tips/ButtonSendTips';
 import ButtonWritePost from '../../common/button/button-wtire-post/ButtonWritePost';
 import { config } from 'src/config';
+import HiddenComponent from '../../common/hidden-component/HiddenComponent';
 
 const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
-  const router = useRouter();
   const { content, struct, id } = props;
+
+  const router = useRouter();
   const isMy = useIsMySpace(struct);
   const [spaceId, setSpaceId] = useLocalStorage<string>('spaceId', id);
   const { isVisible, toggleModal } = useModal();
@@ -33,6 +35,7 @@ const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
 
   return (
     <Account
+      hiddenBlock={struct.hidden && <HiddenComponent data={props} typeContent={TypeContent.Space} />}
       avatar={content.image}
       name={content.name}
       id={id}

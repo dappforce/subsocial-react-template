@@ -104,6 +104,13 @@ export function createFetchOne<R>(fetchMany: FetchManyFn<R>) {
     };
 }
 
+export function createFetchOneSpace<R>(fetchMany: FetchManyFn<R>) {
+  return (arg: CommonFetchPropsAndId & { withUnlisted?: boolean }): AppThunk =>
+    async (dispatch) => {
+      await dispatch(fetchMany(toParamsAndIds(arg)));
+    };
+}
+
 export type SelectByIdFn<R> = (state: RootState, id: EntityId) => R | undefined;
 
 export function selectManyByIds<

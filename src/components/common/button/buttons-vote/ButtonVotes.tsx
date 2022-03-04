@@ -17,20 +17,17 @@ import {
   ReactionStruct,
   selectMyReactionByPostId,
 } from 'src/store/features/reactions/myPostReactionsSlice';
-import {
-  ReactionEnum,
-  ReactionId,
-  ReactionType,
-} from '@subsocial/types/dto';
+import { ReactionEnum, ReactionId, ReactionType } from '@subsocial/types/dto';
 import { ReactionKind } from '@subsocial/types/substrate/classes';
 import TxButton from '../TxButton';
-import { getNewIdsFromEvent, getPostStructWithUpdatedCounts } from './voting';
+import { getPostStructWithUpdatedCounts } from './voting';
+import { getNewIdsFromEvent } from '@subsocial/api';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import { useAppSelector } from 'src/store/app/store';
 import { SubmittableResult } from '@polkadot/api';
 import { useTranslation } from 'react-i18next';
-import IconLike from "../../icons/IconLike";
-import IconDislike from "../../icons/IconDislike";
+import IconLike from '../../icons/IconLike';
+import IconDislike from '../../icons/IconDislike';
 
 const ButtonVotes: FC<ButtonVoteProps> = (props) => {
   const myAddress = useMyAddress();
@@ -90,9 +87,6 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
       kind: isActive ? undefined : newKind,
     };
 
-    console.log(newReaction)
-
-
     upsertMyReaction({ id: postId, ...newReaction });
   };
 
@@ -123,22 +117,14 @@ const InnerButtonVotes: FC<InnerButtonVoteProps> = ({
   const content = useMemo(
     () => ({
       downvote: {
-        disable: (
-          <IconDislike type={'outline'} />
-        ),
-        active: (
-          <IconDislike type={'contained'} />
-        ),
+        disable: <IconDislike type={'outline'} />,
+        active: <IconDislike type={'contained'} />,
         label: t('buttons.downvote'),
         styles: styles.red,
       },
       upvote: {
-        disable: (
-          <IconLike type={'outline'} />
-        ),
-        active: (
-          <IconLike type={'contained'} />
-        ),
+        disable: <IconLike type={'outline'} />,
+        active: <IconLike type={'contained'} />,
         label: t('buttons.upvote'),
         styles: styles.green,
       },

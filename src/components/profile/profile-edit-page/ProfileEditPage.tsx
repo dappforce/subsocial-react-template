@@ -5,6 +5,7 @@ import { useAppSelector } from 'src/store/app/store';
 import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { CardEditType } from "../../../models/common/card-edit";
 import { useTranslation } from 'react-i18next';
+import styles from './ProfileEditPage.module.sass';
 
 const ProfileEditPage = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const ProfileEditPage = () => {
   };
 
   return (
-    <Layout>
+    <Layout className={styles.wrapper}>
       <CardEdit
         profileData={profileData}
         title={t('forms.titles.editProfile')}

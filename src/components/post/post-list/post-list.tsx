@@ -3,29 +3,35 @@ import {
   getSuggestedPostIdsByPage,
   loadSuggestedPostIds,
 } from '../loadSuggestedPostIdsFromEnv';
-import { config } from 'src/config'
+import { config } from 'src/config';
 import { fetchPosts } from 'src/store/features/posts/postsSlice';
 import { useApi } from 'src/components/api';
 import { useAppDispatch } from 'src/store/app/store';
 import InfinityListScroll from '../../common/infinity-list/InfinityListScroll';
 import Post from '../post-item/Post';
-import { AccountId, SpaceId } from '@subsocial/types/dto';
-import { HasHiddenVisibility } from 'src/store/app/helpers';
+
 import {
   InnerLoadMoreFn,
   loadMoreValuesArgs,
-} from '../../../models/infinity-scroll';
-
+} from 'src/models/infinity-scroll';
 import { getFeedCount, getNewsFeed } from 'src/components/utils/OffchainUtils';
 import { useRouter } from 'next/router';
 import Router from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { ListType } from 'src/components/home/HomePage';
-import infinityListScroll from "../../common/infinity-list/InfinityListScroll";
+import { PostListProps } from 'src/models/post';
 
 const loadMorePostsFn = async (loadMoreValues: loadMoreValuesArgs) => {
-  const { size, page, api, dispatch, visibility, myAddress, ids, withSpace } =
-    loadMoreValues;
+  const {
+    size,
+    page,
+    api,
+    dispatch,
+    visibility,
+    myAddress,
+    ids,
+    withSpace
+  } = loadMoreValues;
 
   let postIds: string[];
 
@@ -33,8 +39,8 @@ const loadMorePostsFn = async (loadMoreValues: loadMoreValuesArgs) => {
     const data = await getNewsFeed(myAddress, (page - 1) * size, size).then(
       (res) => res
     );
-    //@ts-ignore
-    postIds = data && data.map((item) => item.post_id);
+
+    postIds = data.map((item) => item.post_id || '');
   } else {
     const allSuggestedPotsIds = await loadSuggestedPostIds(api, ids);
     postIds = getSuggestedPostIdsByPage(allSuggestedPotsIds, size, page);
@@ -54,14 +60,6 @@ const loadMorePostsFn = async (loadMoreValues: loadMoreValuesArgs) => {
   return postIds;
 };
 
-type PostListProps = {
-  ids: SpaceId[];
-  visibility?: HasHiddenVisibility;
-  myAddress?: AccountId;
-  withSpace?: boolean;
-  type?: ListType;
-};
-
 const PostList: FC<PostListProps> = ({
   ids,
   visibility,
@@ -72,8 +70,8 @@ const PostList: FC<PostListProps> = ({
   const [postsData, setPostsData] = useState<string[]>([]);
   const dispatch = useAppDispatch();
   const { api } = useApi();
-  const [totalCount, setTotalCount] = useState(0);
-  const [isEmpty, setIsEmpty] = useState(false);
+  const [ totalCount, setTotalCount ] = useState(0);
+  const [ isEmpty, setIsEmpty ] = useState(false);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -92,7 +90,7 @@ const PostList: FC<PostListProps> = ({
   useEffect(() => {
     setTotalCount(0);
     setIsEmpty(false);
-  }, [myAddress]);
+  }, [ myAddress ]);
 
   useEffect(() => {
     if (totalCount || isEmpty) return;
@@ -101,18 +99,18 @@ const PostList: FC<PostListProps> = ({
     if (config.isOffChainFeed && isMounted) {
       if (type === ListType.feeds) {
         myAddress &&
-          getFeedCount(myAddress).then(
-            (res) => {
-              if (+res === 0) {
-                setIsEmpty(true);
-                setTotalCount(0);
-              } else {
-                setIsEmpty(false);
-                setTotalCount(res);
-              }
-            },
-            (err) => console.log('error', err)
-          );
+        getFeedCount(myAddress).then(
+          (res) => {
+            if (+res === 0) {
+              setIsEmpty(true);
+              setTotalCount(0);
+            } else {
+              setIsEmpty(false);
+              setTotalCount(res);
+            }
+          },
+          (err) => console.log('error', err)
+        );
         loadMore(config.infinityScrollFirstPage, config.infinityScrollOffset).then((ids) =>
           setPostsData(ids)
         );
@@ -147,7 +145,7 @@ const PostList: FC<PostListProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [loadMore, router, totalCount]);
+  }, [ loadMore, router, totalCount ]);
 
   return (
     <InfinityListScroll
@@ -159,7 +157,7 @@ const PostList: FC<PostListProps> = ({
           ? t('generalMessages.emptyFeed')
           : t('content.noPosts')
       }
-      renderItem={(id) => <Post postId={id} key={id} withSpace={withSpace} />}
+      renderItem={(id) => <Post postId={id} key={id} withSpace={withSpace} visibility={visibility} />}
       isEmpty={isEmpty}
     />
   );

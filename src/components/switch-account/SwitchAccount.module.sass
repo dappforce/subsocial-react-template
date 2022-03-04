@@ -1,5 +1,7 @@
 @import src/styles/vars
 
+
+
 .close
   position: absolute !important
   right: 0
@@ -11,6 +13,10 @@
 .drawer
   display: flex
   flex-direction: column
+  z-index: 1202
+
+  & :global(.MuiPaper-root.MuiDrawer-paper)
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1)
 
   & :global(.MuiDrawer-paper)
     max-width: 425px
@@ -118,7 +124,7 @@
   gap: 1.5rem
   position: relative
   width: 100%
-  padding: 0 $space_normal $space_normal $space_normal
+  padding: 0 $space_normal $space_big $space_normal
   margin-top: auto
   box-shadow: 0 30px 22px 56px rgba(255, 255, 255, 1)
   background: $color_button_basic_bg

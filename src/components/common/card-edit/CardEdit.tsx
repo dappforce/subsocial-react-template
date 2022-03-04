@@ -19,20 +19,20 @@ import TagsInput from '../inputs/tags-input/TagsInput';
 import { CardEditProps, CardEditType } from 'src/models/common/card-edit';
 import { loadImgUrl } from 'src/utils';
 import Editor from '../editor/Editor';
-import {CommonContent, IpfsCid} from '@subsocial/types';
+import { CommonContent, IpfsCid } from '@subsocial/types';
 import TxButton from '../../common/button/TxButton';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import { useApi } from 'src/components/api';
 import { useRouter } from 'next/router';
 import { TxCallback, TxFailedCallback } from 'src/models/common/button';
-import { getNewIdsFromEvent } from '../button/buttons-vote/voting';
+import { getNewIdsFromEvent } from '@subsocial/api';
 import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import Snackbar from '../snackbar/Snackbar';
 import { SnackbarType } from 'src/models/common/snackbar';
 import { unpinIpfsCid } from 'src/components/utils/unpinIpfsCid';
 import { useTranslation } from 'react-i18next';
-import { config } from 'src/config'
+import { config } from 'src/config';
 
 const CardEdit: FC<CardEditProps> = ({
   type,
@@ -78,7 +78,6 @@ const CardEdit: FC<CardEditProps> = ({
           avatar: cidImage,
         };
 
-
   const newTxParams = (cid: IpfsCid) => {
     if (existentPropsData?.id) {
       return type === CardEditType.Space
@@ -104,10 +103,10 @@ const CardEdit: FC<CardEditProps> = ({
     }
 
     const imageType = spaceData
-        ? //@ts-ignore
+      ? //@ts-ignore
         existentPropsData?.content?.image
-        : //@ts-ignore
-        existentPropsData?.content?.avatar || ''
+      : //@ts-ignore
+        existentPropsData?.content?.avatar || '';
 
     setState({
       name: existentPropsData?.content?.name || '',
@@ -116,7 +115,7 @@ const CardEdit: FC<CardEditProps> = ({
     //@ts-ignore
     setTags(existentPropsData?.content?.tags || []);
     setImage(imageType ? loadImgUrl(imageType) : '');
-    setCidImage(imageType)
+    setCidImage(imageType);
   }, [existentPropsData?.content, profile?.id, router.query.address]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -209,7 +208,9 @@ const CardEdit: FC<CardEditProps> = ({
       <Snackbar
         type={SnackbarType.Error}
         open={mbError}
-        message={t('imageShouldBeLessThan', { limit: config.loadImageLimitMb / (1024 * 1024) })}
+        message={t('imageShouldBeLessThan', {
+          limit: config.loadImageLimitMb / (1024 * 1024),
+        })}
       />
       {!isOwner ? (
         <CardContent className={styles.warningText}>

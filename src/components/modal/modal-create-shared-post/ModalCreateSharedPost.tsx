@@ -5,7 +5,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { useApi } from 'src/components/api';
 import ButtonCancel from 'src/components/common/button/button-cancel/ButtonCancel';
 import ButtonClose from 'src/components/common/button/button-close/ButtonClose';
-import { getNewIdsFromEvent } from 'src/components/common/button/buttons-vote/voting';
+import { getNewIdsFromEvent } from '@subsocial/api';
 import TxButton from 'src/components/common/button/TxButton';
 import Editor from 'src/components/common/editor/Editor';
 import SelectSpaces from 'src/components/common/select-spaces/SelectSpaces';
@@ -18,11 +18,11 @@ import { TitleSizes } from 'src/models/common/typography';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import MaterialModal from '@mui/material/Modal';
 import styles from './ModalCreateSharedPost.module.sass';
-import { useSelectPost } from "../../../store/features/posts/postsHooks";
-import { SharedPostStruct } from "@subsocial/types/dto";
-import ButtonComponent from "../../common/button/button-component/ButtonComponent";
+import { useSelectPost } from '../../../store/features/posts/postsHooks';
+import { SharedPostStruct } from '@subsocial/types/dto';
+import ButtonComponent from '../../common/button/button-component/ButtonComponent';
 import { useTranslation } from 'react-i18next';
-import { unpinIpfsCid } from "../../utils/unpinIpfsCid";
+import { unpinIpfsCid } from '../../utils/unpinIpfsCid';
 
 interface ModalCreateSharedPostProps {
   postId: string;
@@ -42,12 +42,15 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
   const { api } = useApi();
   const router = useRouter();
   const postData = useSelectPost(postId);
-  const { isSharedPost, sharedPostId } = postData?.post.struct  as SharedPostStruct || {};
+  const { isSharedPost, sharedPostId } =
+    (postData?.post.struct as SharedPostStruct) || {};
   const hasSpace = !!mySpaceIds.length;
   const { t } = useTranslation();
   const json = { body };
 
-  const sharedPostExtension = { SharedPost: isSharedPost ? sharedPostId : postId };
+  const sharedPostExtension = {
+    SharedPost: isSharedPost ? sharedPostId : postId,
+  };
 
   const newTxParams = (cid: IpfsCid) => {
     return [spaceId, sharedPostExtension, { IPFS: cid }];
@@ -66,11 +69,7 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
   };
 
   const onFailed: TxFailedCallback = (txResult, newCid) => {
-    newCid &&
-    unpinIpfsCid(
-      api.subsocial.ipfs,
-      newCid,
-    );
+    newCid && unpinIpfsCid(api.subsocial.ipfs, newCid);
   };
 
   useEffect(() => {
@@ -94,46 +93,46 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
         </div>
         {hasSpace ? (
           <Box component={'form'} className={styles.form}>
-          <SelectSpaces
-            spaceIds={mySpaceIds}
-            initialId={spaceId}
-            onChange={setSpaceId}
-            className={styles.select}
-          />
-          <Editor
-            value={body}
-            onChange={handleChange}
-            placeholder={t('forms.placeholder.addComment')}
-            autofocus
-          />
-          <Post
-            postId={isSharedPost ? sharedPostId : postId}
-            isShowActions={false}
-            className={styles.post}
-          />
-          <div className={styles.buttons}>
-            <ButtonCancel onClick={onClose} className={styles.buttonCancel}>
-              {t('buttons.cancel')}
-            </ButtonCancel>
-            <TxButton
-              label={t('buttons.createAPost')}
-              accountId={address}
-              tx={'posts.createPost'}
-              params={() =>
-                getTxParams({
-                  json,
-                  ipfs: api.subsocial.ipfs,
-                  buildTxParamsCallback: newTxParams,
-                })
-              }
-              onSuccess={onSuccess}
-              onFailed={onFailed}
-              variant={'contained'}
-              className={styles.button}
-              withLoader
+            <SelectSpaces
+              spaceIds={mySpaceIds}
+              initialId={spaceId}
+              onChange={setSpaceId}
+              className={styles.select}
             />
-          </div>
-        </Box>
+            <Editor
+              value={body}
+              onChange={handleChange}
+              placeholder={t('forms.placeholder.addComment')}
+              autofocus
+            />
+            <Post
+              postId={isSharedPost ? sharedPostId : postId}
+              isShowActions={false}
+              className={styles.post}
+            />
+            <div className={styles.buttons}>
+              <ButtonCancel onClick={onClose} className={styles.buttonCancel}>
+                {t('buttons.cancel')}
+              </ButtonCancel>
+              <TxButton
+                label={t('buttons.createAPost')}
+                accountId={address}
+                tx={'posts.createPost'}
+                params={() =>
+                  getTxParams({
+                    json,
+                    ipfs: api.subsocial.ipfs,
+                    buildTxParamsCallback: newTxParams,
+                  })
+                }
+                onSuccess={onSuccess}
+                onFailed={onFailed}
+                variant={'contained'}
+                className={styles.button}
+                withLoader
+              />
+            </div>
+          </Box>
         ) : (
           <ButtonComponent
             variant={'outlined'}

@@ -1,13 +1,13 @@
 @import src/styles/vars
 
 .bar
-  box-shadow: 0 3px 10px rgba(153, 153, 153, 0.12), 0 3px 9px rgba(153, 153, 153, 0.12), 0 1px 20px rgba(153, 153, 153, 0.2)
+  box-shadow: none
+  z-index: 1201
 
   @include tablet
     box-shadow: none
 
 .barWithMenu
-  z-index: 1201
   box-shadow: none
 
 .header
@@ -26,6 +26,7 @@
   height: min-content
   margin-left: 0
   color: $color_text_secondary
+
 
 .label
   color: $color_text_secondary

@@ -16,16 +16,22 @@ import { getTxParams } from 'src/components/utils/getTxParams';
 import ButtonCancel from '../button/button-cancel/ButtonCancel';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { TxCallback, TxFailedCallback } from "../../../models/common/button";
-import { getNewIdsFromEvent } from "../button/buttons-vote/voting";
-import { upsertContent } from "../../../store/features/contents/contentsSlice";
-import { useAppDispatch } from "../../../store/app/store";
-import { fetchPosts } from "../../../store/features/posts/postsSlice";
-import { unpinIpfsCid } from "../../utils/unpinIpfsCid";
+import { TxCallback, TxFailedCallback } from '../../../models/common/button';
+import { getNewIdsFromEvent } from '@subsocial/api';
+import { upsertContent } from '../../../store/features/contents/contentsSlice';
+import { useAppDispatch } from '../../../store/app/store';
+import { fetchPosts } from '../../../store/features/posts/postsSlice';
+import { unpinIpfsCid } from '../../utils/unpinIpfsCid';
 
 const NewComment: FC<NewCommentProps> = (props) => {
-  const { parentStruct, className, placeholder, autofocus, onClickCancel, addNewComment } =
-    props;
+  const {
+    parentStruct,
+    className,
+    placeholder,
+    autofocus,
+    onClickCancel,
+    addNewComment,
+  } = props;
   const { id, isComment } = parentStruct;
   const [comment, setComment] = useState('');
   const address = useMyAddress();
@@ -81,18 +87,23 @@ const NewComment: FC<NewCommentProps> = (props) => {
   };
 
   const onTxSuccess: TxCallback = (txResult, newCid) => {
-    dispatch(upsertContent({id: newCid as string, body: comment, isShowMore: false, summary: comment }))
-    dispatch(fetchPosts({ ids: [getNewIdsFromEvent(txResult).toString()], api}))
-    addNewComment(getNewIdsFromEvent(txResult).toString())
+    dispatch(
+      upsertContent({
+        id: newCid as string,
+        body: comment,
+        isShowMore: false,
+        summary: comment,
+      })
+    );
+    dispatch(
+      fetchPosts({ ids: [getNewIdsFromEvent(txResult).toString()], api })
+    );
+    addNewComment(getNewIdsFromEvent(txResult).toString());
     handelCancel();
   };
 
   const onFailed: TxFailedCallback = (txResult, newCid) => {
-    newCid &&
-    unpinIpfsCid(
-      api.subsocial.ipfs,
-      newCid,
-    );
+    newCid && unpinIpfsCid(api.subsocial.ipfs, newCid);
   };
 
   return (

@@ -16,7 +16,7 @@ import ButtonCancel from 'src/components/common/button/button-cancel/ButtonCance
 import TxButton from 'src/components/common/button/TxButton';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import { TxCallback, TxFailedCallback } from 'src/models/common/button';
-import { getNewIdsFromEvent } from 'src/components/common/button/buttons-vote/voting';
+import { getNewIdsFromEvent } from '@subsocial/api';
 import { useRouter } from 'next/router';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import { useApi } from 'src/components/api';
@@ -32,7 +32,7 @@ import { getInitialPostValue } from '../../utils/getInitialPostValue';
 import Post from '../post-item/Post';
 import { SharedPostStruct } from '@subsocial/types/dto';
 import { useTranslation } from 'react-i18next';
-import { config } from 'src/config'
+import { config } from 'src/config';
 import { unpinIpfsCid } from 'src/components/utils/unpinIpfsCid';
 
 export const EditorPost: FC<EditorPostProps> = (props) => {
@@ -46,30 +46,30 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
     (postData?.post.struct as SharedPostStruct) || {};
   const initialPostValue = getInitialPostValue(postData?.post.content);
 
-  const [activeTab, setActiveTab] = useState<TypePostTabs>(
+  const [ activeTab, setActiveTab ] = useState<TypePostTabs>(
     TypePostTabs.Article
   );
-  const [tags, setTags] = useState<string[]>([]);
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [image, setImage] = useState('');
-  const [link, setLink] = useState('');
-  const [mySpaceIds, setMySpaceIds] = useState<string[]>([]);
-  const [spaceId, setSpaceId] = useLocalStorage('spaceId', mySpaceIds[0] || '');
-  const [mbError, setMbError] = useState(false);
+  const [ tags, setTags ] = useState<string[]>([]);
+  const [ title, setTitle ] = useState('');
+  const [ body, setBody ] = useState('');
+  const [ image, setImage ] = useState('');
+  const [ link, setLink ] = useState('');
+  const [ mySpaceIds, setMySpaceIds ] = useState<string[]>([]);
+  const [ spaceId, setSpaceId ] = useLocalStorage('spaceId', mySpaceIds[0] || '');
+  const [ mbError, setMbError ] = useState(false);
   const { t } = useTranslation();
-  const [cidImage, setCidImage] = useState<IpfsCid>();
+  const [ cidImage, setCidImage ] = useState<IpfsCid>();
 
-  const regularPostExtantion = { RegularPost: null };
+  const regularPostExtention = {RegularPost: null};
 
   const initData = () => {
     setTags(initialPostValue.tags || []);
     setTitle(initialPostValue.title || '');
     setBody(initialPostValue.body || '');
     setCidImage(initialPostValue.image || '');
-    setImage(initialPostValue.image ? loadImgUrl(initialPostValue.image) : '')
+    setImage(initialPostValue.image ? loadImgUrl(initialPostValue.image) : '');
     setLink(initialPostValue.link || '');
-  }
+  };
 
   const json = ((): dataPost => {
     switch (activeTab) {
@@ -95,13 +95,13 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
       //if updating the existing post
       const update = {
         currentSpaceId,
-        content: { IPFS: cid },
+        content: {IPFS: cid},
         hidden: null,
       };
-      return [postId, update];
+      return [ postId, update ];
     } else {
       //if creating a new post
-      return [spaceId, regularPostExtantion, { IPFS: cid }];
+      return [ spaceId, regularPostExtention, {IPFS: cid} ];
     }
   };
 
@@ -131,32 +131,32 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
   const reset = postId
     ? () => initData()
     : () => {
-        setTags([]);
-        setTitle('');
-        setBody('');
-        setCidImage('');
-        setImage('');
-        setLink('');
-      };
+      setTags([]);
+      setTitle('');
+      setBody('');
+      setCidImage('');
+      setImage('');
+      setLink('');
+    };
 
   const onSuccess: TxCallback = (txResult, newCid) => {
     const id = postId || getNewIdsFromEvent(txResult)?.toString();
 
     if (postData) {
       newCid &&
-        unpinIpfsCid(
-          api.subsocial.ipfs,
-          //@ts-ignore
-          postData?.post?.content?.id,
-          newCid
-        );
+      unpinIpfsCid(
+        api.subsocial.ipfs,
+        //@ts-ignore
+        postData?.post?.content?.id,
+        newCid
+      );
 
       cidImage &&
-        unpinIpfsCid(
-          api.subsocial.ipfs,
-          postData?.post?.content?.image,
-          cidImage
-        );
+      unpinIpfsCid(
+        api.subsocial.ipfs,
+        postData?.post?.content?.image,
+        cidImage
+      );
     }
 
     router.push(`/${currentSpaceId || spaceId}/${id}`);
@@ -164,43 +164,41 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
 
   const onFailed: TxFailedCallback = (txResult, newCid) => {
     newCid &&
-      unpinIpfsCid(
-        api.subsocial.ipfs,
-        newCid,
-        //@ts-ignore
-        postData?.post?.content?.id
-      );
+    unpinIpfsCid(
+      api.subsocial.ipfs,
+      newCid,
+      //@ts-ignore
+      postData?.post?.content?.id
+    );
 
     cidImage &&
-      unpinIpfsCid(
-        api.subsocial.ipfs,
-        cidImage,
-        postData?.post?.content?.image
-      );
+    unpinIpfsCid(
+      api.subsocial.ipfs,
+      cidImage,
+      postData?.post?.content?.image
+    );
   };
 
   useEffect(() => {
     if (isWithLink) {
       setActiveTab(TypePostTabs.Video);
     }
-    initData()
-  }, [props]);
+    initData();
+  }, [ props ]);
 
   useEffect(() => {
     (async () => {
       if (!address) return null;
-      await api.subsocial.substrate
-        .spaceIdsByOwner(address)
-        .then((data) => {
-          const ids = data.map((id) => id.toString());
-          setMySpaceIds(ids);
-        });
+      await api.subsocial.substrate.spaceIdsByOwner(address).then((data) => {
+        const ids = data.map((id) => id.toString());
+        setMySpaceIds(ids);
+      });
     })();
-  }, [address, api]);
+  }, [ address, api ]);
 
   return (
     <Layout>
-      <CardWrapper>
+      <CardWrapper className={styles.wrapper}>
         <Snackbar
           type={SnackbarType.Error}
           open={mbError}
@@ -251,7 +249,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
                   onChange={handleLink}
                 />
 
-                <Embed link={link} />
+                <Embed link={link}/>
               </>
             )}
 
@@ -269,7 +267,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
               placeholder={t('forms.placeholder.postBody')}
             />
 
-            {!isSharedPost && <TagsInput tags={tags} setTags={setTags} />}
+            {!isSharedPost && <TagsInput tags={tags} setTags={setTags}/>}
 
             {isSharedPost && (
               <Post

@@ -1,6 +1,6 @@
 import { Activity } from '@subsocial/types';
 import React from 'react';
-import { config } from 'src/config'
+import { config } from 'src/config';
 import { fetchPosts } from 'src/store/features/posts/postsSlice';
 import { fetchProfiles } from 'src/store/features/profiles/profilesSlice';
 import { fetchSpaces } from 'src/store/features/spaces/spacesSlice';
@@ -16,6 +16,7 @@ import {
   LoadMoreFn,
   BaseActivityProps,
 } from '../../models/dataActivities';
+import { extractEntityIdsFromActivities } from '@subsocial/api/offchain';
 
 export const NotifActivities = ({
   loadMore,
@@ -46,23 +47,11 @@ export const createLoadMoreActivities =
         (res) => res
       )) || [];
 
-    const ownerIds: string[] = [];
-    const spaceIds: string[] = [];
-    const postIds: string[] = [];
-
-    activities.forEach(
-      ({ account, following_id, space_id, post_id, comment_id }) => {
-        account && ownerIds.push(account);
-        following_id && ownerIds.push(following_id);
-        space_id && spaceIds.push(space_id);
-        post_id && postIds.push(post_id);
-        comment_id && postIds.push(comment_id);
-      }
-    );
-
+    const {spaceIds, profileIds, postIds}= extractEntityIdsFromActivities(activities);
+    
     const fetches: Promise<any>[] = [
       dispatch(fetchSpaces({ ids: spaceIds, api })),
-      dispatch(fetchProfiles({ ids: ownerIds, api })),
+      dispatch(fetchProfiles({ ids: profileIds, api })),
       dispatch(fetchPosts({ ids: postIds, api })),
     ];
 

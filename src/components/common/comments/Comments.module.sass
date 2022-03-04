@@ -11,7 +11,12 @@
 
 .details
   display: flex
+  justify-content: space-between
+
+.leftPart
+  display: flex
   align-items: center
+
 
 .textarea
   & :global(.MuiOutlinedInput-root)
@@ -23,7 +28,9 @@
 
 .options
   margin-left: $space_tiny
-  transform: rotate(-90deg)
+  margin-right: -$space_tiny
+  color: $color_icon_black
+
 
 .group
   display: flex
@@ -100,7 +107,7 @@
   & :global(.CodeMirror-wrap)
     padding: $space_mini $space_normal
     border-color: $color_button_outline_primary
-    
+
 .editorActive
   & :global(.CodeMirror-wrap)
     padding: $space_small $space_normal
