@@ -19,6 +19,7 @@ export interface AccountProps {
   action: ReactNode;
   posts?: number;
   withBalance?: boolean;
+  hiddenBlock?: ReactNode;
 }
 
 export type AccountDescriptionProps = Pick<

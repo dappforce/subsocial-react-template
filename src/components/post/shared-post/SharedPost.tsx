@@ -40,7 +40,7 @@ const SharedPost: FC<any> = (props) => {
   };
 
   useEffect(() => {
-    dispatch(fetchPosts({ ids: [ sharedPostId ], api }));
+    dispatch(fetchPosts({ids: [ sharedPostId ], api}));
   }, []);
 
   return (
@@ -109,13 +109,15 @@ const SharedPost: FC<any> = (props) => {
             </>
           }
         />
-        <Text
-          component={'div'}
-          type={TextSizes.NORMAL}
-          className={styles.titleSharedPost}
-        >
-          {post?.content?.body}
-        </Text>
+        {post?.content?.body && (
+          <Text
+            component={'div'}
+            type={TextSizes.NORMAL}
+            className={styles.titleSharedPost}
+          >
+            {post?.content?.body}
+          </Text>
+        )}
         {!isNotfoundPost ? (
           <Post
             postId={sharedPostId}

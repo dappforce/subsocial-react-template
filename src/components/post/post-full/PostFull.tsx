@@ -14,7 +14,7 @@ import Title from '../../common/title/Title';
 import styles from './PostFull.module.sass';
 import SmallLink from '../../common/links/small-link/SmallLink';
 import TagList from '../../common/tag/TagList';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { TitleSizes } from 'src/models/common/typography';
 import Embed from '../../common/Embed';
@@ -26,9 +26,6 @@ import {
   ReactionEnum,
 } from '@subsocial/types/dto';
 import { toShortAddress } from 'src/components/utils/address';
-import { useAppDispatch } from 'src/store/app/store';
-import { ApiContext } from 'src/components/api';
-import { fetchPosts } from 'src/store/features/posts/postsSlice';
 import { useSelectPost } from 'src/store/app/hooks';
 import ButtonVotes from '../../common/button/buttons-vote/ButtonVotes';
 import { PostFullProps } from 'src/models/post';
@@ -41,17 +38,13 @@ import classNames from 'classnames';
 import { useAuth } from 'src/components/auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';
 import { useTranslation } from 'react-i18next';
+import SpaceHiddenComponent from '../../common/space-hidden-component/SpaceHiddenComponent';
+import HiddenComponent from '../../common/hidden-component/HiddenComponent';
 
 const PostFull: FC<PostFullProps> = (props) => {
   const { post, space } = props;
 
   const profile = useSelectProfile(post.struct.ownerId.toString());
-
-  const [fetched, setFetched] = useState(false);
-
-  const dispatch = useAppDispatch();
-
-  const { api } = useContext(ApiContext);
 
   const { rootPostId, isSharedPost } = post.struct;
 
@@ -78,18 +71,14 @@ const PostFull: FC<PostFullProps> = (props) => {
     Router.push(`/${post.struct.spaceId}/${post.id}/edit`);
   };
 
-  useEffect(() => {
-    if (rootPostId) {
-      dispatch(fetchPosts({ ids: [rootPostId], api })).then(() =>
-        setFetched(true)
-      );
-    }
-  }, []);
-
   if (!post) return null;
 
   return (
     <CardWrapper className={styles.post}>
+      <SpaceHiddenComponent content={post} />
+      {post.struct.hidden && (
+        <HiddenComponent data={post} typeContent={TypeContent.Post} />
+      )}
       <CardContent
         className={classNames(styles.mainPostContent, {
           [styles.mainSharedPostContent]: isSharedPost,
@@ -153,29 +142,21 @@ const PostFull: FC<PostFullProps> = (props) => {
                   <SmallLink
                     href={getUrl({
                       type: TypeUrl.Space,
-                      title:
                       //@ts-ignore
-                      space?.content?.handle ||
-                      //@ts-ignore
-                        postData?.space?.content?.handle,
+                      title: space?.content?.handle || postData?.space?.content?.handle,
                       id: space?.struct.id || postData?.space?.struct.id,
                     })}
                   >
-                    {/*@ts-ignore*/}
-                    {space?.content.name || postData?.space.content.name}
+                    {space?.content?.name || postData?.space?.content?.name}
                   </SmallLink>
                   {'\xA0 · \xA0'}
                   <SmallLink
                     href={getUrl({
                       type: TypeUrl.Post,
-                      title:
                       //@ts-ignore
-                      space?.content.handle ||
-                      //@ts-ignore
-                      postData?.space?.content.handle,
+                      title: space?.content.handle || postData?.space?.content.handle,
                       id: space?.struct.id || postData?.space?.struct.id,
-                      //@ts-ignore
-                      subTitle: post?.content.title,
+                      subTitle: post?.content?.title,
                       subId: post.struct.id,
                     })}
                   >
@@ -194,7 +175,7 @@ const PostFull: FC<PostFullProps> = (props) => {
               {post?.content?.title}
             </Title>
           )}
-          {fetched && !isSharedPost && postData?.post?.content?.title && (
+          {!isSharedPost && postData?.post?.content?.title && (
             <Title
               variant={'h1'}
               type={TitleSizes.DETAILS}
@@ -204,9 +185,8 @@ const PostFull: FC<PostFullProps> = (props) => {
               <Link
                 href={getUrl({
                   type: TypeUrl.Post,
-                  title:
                   //@ts-ignore
-                    space?.content.handle || postData?.space?.content.handle,
+                  title: space?.content.handle || postData?.space?.content.handle,
                   id: space?.struct.id || postData?.space?.struct.id,
                   subTitle: postData?.post?.content.title,
                   subId: postData?.post.struct.id,
@@ -237,11 +217,9 @@ const PostFull: FC<PostFullProps> = (props) => {
         </CardContent>
       </CardContent>
 
-      {!isSharedPost && (
-        <TagList tags={post.content?.tags} className={styles.tags} />
-      )}
-
+      {!isSharedPost && <TagList tags={post.content?.tags} className={styles.tags} />}
       {!isSharedPost && <Divider variant="middle" />}
+
       <CardActions
         className={classNames(styles.cardActions, {
           [styles.sharedPostActions]: isSharedPost,

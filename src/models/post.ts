@@ -4,9 +4,11 @@ import {
   PostWithSomeDetails,
   PostStruct,
   ProfileData,
-  SpaceData
+  SpaceData, SpaceId, AccountId
 } from '@subsocial/types/dto';
 import { IpfsCid } from '@subsocial/types';
+import { Visibility } from '@subsocial/api/filters';
+import { ListType } from '../components/home/HomePage';
 
 export type PostActionsProps = {
   toggleComments: () => void;
@@ -53,4 +55,12 @@ export interface PostInfoProps {
   profile: ProfileData;
   post: PostData;
   space: SpaceData;
+}
+
+export interface PostListProps {
+  ids: SpaceId[];
+  visibility?: Visibility;
+  myAddress?: AccountId;
+  withSpace?: boolean;
+  type?: ListType;
 }

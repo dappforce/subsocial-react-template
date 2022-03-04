@@ -19,10 +19,6 @@ i18n
         translation: translation_ru
       }
     },
-    interpolation: {
-      prefix: '{',
-      suffix: '}',
-    },
   });
 
 const lng = i18n.language.replace(/"/g, '');

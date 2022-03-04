@@ -5,6 +5,7 @@ import { ButtonTogglerVisibility } from '../button/button-toggler-visibility/But
 import { TypeContent } from 'src/models/common/button';
 import { PostData, PostStruct, SpaceData } from '@subsocial/types/dto';
 import { useTranslation } from 'react-i18next';
+import { memo } from 'react';
 
 const HiddenComponent = ({
   data,
@@ -14,34 +15,36 @@ const HiddenComponent = ({
   typeContent: TypeContent;
 }) => {
   const { t } = useTranslation();
+
   const message = ((): string => {
     switch (typeContent) {
       case TypeContent.Post:
-        return t('generalMessages.hiddenPost');
+        return t('generalMessages.hiddenMessage', {type: t('Post').toLowerCase()});
       case TypeContent.Space:
-        return t('generalMessages.hiddenSpace');
+        return t('generalMessages.hiddenMessage', {type: t('Space').toLowerCase()});
       case TypeContent.Comment:
-        return t('generalMessages.hiddenComment');
+        return t('generalMessages.hiddenMessage', {type: t('comment')});
       default:
         return '';
     }
   })();
 
   return (
-  <Alert
-    className={styles.warning}
-    severity={'warning'}
-    action={
-      <ButtonTogglerVisibility
-        contentStruct={data?.struct as unknown as PostStruct}
-        typeContent={typeContent}
-        withLoader
-      />
-    }
-    icon={<ErrorIcon/>}
-  >
-    {message}
-  </Alert>
-)};
+    <Alert
+      className={styles.warning}
+      severity={'warning'}
+      action={
+        <ButtonTogglerVisibility
+          contentStruct={data?.struct as unknown as PostStruct}
+          typeContent={typeContent}
+          withLoader
+        />
+      }
+      icon={<ErrorIcon />}
+    >
+      {message}
+    </Alert>
+  );
+};
 
-export default HiddenComponent;
+export default memo(HiddenComponent);

@@ -10,7 +10,6 @@ import {
   createFetchOne,
   createSelectUnknownIds,
   FetchManyArgs,
-  HasHiddenVisibility,
   SelectManyArgs,
   selectManyByIds,
   SelectOneArgs,
@@ -38,6 +37,7 @@ import {
   SpaceData,
 } from '@subsocial/types/dto';
 import { fetchMyReactionsByPostIds } from '../reactions/myPostReactionsSlice';
+import { Visibility } from '@subsocial/api/filters';
 
 const postsAdapter = createEntityAdapter<PostStruct>();
 
@@ -58,10 +58,8 @@ const _selectPostsByIds = (state: RootState, ids: EntityId[]) =>
 
 const withSpaceOwner = { withOwner: false };
 
-export type PostVisibility = HasHiddenVisibility;
-
 type Args = {
-  visibility?: PostVisibility;
+  visibility?: Visibility;
   withContent?: boolean;
   withOwner?: boolean;
   withSpace?: boolean;
@@ -150,7 +148,7 @@ export function selectPosts(
 
     if (withExt && isSharedPost) {
       const { sharedPostId } = asSharedPostStruct(struct);
-      ext = getFirstOrUndefined(selectPosts(state, { ids: [sharedPostId] }));
+      ext = getFirstOrUndefined(selectPosts(state, { ids: [ sharedPostId ] }));
     }
 
     result.push({ id: post.id, ext, post, owner, space });
@@ -163,7 +161,7 @@ export function selectPost(
   props: SelectPostArgs
 ): PostWithSomeDetails | undefined {
   const { id, ...rest } = props;
-  const entities = selectPosts(state, { ids: [id], ...rest });
+  const entities = selectPosts(state, { ids: [ id ], ...rest });
   return getFirstOrUndefined(entities);
 }
 
@@ -189,24 +187,26 @@ export const fetchPosts = createAsyncThunk<
 
   if (!reload) {
     newIds = selectUnknownPostIds(getState(), ids);
+
     if (!newIds.length) {
       return [];
     }
   }
 
   withReactionByAccount &&
-    dispatch(
-      fetchMyReactionsByPostIds({
-        ids: newIds,
-        myAddress: withReactionByAccount,
-        api,
-      })
-    );
+  dispatch(
+    fetchMyReactionsByPostIds({
+      ids: newIds,
+      myAddress: withReactionByAccount,
+      api,
+    })
+  );
 
   const posts = await api.findPostsWithAllDetails({
     ids: newIds as unknown as AnyPostId[],
     visibility,
   });
+
   const structs = posts.map((post) => post.post.struct);
 
   if (withOwner) {
@@ -223,8 +223,11 @@ export const fetchPosts = createAsyncThunk<
     }
   }
 
+
   if (withSpace) {
+
     const spaces = posts.map((post) => post.space.struct);
+
     const spacesContent = posts.map((post) => ({
       ...post.space.content,
       id: post.space.struct.contentId,
@@ -247,8 +250,10 @@ export const fetchPosts = createAsyncThunk<
     }
   }
 
+
   return structs;
 });
+
 export const fetchPost = createFetchOne(fetchPosts);
 
 const posts = createSlice({

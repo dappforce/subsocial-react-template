@@ -3,19 +3,13 @@ import Layout from '../../layout/Layout';
 import SpaceView from '../../space/space-item/Space';
 import Comments from '../../common/comments/Comments';
 import PostFull from '../post-full/PostFull';
-import {
-  fetchPost,
-  fetchPosts,
-  selectPost,
-} from 'src/store/features/posts/postsSlice';
-import { getInitialPropsWithRedux, NextContextWithRedux } from 'src/store/app';
-import { bnsToIds, idToBn } from '@subsocial/utils';
+import { fetchPost } from 'src/store/features/posts/postsSlice';
+import { getInitialPropsWithRedux } from 'src/store/app';
 import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
-import { PostWithAllDetails, PostWithSomeDetails, PostStruct } from '@subsocial/types/dto';
-import { useContext, useEffect } from 'react';
-import { ApiContext } from 'src/components/api';
-import { useAppDispatch } from 'src/store/app/store';
-import { useSelectPost } from 'src/store/app/hooks';
+import { PostWithAllDetails, PostStruct } from '@subsocial/types/dto';
+import { useIsUnlistedPost } from 'src/hooks/useIsUnlistedPost';
+import ErrorPage from 'next/error';
+import { loadPostOnNextReq } from './loadPostOnNextReq';
 
 export type PostDetailsProps = {
   postData: PostWithAllDetails;
@@ -24,60 +18,22 @@ export type PostDetailsProps = {
 const PostPage: NextPage<PostDetailsProps> = (props) => {
   const { postData } = props;
   const { post, space } = postData;
+  const isHiddenPost = useIsUnlistedPost({ post: post.struct, space: space?.struct })
 
-  //@ts-ignore
-  const { rootPostId } = post.struct;
-  const dispatch = useAppDispatch();
-
-  const { api } = useContext(ApiContext);
-  //@ts-ignore
-  const rootPostData = useSelectPost(rootPostId) as PostWithSomeDetails;
-
-  useEffect(() => {
-    dispatch(fetchPosts({ ids: [rootPostId], api }));
-  }, []);
-
-  if (!post.content) return null;
+  if (!post.content || isHiddenPost) {
+    return <ErrorPage statusCode={404} />
+  }
 
   return (
     <Layout>
-      <PostFull {...postData} />
-      <SpaceView spaceData={space || rootPostData?.space} />
+      <PostFull post={post} space={space} id={post.id}/>
+      <SpaceView spaceData={space} withUnlisted />
       <Comments parentStruct={post.struct} />
     </Layout>
   );
 };
 
 export default PostPage;
-
-export async function loadPostOnNextReq({
-  context,
-  dispatch,
-  subsocial,
-  reduxStore,
-}: NextContextWithRedux): Promise<PostWithSomeDetails> {
-  const { query } = context;
-
-  if (!query.post || typeof query.post !== 'string')
-    return {} as PostWithSomeDetails;
-
-  const url = query.post?.split('-');
-
-  const postId = url[url.length - 1];
-  const replyIds = await subsocial.subsocial.substrate.getReplyIdsByPostId(
-    idToBn(postId)
-  );
-
-  const ids = bnsToIds(replyIds).concat(postId);
-
-  await dispatch(fetchPosts({ api: subsocial, ids, reload: true }));
-
-  const postData = selectPost(reduxStore.getState(), { id: postId });
-
-  if (!postData) return {} as PostWithSomeDetails;
-
-  return postData as unknown as PostWithSomeDetails;
-}
 
 getInitialPropsWithRedux(PostPage, async (props) => {
   const { subsocial, dispatch } = props;

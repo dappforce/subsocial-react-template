@@ -12,16 +12,18 @@ import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { useAppSelector } from 'src/store/app/store';
 import { selectMyReactionByPostId } from 'src/store/features/reactions/myPostReactionsSlice';
 import SharedPost from '../shared-post/SharedPost';
-import { useMyAddress } from '../../../store/features/myAccount/myAccountHooks';
+import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import HiddenComponent from '../../common/hidden-component/HiddenComponent';
 import { TypeContent } from 'src/models/common/button';
 import SpaceHiddenComponent from 'src/components/common/space-hidden-component/SpaceHiddenComponent';
+import { Visibility } from '@subsocial/api/filters';
 
 type Props = {
   postId: string;
   isShowActions?: boolean;
   withSpace?: boolean;
   className?: string;
+  visibility?: Visibility
 };
 
 const Post: FC<Props> = ({
@@ -29,6 +31,7 @@ const Post: FC<Props> = ({
   isShowActions = true,
   withSpace,
   className: inputClassName,
+  visibility
 }) => {
   const [isShowComments, setIsShowComments] = useState(false);
   const postData = useSelectPost(postId) as PostWithSomeDetails;
@@ -44,12 +47,13 @@ const Post: FC<Props> = ({
     return selectMyReactionByPostId(state, { postId, myAddress: address });
   });
 
-  if (
-    !postData ||
-    (withSpace && !postData.space) ||
-    (withSpace && space?.struct.hidden)
-  )
+  const postWithSpace = withSpace && !postData?.space;
+  const postWithHiddenSpace = withSpace && space?.struct.hidden;
+  const isHiddenPost = (visibility === 'onlyVisible' || visibility === 'onlyPublic') && !!postData?.post.struct.hidden;
+
+  if (!postData || postWithSpace || postWithHiddenSpace || isHiddenPost) {
     return null;
+  }
 
   const { isSharedPost } = postData.post?.struct;
 

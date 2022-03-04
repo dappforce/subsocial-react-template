@@ -55,7 +55,7 @@ const Address: FC<AddressProps> = ({
       </Text>
       {(isCopy || isMobile) && (
         <>
-          <Grow in={true} style={{ transformOrigin: '0 0 0' }}>
+          <Grow in style={{ transformOrigin: '0 0 0' }}>
             <IconButton
               onClick={(e) => {
                 e.stopPropagation();
