@@ -152,10 +152,7 @@ const PostList: FC<PostListProps> = ({
       dataSource={postsData}
       loadMore={loadMore}
       totalCount={totalCount}
-      emptyText={
-        Router.query.tab === 'feeds'
-          ? t('generalMessages.emptyFeed')
-          : t('content.noPosts')
+      emptyText={''
       }
       renderItem={(id) => <Post postId={id} key={id} withSpace={withSpace} visibility={visibility} />}
       isEmpty={isEmpty}

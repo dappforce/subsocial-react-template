@@ -22,20 +22,21 @@ import {
 } from '../contents/contentsSlice';
 import { selectSpaces, upsertManySpace } from '../spaces/spacesSlice';
 import { upsertManyProfiles } from '../profiles/profilesSlice';
-import { AnyPostId } from '@subsocial/types';
+import { AnyPostId } from '@subsocial/api/types';
 import {
   asCommentStruct,
   asSharedPostStruct,
-  getUniqueSpaceIds,
-} from '@subsocial/api/flat-subsocial/flatteners';
+} from '@subsocial/api/subsocial/flatteners/utils';
+import {
+  getUniqueSpaceIds
+} from '@subsocial/api/subsocial/flatteners'
 import {
   PostStruct,
   AccountId,
   PostId,
   PostWithSomeDetails,
-  ProfileData,
   SpaceData,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types';
 import { fetchMyReactionsByPostIds } from '../reactions/myPostReactionsSlice';
 import { Visibility } from '@subsocial/api/filters';
 
@@ -108,7 +109,7 @@ export function selectPosts(
 
   const postsMap = selectPostEntities(state);
 
-  const ownerByIdMap = new Map<EntityId, ProfileData>();
+  const ownerByIdMap = new Map<EntityId, SpaceData>();
 
   const spaceByIdMap = new Map<EntityId, SpaceData>();
   if (withSpace) {
@@ -125,7 +126,7 @@ export function selectPosts(
     const { struct } = post;
     const { ownerId, spaceId, isComment, isSharedPost } = struct;
 
-    let owner: ProfileData | undefined;
+    let owner: SpaceData | undefined;
     if (ownerId) {
       owner = ownerByIdMap.get(ownerId);
     }
@@ -147,8 +148,8 @@ export function selectPosts(
     let ext: PostWithSomeDetails | undefined;
 
     if (withExt && isSharedPost) {
-      const { sharedPostId } = asSharedPostStruct(struct);
-      ext = getFirstOrUndefined(selectPosts(state, { ids: [ sharedPostId ] }));
+      const { originalPostId } = asSharedPostStruct(struct);
+      ext = getFirstOrUndefined(selectPosts(state, { ids: [originalPostId] }));
     }
 
     result.push({ id: post.id, ext, post, owner, space });
@@ -161,7 +162,7 @@ export function selectPost(
   props: SelectPostArgs
 ): PostWithSomeDetails | undefined {
   const { id, ...rest } = props;
-  const entities = selectPosts(state, { ids: [ id ], ...rest });
+  const entities = selectPosts(state, { ids: [id], ...rest });
   return getFirstOrUndefined(entities);
 }
 
@@ -194,30 +195,30 @@ export const fetchPosts = createAsyncThunk<
   }
 
   withReactionByAccount &&
-  dispatch(
-    fetchMyReactionsByPostIds({
-      ids: newIds,
-      myAddress: withReactionByAccount,
-      api,
-    })
-  );
+    dispatch(
+      fetchMyReactionsByPostIds({
+        ids: newIds,
+        myAddress: withReactionByAccount,
+        api,
+      })
+    );
 
-  const posts = await api.findPostsWithAllDetails({
+  const posts: any = await api.findPostsWithAllDetails({
     ids: newIds as unknown as AnyPostId[],
     visibility,
   });
 
-  const structs = posts.map((post) => post.post.struct);
+  const structs = posts.map((post: any) => post.post.struct);
 
   if (withOwner) {
-    const owner = posts.filter((post) => post.owner);
+    const owner = posts.filter((post: any) => post.owner);
 
     if (owner.length) {
-      const ownerContent = owner.map((post) => ({
+      const ownerContent = owner.map((post: any) => ({
         ...post.owner.content,
         id: post.owner.struct.contentId,
       }));
-      const ownerStruct = owner.map((post) => post.owner.struct);
+      const ownerStruct = owner.map((post: any) => post.owner.struct);
       dispatch(upsertManyProfiles(ownerStruct));
       dispatch(upsertManyContent(ownerContent as Content[]));
     }
@@ -226,9 +227,9 @@ export const fetchPosts = createAsyncThunk<
 
   if (withSpace) {
 
-    const spaces = posts.map((post) => post.space.struct);
+    const spaces = posts.map((post: any) => post.space.struct);
 
-    const spacesContent = posts.map((post) => ({
+    const spacesContent = posts.map((post: any) => ({
       ...post.space.content,
       id: post.space.struct.contentId,
     }));
@@ -240,7 +241,7 @@ export const fetchPosts = createAsyncThunk<
   }
 
   if (withContent) {
-    const postsContent = posts.map((post) => ({
+    const postsContent = posts.map((post: any) => ({
       ...post.post.content,
       id: post.post.struct.contentId,
     }));

@@ -1,11 +1,11 @@
 export const config = {
   appName: 'rSocial',
   ipfsUrl: `https://staging.subsocial.network/ipfs/ipfs`,
-  substrateNodeUrl: `wss://pc-testnet.subsocial.network/stg-ws`,
+  substrateNodeUrl: `wss://para.f3joule.space`,
   offchainUrl: `https://staging.subsocial.network/offchain`,
   offchainWs: `wss://staging.subsocial.network/notif-ws`,
   addFileUrl: `https://staging.subsocial.network/offchain/v1/ipfs/addFile`,
-  ipfsNodeUrl: `https://staging.subsocial.network/ipfs`,
+  ipfsNodeUrl: `https://app.subsocial.network/ipfs`,
   infinityScrollOffset: 20,
   infinityScrollFirstPage: 1,
   addressLengthShort: 13,

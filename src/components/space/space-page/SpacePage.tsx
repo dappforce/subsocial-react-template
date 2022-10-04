@@ -19,7 +19,6 @@ import { SpacePageProps, ViewSpaceProps } from 'src/models/space';
 import { isHidden, Visibility } from '@subsocial/api/filters';
 import { return404 } from '../../utils/next';
 import ErrorPage from 'next/error';
-import { Space } from '@subsocial/definitions/interfaces';
 
 const PostList: FC<Omit<ViewSpaceProps, 'spaceData'>> = ({posts, postIds, visibility}) => {
     const dispatch = useAppDispatch()
@@ -50,12 +49,12 @@ const PostList: FC<Omit<ViewSpaceProps, 'spaceData'>> = ({posts, postIds, visibi
   />;
 };
 
-const SpacePage: FC<SpacePageProps> = (props) => {
+const SpacePage: FC<SpacePageProps> = (props: any) => {
   const { spaceData, postIds, posts, notFound } = props;
 
   const isMySpace = useIsMySpace(spaceData.struct);
   //@ts-ignore
-  const isHiddenSpace = isHidden(spaceData.struct as unknown as Space);
+  const isHiddenSpace = isHidden(spaceData.struct as unknown);
   const visibility: Visibility | undefined = !isMySpace ? 'onlyVisible' : undefined;
 
   return !isMySpace && isHiddenSpace
@@ -90,7 +89,7 @@ getInitialPropsWithRedux(SpacePage, async (props) => {
     spaceData,
     posts,
     postIds: bnsToIds(postIds),
-  };
+  } as any;
 });
 
 export default SpacePage;

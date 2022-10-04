@@ -9,7 +9,7 @@ import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import Editor from '../editor/Editor';
 import TxButton from '../button/TxButton';
 import { IpfsContent } from '@subsocial/types/substrate/classes';
-import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { asCommentStruct } from '@subsocial/api/subsocial/flatteners/utils';
 import { IpfsCid } from '@subsocial/types';
 import { useApi } from 'src/components/api';
 import { getTxParams } from 'src/components/utils/getTxParams';

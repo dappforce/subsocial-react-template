@@ -91,12 +91,12 @@ export const fetchProfiles = createAsyncThunk<
     const profile = await api.findProfiles(newIds);
 
     const content = {
-      entities: profile.map((item) => ({
+      entities: profile.map((item: any) => ({
         ...item.content,
         id: item.struct.contentId,
       })),
-      ids: profile.map((item) => item.id),
-      struct: profile.map((item) => item.struct),
+      ids: profile.map((item: any) => item.id),
+      struct: profile.map((item: any) => item.struct),
     };
 
     if (withContent) {

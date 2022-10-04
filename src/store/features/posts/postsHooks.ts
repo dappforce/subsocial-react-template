@@ -8,12 +8,12 @@ import {
 import { selectPostContentById } from '../contents/contentsSlice';
 import { useSelectSpace } from '../spaces/spacesHooks';
 import { PostId, PostWithSomeDetails, PostStruct } from '@subsocial/types/dto';
-import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { asCommentStruct } from '@subsocial/api/subsocial/flatteners/utils';
 import { useActions } from '../../app/helpers';
 
 export const useSelectPost = (
   postId?: PostId
-): PostWithSomeDetails | undefined => {
+): PostWithSomeDetails | undefined | any => {
   const struct = useAppSelector((state) =>
     postId ? selectPostStructById(state, postId) : undefined
   );

@@ -1,6 +1,5 @@
 import { createContext, FC, useContext, useEffect, useState } from 'react';
-import { newFlatSubsocialApi } from '@subsocial/api';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
+import { SubsocialApi, ISubsocialApi } from '@subsocial/api';
 import useLoader from 'src/hooks/useLoader';
 import Snackbar from '../common/snackbar/Snackbar';
 import { HttpRequestMethod } from '@subsocial/api/types';
@@ -15,15 +14,15 @@ import { useTranslation } from 'react-i18next';
 import { ApiPromise } from '@polkadot/api';
 import { config as inputConfig } from 'src/config';
 
-type ContextType = { api: FlatSubsocialApi, substrateApi: ApiPromise };
+type ContextType = { api: SubsocialApi, substrateApi: ApiPromise };
 export const ApiContext = createContext<ContextType>({
-  api: {} as FlatSubsocialApi,
+  api: {} as SubsocialApi,
   substrateApi: {} as ApiPromise,
 });
 
 const config = {
   substrateNodeUrl: inputConfig.substrateNodeUrl,
-  offchainUrl: inputConfig.offchainUrl,
+  offchainUrl: '',
   ipfsNodeUrl: inputConfig.ipfsNodeUrl,
   useServer: {
     httpRequestMethod: 'get' as HttpRequestMethod,
@@ -31,12 +30,13 @@ const config = {
 };
 
 export async function initSubsocialApi() {
-  return await newFlatSubsocialApi(config);
+  console.log('hi', 'here')
+  return await SubsocialApi.create(config);
 }
 
 export const ApiProvider: FC = (props) => {
-  const [ api, setApi ] = useState<FlatSubsocialApi>({} as FlatSubsocialApi);
-  const [ substrateApi, setSubstrateApi ] = useState<ApiPromise>({} as ApiPromise);
+  const [api, setApi] = useState<SubsocialApi>({} as SubsocialApi);
+  const [substrateApi, setSubstrateApi] = useState<ApiPromise>({} as ApiPromise);
   const { isLoader, toggleLoader } = useLoader();
   const dispatch = useAppDispatch();
   const { type, message, setSnackConfig, removeSnackbar } = useSnackbar();
@@ -50,6 +50,7 @@ export const ApiProvider: FC = (props) => {
 
     toggleLoader();
     initSubsocialApi().then((res) => {
+      console.log(res)
       setApi(res);
       res.subsocial.substrate.api.then((res) => {
         setSubstrateApi(res);
@@ -58,7 +59,7 @@ export const ApiProvider: FC = (props) => {
     });
   }, []);
 
-  return !api.subsocial ? (
+  return !api ? (
     <Snackbar
       type={type}
       open={isLoader}

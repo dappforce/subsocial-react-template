@@ -20,7 +20,7 @@ import {
   SharedPostContent,
   SpaceContent,
 } from '@subsocial/types/dto';
-import { convertToDerivedContent } from '@subsocial/api/flat-subsocial/utils';
+import { convertToDerivedContent } from '@subsocial/api/subsocial/flatteners/utils';
 
 /** Content with id */
 
@@ -75,7 +75,7 @@ export const fetchContents = createAsyncThunk<
   const contents = await api.subsocial.ipfs.getContentArray(newIds);
 
   return Object.entries(contents).map(([id, content]) => {
-    const derivedContent = convertToDerivedContent(content) as CommentContent;
+    const derivedContent = convertToDerivedContent(content as any) as CommentContent;
 
     return { id, ...derivedContent };
   });

@@ -11,7 +11,7 @@ import Link from 'src/components/common/links/link/Link';
 import SmallLink from '../links/small-link/SmallLink';
 import { CommentContent, PostData } from '@subsocial/types/dto';
 import { useSelectPost } from 'src/store/features/posts/postsHooks';
-import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
+import { asCommentStruct } from '@subsocial/api/subsocial/flatteners/utils';
 import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { DateService, getUrl, transformCount, TypeUrl } from 'src/utils';
 import Text from '../text/Text';
@@ -93,7 +93,7 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
     dispatch(
       upsertPost({
         ...comment.struct,
-        visibleRepliesCount: visibleRepliesCount + 1,
+        repliesCount: visibleRepliesCount + 1,
       })
     );
     dispatch(
