@@ -1,11 +1,11 @@
 import { AppDispatch, AppStore, initializeStore } from 'src/store/app/store';
 import { NextComponentType, NextPageContext } from 'next';
 import { initSubsocialApi } from 'src/components/api';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
+import { SubsocialApi } from '@subsocial/api';
 
 export type NextContextWithRedux = {
   context: NextPageContext;
-  subsocial: FlatSubsocialApi;
+  subsocial: SubsocialApi;
   dispatch: AppDispatch;
   reduxStore: AppStore;
 };

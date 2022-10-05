@@ -1,4 +1,4 @@
-import {PostContent} from "@subsocial/types";
+import {PostContent} from "@subsocial/api/types";
 
 export const getInitialPostValue = (
   post: PostContent | undefined

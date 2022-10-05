@@ -42,7 +42,7 @@ const File: FC<FileProps> = ({
     setImage && setImage(addedImageURL);
 
     if (addedImage.size < config.loadImageLimitMb) {
-      const ipfsImageCid = await api.subsocial.ipfs.saveFile(addedImage);
+      const ipfsImageCid = await api.ipfs.saveFile(addedImage);
       setCidImage(ipfsImageCid);
     } else {
       setFile(image);

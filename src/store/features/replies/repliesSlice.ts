@@ -14,7 +14,7 @@ import {
   AccountId,
   PostId,
   PostWithSomeDetails,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 import { bnsToIds, idToBn } from '@subsocial/utils';
 
 export type ReplyIdsByPostId = {
@@ -59,7 +59,7 @@ export const fetchPostReplyIds = createAsyncThunk<
   }
 
   const replyBnIds = await api.subsocial.substrate.getReplyIdsByPostId(
-    idToBn(parentId)
+      parentId
   );
 
   const replyIds = bnsToIds(replyBnIds);

@@ -4,7 +4,7 @@ import {
   ReactionStruct,
   upsertMyReaction,
 } from './myPostReactionsSlice';
-import { AccountId, PostId } from '@subsocial/types/dto';
+import { AccountId, PostId } from '@subsocial/api/types/dto';
 import { useApi } from '../../../components/api';
 import { useAppDispatch } from '../../app/store';
 import { useMyAddress } from '../myAccount/myAccountHooks';

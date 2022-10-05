@@ -2,7 +2,7 @@ import {
   PostId,
   PostWithSomeDetails,
   SpaceWithSomeDetails,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 import { Visibility } from '@subsocial/api/filters';
 
 export interface SpacePageProps {

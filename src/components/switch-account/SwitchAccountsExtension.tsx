@@ -32,7 +32,7 @@ export const SwitchAccountsExtensionItem: FC<Account> = (props) => {
     >
       <ListItemAvatar>
         <AvatarElement
-          src={profile?.content?.avatar}
+          src={profile?.content?.image}
           size={AvatarSizes.MEDIUM}
           id={props.address}
         />

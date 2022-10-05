@@ -1,4 +1,4 @@
-import { AccountId } from '@subsocial/types/dto';
+import { AccountId } from '@subsocial/api/types/dto';
 
 export interface ProfileFollowersProps {
   following: number;

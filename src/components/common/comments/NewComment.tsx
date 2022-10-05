@@ -8,9 +8,9 @@ import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import Editor from '../editor/Editor';
 import TxButton from '../button/TxButton';
-import { IpfsContent } from '@subsocial/types/substrate/classes';
-import { asCommentStruct } from '@subsocial/api/flat-subsocial/flatteners';
-import { IpfsCid } from '@subsocial/types';
+import { IpfsContent } from '@subsocial/api/substrate/wrappers';
+import { asCommentStruct } from '@subsocial/api/subsocial/flatteners/utils';
+import { IpfsCid } from '@subsocial/api/types';
 import { useApi } from 'src/components/api';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import ButtonCancel from '../button/button-cancel/ButtonCancel';
@@ -103,7 +103,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
   };
 
   const onFailed: TxFailedCallback = (txResult, newCid) => {
-    newCid && unpinIpfsCid(api.subsocial.ipfs, newCid);
+    newCid && unpinIpfsCid(api.ipfs, newCid);
   };
 
   return (
@@ -114,7 +114,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
       })}
     >
       <AvatarElement
-        src={user?.content?.avatar}
+        src={user?.content?.image}
         size={AvatarSizes.SMALL}
         id={user?.id || ''}
       />
@@ -145,7 +145,7 @@ const NewComment: FC<NewCommentProps> = (props) => {
               params={() =>
                 getTxParams({
                   json: { body: comment },
-                  ipfs: api.subsocial.ipfs,
+                  ipfs: api.ipfs,
                   buildTxParamsCallback: newTxParams,
                 })
               }

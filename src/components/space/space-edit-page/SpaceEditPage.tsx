@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useApi } from '../../api';
 import { fetchSpace } from 'src/store/features/spaces/spacesSlice';
 import { useAppDispatch } from 'src/store/app/store';
-import { SpaceWithSomeDetails } from '@subsocial/types/dto';
+import { SpaceWithSomeDetails } from '@subsocial/api/types/dto';
 import { CardEditType } from "../../../models/common/card-edit";
 import { useTranslation } from 'react-i18next';
 
@@ -23,8 +23,8 @@ const SpaceEditPage = () => {
 
     if (idOrHandle.includes('@')) {
       const handle = idOrHandle.slice(1).toLowerCase();
-      api.subsocial.substrate.getSpaceIdByHandle(handle).then((id) => {
-        if (id) setId(id.toString());
+      api.findDomain(handle).then((domain) => {
+        if (domain) setId(domain.innerSpace?.toString() || idOrHandle);
       });
     } else {
       setId(idOrHandle);

@@ -1,17 +1,16 @@
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
-import { ProfileData } from '@subsocial/types/dto';
+import { SubsocialApi } from '@subsocial/api';
+import { SpaceData } from '@subsocial/api/types/dto';
 import {
-  Activity,
   AnyAccountId,
   EventsName,
-} from '@subsocial/types';
+} from '@subsocial/api/types';
 import { AppDispatch } from 'src/store/app/store';
 
 export type AddressProps = {
   className?: string;
   style?: React.CSSProperties;
   address: AnyAccountId;
-  owner?: ProfileData;
+  owner?: SpaceData;
 };
 
 export type EventsMsg = {
@@ -27,17 +26,6 @@ export type ParsedPaginationQuery = {
   size: number;
 };
 
-export type LoadMoreProps = ParsedPaginationQuery & {
-  api: FlatSubsocialApi;
-  dispatch: AppDispatch;
-  address?: string;
-};
-export type LoadMoreFn = (
-  myAddress: string,
-  offset: number,
-  limit: number
-) => Promise<Activity[]>;
-
 type GetCountFn = (account: string) => Promise<number>;
 
 export type BaseActivityProps = {
@@ -46,17 +34,11 @@ export type BaseActivityProps = {
   title?: string;
 };
 
-export type ActivityProps<T> = BaseActivityProps & {
-  loadMore: (props: LoadMoreProps) => Promise<T[]>;
-  getCount?: GetCountFn;
-  noDataDesc?: string;
-  loadingLabel?: string;
-};
-
 export type DataListItemProps<T> = {
   getKey: RowKeyFn<T>;
   renderItem: RenderItemFn<T>;
 };
+
 export type DataListOptProps = {
   title?: React.ReactNode;
   level?: number;
@@ -65,16 +47,6 @@ export type DataListOptProps = {
   customNoData?: React.ReactNode;
   className?: string;
 };
-
-export type DataListProps<T extends any> = DataListOptProps &
-  DataListItemProps<T> & {
-    totalCount?: number;
-    dataSource: T[];
-    beforeList?: React.ReactNode;
-    children?: React.ReactNode;
-  };
-
-export type InnerActivitiesProps<T> = ActivityProps<T> & DataListItemProps<T>;
 
 //----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@ import {
 import { FetchOneArgs, ThunkApiConfig } from 'src/store/app/helpers';
 import { SelectOneFn } from 'src/store/app/hooksCommon';
 import { RootState } from 'src/store/app/rootReducer';
-import { AccountId } from '@subsocial/types/dto';
+import { AccountId } from '@subsocial/api/types/dto';
 
 type Entity = {
   id: AccountId;

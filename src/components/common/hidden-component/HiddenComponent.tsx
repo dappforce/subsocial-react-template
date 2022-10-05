@@ -3,7 +3,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { Alert } from '@mui/material';
 import { ButtonTogglerVisibility } from '../button/button-toggler-visibility/ButtonTogglerVisibility';
 import { TypeContent } from 'src/models/common/button';
-import { PostData, PostStruct, SpaceData } from '@subsocial/types/dto';
+import { PostData, PostStruct, SpaceData } from '@subsocial/api/types/dto';
 import { useTranslation } from 'react-i18next';
 import { memo } from 'react';
 

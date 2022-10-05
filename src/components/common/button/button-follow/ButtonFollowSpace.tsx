@@ -5,7 +5,7 @@ import { useApi } from 'src/components/api';
 import { notDef } from '@subsocial/utils';
 import TxButton from '../TxButton';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
-import { SpaceId } from '@subsocial/types/dto';
+import { SpaceId } from '@subsocial/api/types/dto';
 import { selectSpaceIdsByFollower } from 'src/store/features/spaceIds/followedSpaceIdsSlice';
 import { shallowEqual } from 'react-redux';
 import { useCreateReloadSpace } from 'src/store/app/hooks';

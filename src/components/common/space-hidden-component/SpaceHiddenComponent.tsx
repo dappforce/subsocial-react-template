@@ -3,7 +3,7 @@ import { Alert } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 import { TypeContent } from 'src/models/common/button';
 import { useSelectSpace } from 'src/store/app/hooks';
-import { PostData, SpaceStruct } from '@subsocial/types/dto';
+import { PostData, SpaceStruct } from '@subsocial/api/types/dto';
 import { ButtonTogglerVisibility } from '../button/button-toggler-visibility/ButtonTogglerVisibility';
 import { useEffect } from 'react';
 import { useAppDispatch } from 'src/store/app/store';

@@ -5,8 +5,8 @@ import { transformCount } from 'src/utils';
 import { useApi } from '../../../api';
 import { asString } from '@subsocial/utils';
 import { fetchProfiles } from 'src/store/features/profiles/profilesSlice';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
-import { PostId } from '@subsocial/types/dto';
+import { SubsocialApi } from '@subsocial/api';
+import { PostId } from '@subsocial/api/types/dto';
 import { getPageOfIds } from '../../../utils/getIds';
 import { config } from 'src/config'
 import { useAppDispatch } from 'src/store/app/store';
@@ -20,16 +20,16 @@ export const getAccountsIdsByPage = (
 ) => getPageOfIds(ids, { page, size });
 
 const loadSuggestedAccountIds = async (
-  api: FlatSubsocialApi,
-  spaceId: unknown
+  api: SubsocialApi,
+  spaceId: string
 ) => {
-  const method = await api.subsocial.substrate.getPalletQuery('spaceFollows');
-  const ids = (await method.spaceFollowers(spaceId)) as unknown as string[];
+  const substrateApi = await api.substrateApi;
+  const ids = (await substrateApi.query.spaceFollows.spaceFollowers(spaceId)) as unknown as string[];
   return ids.map(asString);
 };
 
 const loadMoreAccountsFn = async (
-  loadMoreValues: any & { api: FlatSubsocialApi }
+  loadMoreValues: any & { api: SubsocialApi }
 ) => {
   const { size, page, api, dispatch, spaceId } = loadMoreValues;
   const ids = await loadSuggestedAccountIds(api, spaceId);

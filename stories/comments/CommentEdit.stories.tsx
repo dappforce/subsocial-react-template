@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import React, { ComponentProps } from 'react';
 import { comment } from '../mocked-data';
 import EditComment from 'src/components/common/comments/EditComment';
-import { PostData } from '@subsocial/types/dto';
+import { PostData } from '@subsocial/api/types/dto';
 
 export default {
   component: EditComment,

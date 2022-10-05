@@ -1,7 +1,7 @@
 import { NextContextWithRedux } from 'src/store/app';
 import { fetchSpace, selectSpace } from 'src/store/features/spaces/spacesSlice';
-import { SpaceWithSomeDetails } from '@subsocial/types/dto';
-import { SpaceId } from '@subsocial/types/substrate/interfaces';
+import { SpaceWithSomeDetails } from '@subsocial/api/types/dto';
+import { SpaceId } from '@subsocial/api/types/substrate';
 
 export async function loadSpaceOnNextReq(
   props: NextContextWithRedux,
@@ -17,7 +17,9 @@ export async function loadSpaceOnNextReq(
 
   if (idOrHandle[0] === '@') {
     const handle = idOrHandle.slice(1).toLowerCase();
-    id = await subsocial.subsocial.substrate.getSpaceIdByHandle(handle);
+    const domain = await subsocial.findDomain(handle);
+
+    id = domain?.innerSpace
   } else {
     id = idOrHandle;
   }

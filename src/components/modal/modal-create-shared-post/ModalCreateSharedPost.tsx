@@ -1,5 +1,5 @@
 import { Box } from '@mui/system';
-import { IpfsCid } from '@subsocial/types';
+import { IpfsCid } from '@subsocial/api/types';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useApi } from 'src/components/api';
@@ -19,7 +19,7 @@ import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import MaterialModal from '@mui/material/Modal';
 import styles from './ModalCreateSharedPost.module.sass';
 import { useSelectPost } from '../../../store/features/posts/postsHooks';
-import { SharedPostStruct } from '@subsocial/types/dto';
+import { SharedPostStruct } from '@subsocial/api/types/dto';
 import ButtonComponent from '../../common/button/button-component/ButtonComponent';
 import { useTranslation } from 'react-i18next';
 import { unpinIpfsCid } from '../../utils/unpinIpfsCid';
@@ -42,14 +42,14 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
   const { api } = useApi();
   const router = useRouter();
   const postData = useSelectPost(postId);
-  const { isSharedPost, sharedPostId } =
+  const { isSharedPost, originalPostId } =
     (postData?.post.struct as SharedPostStruct) || {};
   const hasSpace = !!mySpaceIds.length;
   const { t } = useTranslation();
   const json = { body };
 
   const sharedPostExtension = {
-    SharedPost: isSharedPost ? sharedPostId : postId,
+    SharedPost: isSharedPost ? originalPostId : postId,
   };
 
   const newTxParams = (cid: IpfsCid) => {
@@ -69,7 +69,7 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
   };
 
   const onFailed: TxFailedCallback = (txResult, newCid) => {
-    newCid && unpinIpfsCid(api.subsocial.ipfs, newCid);
+    newCid && unpinIpfsCid(api.ipfs, newCid);
   };
 
   useEffect(() => {
@@ -106,7 +106,7 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
               autofocus
             />
             <Post
-              postId={isSharedPost ? sharedPostId : postId}
+              postId={isSharedPost ? originalPostId : postId}
               isShowActions={false}
               className={styles.post}
             />
@@ -121,7 +121,7 @@ const ModalCreateSharedPost: FC<ModalCreateSharedPostProps> = ({
                 params={() =>
                   getTxParams({
                     json,
-                    ipfs: api.subsocial.ipfs,
+                    ipfs: api.ipfs,
                     buildTxParamsCallback: newTxParams,
                   })
                 }

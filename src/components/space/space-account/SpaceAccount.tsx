@@ -5,7 +5,7 @@ import ButtonFollowSpace from '../../common/button/button-follow/ButtonFollowSpa
 import ButtonComponent from '../../common/button/button-component/ButtonComponent';
 import { useRouter } from 'next/router';
 import Account from '../../account/Account';
-import { SpaceWithSomeDetails } from '@subsocial/types/dto';
+import { SpaceWithSomeDetails } from '@subsocial/api/types/dto';
 import { useIsMySpace } from 'src/hooks/useIsMySpace';
 import { TypeContent } from 'src/models/common/button';
 import { toEdit } from '../toEdit';
@@ -39,7 +39,7 @@ const SpaceAccount: FC<SpaceWithSomeDetails> = (props) => {
       avatar={content.image}
       name={content.name}
       id={id}
-      followersCount={struct.followersCount}
+      followersCount={(struct as any).followersCount || 0}
       posts={struct.postsCount}
       buttons={
         <>

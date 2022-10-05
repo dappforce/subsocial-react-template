@@ -10,7 +10,7 @@ import styles from './ButtonOptions.module.sass';
 import { ButtonTogglerVisibility } from '../button-toggler-visibility/ButtonTogglerVisibility';
 import { useIsMyAddress, useIsMySpace } from 'src/hooks/useIsMySpace';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
-import { SpaceStruct } from '@subsocial/types/dto';
+import { SpaceStruct } from '@subsocial/api/types/dto';
 import Image from '../../image/Image';
 import ButtonFollowSpace from '../button-follow/ButtonFollowSpace';
 import { useTranslation } from 'react-i18next';

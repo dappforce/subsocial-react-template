@@ -23,7 +23,7 @@ import {
   PostId,
   ReactionId,
   ReactionType,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 
 const sliceName = 'reactions';
 
@@ -143,7 +143,7 @@ export const fetchMyReactionsByPostIds = createAsyncThunk<
 
   const reactionIds: BN[] = [];
 
-  reactionIdsFromStorage.forEach((reactionIdCodec, index) => {
+  reactionIdsFromStorage.forEach((reactionIdCodec: any, index: number) => {
     const reactionId = reactionIdCodec as unknown as BN;
     if (!reactionId.eqn(0)) {
       const reactionIdStr = reactionId.toString();
@@ -157,7 +157,7 @@ export const fetchMyReactionsByPostIds = createAsyncThunk<
     reactionIds.filter(isDef)
   );
 
-  entities.forEach(({ kind: kindCodec, id }) => {
+  entities.forEach(({ kind, id }: { kind: any, id: any }) => {
     const reactionId = id.toString();
     const postId = postIdByReactionId.get(reactionId);
 
@@ -165,7 +165,7 @@ export const fetchMyReactionsByPostIds = createAsyncThunk<
       reactionByPostId.set(postId, {
         id: prependPostIdWithMyAddress(postId, myAddress),
         reactionId,
-        kind: kindCodec.toString() as ReactionType,
+        kind: kind.toString() as ReactionType,
       });
   });
 

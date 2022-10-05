@@ -8,9 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "start-storybook -s ./public -p 6006",
-    "build-storybook": "build-storybook -s public",
-    "lang": "node ./scripts/copy-lang.js",
-    "postinstall": "yarn lang"
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",
@@ -20,14 +18,12 @@
     "@mui/styled-engine-sc": "^5.0.0",
     "@mui/system": "^5.1.1",
     "@open-wc/webpack-import-meta-loader": "^0.4.7",
-    "@polkadot/extension-dapp": "^0.38.6",
-    "@polkadot/ui-keyring": "^0.86.2",
+    "@polkadot/extension-dapp": "^0.44.6",
+    "@polkadot/ui-keyring": "^2.9.8",
     "@reduxjs/toolkit": "^1.6.2",
     "@storybook/preset-scss": "^1.0.3",
-    "@subsocial/api": "0.6.6-dev.24",
-    "@subsocial/definitions": "0.6.6-dev.24",
-    "@subsocial/utils": "0.6.6-dev.24",
-    "@subsocial/i18n": "0.6.6-dev.24",
+    "@subsocial/api": "0.7.5",
+    "@subsocial/utils": "0.7.5",
     "adblock-detect-react": "^1.0.5",
     "classnames": "^2.3.1",
     "dayjs": "^1.10.7",
@@ -64,18 +60,12 @@
     "tsconfig-paths-webpack-plugin": "^3.5.1",
     "yup": "^0.32.11"
   },
-  "resolutions": {
-    "@polkadot/util": "^7.4.1",
-    "@polkadot/util-crypto": "^7.4.1",
-    "@polkadot/keyring": "^7.4.1"
-  },
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@storybook/addon-actions": "^6.3.8",
     "@storybook/addon-essentials": "^6.3.8",
     "@storybook/addon-links": "^6.3.8",
     "@storybook/react": "^6.3.8",
-    "@subsocial/types": "0.6.6-dev.21",
     "@types/lodash.memoize": "^4.1.6",
     "@types/lodash.partition": "^4.6.6",
     "@types/numeral": "^2.0.2",

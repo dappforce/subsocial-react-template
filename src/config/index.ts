@@ -1,11 +1,8 @@
 export const config = {
   appName: 'rSocial',
-  ipfsUrl: `https://staging.subsocial.network/ipfs`,
-  substrateNodeUrl: `wss://testnet.subsocial.network`,
-  offchainUrl: `https://staging.subsocial.network/offchain`,
-  offchainWs: `wss://staging.subsocial.network`,
-  addFileUrl: `https://staging.subsocial.network/offchain/v1/ipfs/addFile`,
-  ipfsNodeUrl: `https://staging.subsocial.network/ipfs`,
+  ipfsUrl: `https://ipfs.subsocial.network/ipfs/`,
+  substrateNodeUrl: `wss://para.f3joule.space`,
+  ipfsNodeUrl: `https://crustwebsites.net`,
   infinityScrollOffset: 20,
   infinityScrollFirstPage: 1,
   addressLengthShort: 13,
@@ -14,6 +11,7 @@ export const config = {
   isOffChainFeed: false,
   enableTips: false,
   recommendedSpaceIds: [
+    '1',
     '1001',
     '1002',
   ],

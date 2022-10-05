@@ -90,7 +90,7 @@ const SwitchAccountMenu: FC<SwitchAccountContentProps> = ({ onClose }) => {
           className={styles.item}
           onClick={() =>
             onClickMenu(
-              !profile ? `/accounts/new` : `/accounts/${address}/edit`
+              !profile ? `/new` : `/${profile.struct.id}/edit`
             )
           }
         >

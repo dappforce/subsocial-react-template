@@ -1,4 +1,4 @@
-import { IpfsCid } from '@subsocial/types';
+import { IpfsCid } from '@subsocial/api/types';
 import {Dispatch, SetStateAction} from 'react';
 
 export interface FileProps {

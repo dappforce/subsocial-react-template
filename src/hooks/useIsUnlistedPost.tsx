@@ -1,7 +1,7 @@
 import { useIsMyAddress, useIsMySpace } from './useIsMySpace';
-import { PostStruct, SpaceStruct } from '@subsocial/types/dto';
+import { PostStruct, SpaceStruct } from '@subsocial/api/types/dto';
 import { isHidden } from '@subsocial/api/filters';
-import { Post } from '@subsocial/types/substrate/interfaces';
+import { Post } from '@subsocial/api/types/substrate';
 
 
 type IsUnlistedPostProps = {

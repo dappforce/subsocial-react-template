@@ -7,14 +7,14 @@ import {
 import { asString } from '@subsocial/utils';
 import { RootState } from './rootReducer';
 import { AppDispatch, AppThunk } from './store';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
+import { SubsocialApi } from '@subsocial/api';
 import {
   FlatSuperCommon,
   HasId,
   CommonContent,
   DerivedContent,
   EntityData,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 import { useDispatch } from 'react-redux';
 import { useApi } from '../../components/api';
 
@@ -37,7 +37,7 @@ export type HasHiddenVisibility =
   | 'onlyHidden';
 
 export type ApiArg = {
-  api: FlatSubsocialApi;
+  api: SubsocialApi;
 };
 
 export type CommonFetchProps = ApiArg & {
@@ -161,7 +161,7 @@ export function selectOneById<S extends StructEntity, C extends ContentEntity>(
 
 type CommonDispatchCallbackProps<T> = {
   dispatch: Dispatch<any>;
-  api: FlatSubsocialApi;
+  api: SubsocialApi;
   args: T;
 };
 

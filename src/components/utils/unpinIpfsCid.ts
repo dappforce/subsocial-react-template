@@ -1,5 +1,5 @@
 import { SubsocialIpfsApi } from '@subsocial/api';
-import { IpfsCid } from '@subsocial/types';
+import { IpfsCid } from '@subsocial/api/types';
 
 export const unpinIpfsCid = (
   ipfs: SubsocialIpfsApi,

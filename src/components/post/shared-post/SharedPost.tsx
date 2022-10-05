@@ -23,10 +23,10 @@ import CardWrapper from 'src/components/common/card-wrapper/CardWrapper';
 const SharedPost: FC<any> = (props) => {
   const { post, space, profile, className: inputClassName } = props;
 
-  const { sharedPostId } = post.struct;
+  const { originalPostId } = post.struct;
   const dispatch = useAppDispatch();
   const { api } = useApi();
-  const sharedPostData = useSelectPost(sharedPostId);
+  const sharedPostData = useSelectPost(originalPostId);
   const { hidden, ownerId } = sharedPostData?.post.struct || {};
   const isMyPost = useIsMyAddress(ownerId);
   const isNotfoundPost = hidden && !isMyPost;
@@ -40,7 +40,7 @@ const SharedPost: FC<any> = (props) => {
   };
 
   useEffect(() => {
-    dispatch(fetchPosts({ids: [ sharedPostId ], api}));
+    dispatch(fetchPosts({ids: [ originalPostId ], api}));
   }, []);
 
   return (
@@ -56,7 +56,7 @@ const SharedPost: FC<any> = (props) => {
               image
             >
               <AvatarElement
-                src={profile?.content?.avatar}
+                src={profile?.content?.image}
                 size={AvatarSizes.MEDIUM}
                 id={profile?.id}
               />
@@ -120,7 +120,7 @@ const SharedPost: FC<any> = (props) => {
         )}
         {!isNotfoundPost ? (
           <Post
-            postId={sharedPostId}
+            postId={originalPostId}
             isShowActions={false}
             className={styles.sharedPostContent}
           />

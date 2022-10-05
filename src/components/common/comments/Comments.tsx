@@ -37,7 +37,7 @@ const Comments: FC<CommentsProps> = ({ parentStruct }) => {
   const { t } = useTranslation();
 
   const addNewComment = (id: string) => {
-    dispatch(upsertPost({...parentStruct, visibleRepliesCount: visibleRepliesCount + 1 }))
+    dispatch(upsertPost({...parentStruct, repliesCount: visibleRepliesCount + 1 }))
     dispatch(upsertReplyIdsByPostId({id: parentId, replyIds: [id, ...replyIds]}))
   }
 

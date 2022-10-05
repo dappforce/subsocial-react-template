@@ -26,7 +26,7 @@ import {
   SpaceId,
   SpaceWithSomeDetails,
   SpaceStruct,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 
 const spacesAdapter = createEntityAdapter<SpaceStruct>();
 
@@ -109,9 +109,12 @@ export const fetchSpaces = createAsyncThunk<SpaceStruct[],
       spaces = spaces.concat(unlistedSpaces);
     }
 
-    const entities = spaces.map(({ struct }) => {
-      return struct;
+    const entitiesPromise = spaces.map(async ({ struct }) => {
+      const postsCount = (await api.blockchain.postsCountBySpaceId(struct.id)).toString()
+      return {...struct, postsCount} as unknown as SpaceStruct;
     });
+
+    const entities = await Promise.all(entitiesPromise);
 
     if (withContent) {
       const content = spaces.map((item) => ({

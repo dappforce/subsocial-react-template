@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import SpaceInfoComponent from 'src/components/space/space-item/SpaceInfo';
 import React, { ComponentProps } from 'react';
 import { space } from "../mocked-data";
-import { SpaceWithSomeDetails } from "@subsocial/types/dto";
+import { SpaceWithSomeDetails } from "@subsocial/api/types/dto";
 import { Container } from "@mui/material";
 
 

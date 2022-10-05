@@ -16,11 +16,10 @@ import {
   CommentContent,
   CommonContent,
   PostContent,
-  ProfileContent,
   SharedPostContent,
   SpaceContent,
-} from '@subsocial/types/dto';
-import { convertToDerivedContent } from '@subsocial/api/flat-subsocial/utils';
+} from '@subsocial/api/types/dto';
+import { convertToDerivedContent } from '@subsocial/api/subsocial/flatteners/utils';
 
 /** Content with id */
 
@@ -35,7 +34,7 @@ const contentsSelectors = contentsAdapter.getSelectors<RootState>(
 const { selectById } = contentsSelectors;
 
 export const selectProfileContentById =
-  selectById as SelectByIdResult<ProfileContent>;
+  selectById as SelectByIdResult<SpaceContent>;
 export const selectSpaceContentById =
   selectById as SelectByIdResult<SpaceContent>;
 export const selectPostContentById =
@@ -72,17 +71,17 @@ export const fetchContents = createAsyncThunk<
     return [];
   }
 
-  const contents = await api.subsocial.ipfs.getContentArray(newIds);
+  const contents = await api.ipfs.getContentArray(newIds);
 
   return Object.entries(contents).map(([id, content]) => {
-    const derivedContent = convertToDerivedContent(content) as CommentContent;
+    const derivedContent = convertToDerivedContent(content as any) as CommentContent;
 
     return { id, ...derivedContent };
   });
 });
 
 export const fetchProfileContents =
-  fetchContents as FetchContentFn<ProfileContent>;
+  fetchContents as FetchContentFn<SpaceContent>;
 export const fetchSpaceContents = fetchContents as FetchContentFn<SpaceContent>;
 export const fetchPostContents = fetchContents as FetchContentFn<PostContent>;
 export const fetchCommentContents =
