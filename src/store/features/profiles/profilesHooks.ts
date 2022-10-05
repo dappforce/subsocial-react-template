@@ -5,13 +5,13 @@ import {
   SelectProfileArgs,
   selectProfileStructById,
 } from './profilesSlice';
-import { AccountId, ProfileData } from '@subsocial/types/dto';
+import { AccountId, SpaceData } from '@subsocial/api/types/dto';
 import { useActions } from '../../app/helpers';
 import { fetchEntityOfAccountIdsByFollower } from './followedAccountIdsSlice';
 
 export const useSelectProfile = (
   accountId?: AccountId
-): ProfileData | undefined => {
+): SpaceData | undefined => {
   const struct = useAppSelector((state) => {
     return accountId ? selectProfileStructById(state, accountId) : undefined;
   });

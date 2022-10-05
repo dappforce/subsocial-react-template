@@ -1,4 +1,4 @@
-import { ReactionType, PostStruct } from '@subsocial/types/dto';
+import { ReactionType, PostStruct } from '@subsocial/api/types/dto';
 import { Reaction } from 'src/store/features/reactions/myPostReactionsSlice';
 
 type Props = {

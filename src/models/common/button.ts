@@ -1,10 +1,10 @@
 import { IconButtonProps } from '@mui/material/IconButton/IconButton';
-import { EntityId, ReactionEnum, PostStruct, SpaceStruct, } from '@subsocial/types/dto';
+import { EntityId, ReactionEnum, PostStruct, SpaceStruct, } from '@subsocial/api/types/dto';
 import { SubmittableResult } from '@polkadot/api';
 import { ButtonProps } from '@mui/material/Button/Button';
 import { ReactionStruct } from 'src/store/features/reactions/myPostReactionsSlice';
 import React, { FunctionComponent } from 'react';
-import { AnyAccountId, IpfsCid } from '@subsocial/types';
+import { AnyAccountId, IpfsCid } from '@subsocial/api/types';
 
 
 export type GetTxParamsFn = () => any[];

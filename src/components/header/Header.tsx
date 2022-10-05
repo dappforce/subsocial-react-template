@@ -95,7 +95,7 @@ const Header: FC<HeaderProps> = ({
                 onClick={() => dispatch(toggleAccount())}
                 address={address}
                 name={profile?.content?.name || account?.name}
-                avatar={profile?.content?.avatar}
+                avatar={profile?.content?.image}
               />
             </>
           )}

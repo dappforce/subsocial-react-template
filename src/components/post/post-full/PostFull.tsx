@@ -24,7 +24,7 @@ import { DateService, getUrl, loadImgUrl, TypeUrl } from 'src/utils';
 import {
   PostWithSomeDetails,
   ReactionEnum,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 import { toShortAddress } from 'src/components/utils/address';
 import { useSelectPost } from 'src/store/app/hooks';
 import ButtonVotes from '../../common/button/buttons-vote/ButtonVotes';
@@ -107,7 +107,7 @@ const PostFull: FC<PostFullProps> = (props) => {
                   image
                 >
                   <AvatarElement
-                    src={profile?.content?.avatar}
+                    src={profile?.content?.image}
                     size={AvatarSizes.MEDIUM}
                     id={profile?.id || post.struct.ownerId}
                   />

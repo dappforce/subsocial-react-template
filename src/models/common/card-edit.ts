@@ -1,4 +1,4 @@
-import { SpaceData, ProfileData } from '@subsocial/types/dto';
+import { SpaceData } from '@subsocial/api/types/dto';
 
 export enum CardEditType {
   Space = 'Space',
@@ -9,7 +9,7 @@ export enum CardEditType {
 
 export interface CardEditProps {
   spaceData?: SpaceData;
-  profileData?: ProfileData;
+  profileData?: SpaceData;
   title: string;
   cancelButton: string;
   saveButton: string;

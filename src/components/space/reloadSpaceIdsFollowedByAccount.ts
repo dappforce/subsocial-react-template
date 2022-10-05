@@ -1,7 +1,7 @@
 import { SubsocialSubstrateApi } from '@subsocial/api'
 import { AppDispatch } from 'src/store/app/store'
 import { upsertFollowedSpaceIdsByAccount } from 'src/store/features/spaceIds/followedSpaceIdsSlice'
-import { AccountId } from '@subsocial/types/dto'
+import { AccountId } from '@subsocial/api/types/dto'
 import { bnsToIds } from '@subsocial/utils'
 import BN from 'bn.js'
 

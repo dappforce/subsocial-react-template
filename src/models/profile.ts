@@ -1,10 +1,9 @@
 import {
   AccountId,
-  ProfileData,
   SpaceData,
   SpaceId,
-} from '@subsocial/types/dto';
-import { AnyAccountId } from '@subsocial/types';
+} from '@subsocial/api/types/dto';
+import { AnyAccountId } from '@subsocial/api/types';
 
 export interface SpaceIds {
   ids: SpaceId[];
@@ -13,7 +12,7 @@ export interface SpaceIds {
 
 export interface ProfilePageProps {
   address: AnyAccountId;
-  owner?: ProfileData;
+  owner?: SpaceData;
   followers?: AccountId[];
   mySpaceIds?: SpaceId[];
   spacesData?: SpaceData[];
@@ -28,7 +27,7 @@ export interface ProfileContentProps {
   address?: AnyAccountId;
 }
 
-export interface ProfileAccountProps extends Partial<ProfileData> {
+export interface ProfileAccountProps extends Partial<SpaceData> {
   activeTab: ProfileTabValues;
   changeTab: (T: any) => void;
 }

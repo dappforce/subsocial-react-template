@@ -2,14 +2,14 @@ import { FC, SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import ModalReactionsLayout from './ModalReactionsLayout';
 import { useApi } from '../../api';
 import { ModalVotesProps } from 'src/models/modal';
-import { Reaction, ReactionId } from '@subsocial/types/substrate/interfaces';
+import { Reaction, ReactionId } from '@subsocial/api/types/substrate';
 import partition from 'lodash.partition';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
+import { SubsocialApi } from '@subsocial/api';
 import { getPageOfIds } from '../../utils/getIds';
 import { fetchProfiles } from 'src/store/features/profiles/profilesSlice';
 import { config } from 'src/config'
 import { useAppDispatch } from 'src/store/app/store';
-import { AccountId, PostId } from '@subsocial/types/dto';
+import { AccountId, PostId } from '@subsocial/api/types/dto';
 import { Tab } from 'src/models/common/tabs';
 import { useTranslation } from 'react-i18next';
 
@@ -19,12 +19,12 @@ interface ReactionType {
 }
 
 const loadSuggestedReactionsIds = async (
-  api: FlatSubsocialApi,
+  api: SubsocialApi,
   postId: PostId
 ) => {
-  const method = await api.subsocial.substrate.getPalletQuery('reactions');
-  const ids = await method.reactionIdsByPostId(postId);
-  return await api.subsocial.substrate.findReactions(
+  const substrateApi = await api.substrateApi;
+  const ids = await substrateApi.query.reactions.reactionIdsByPostId(postId);
+  return await api.blockchain.findReactions(
     ids as unknown as ReactionId[]
   );
 };
@@ -37,7 +37,7 @@ function isUpvote(reaction: ReactionType): boolean {
 }
 
 const loadMoreReactionsFn = async (
-  loadMoreValues: any & { api: FlatSubsocialApi }
+  loadMoreValues: any & { api: SubsocialApi }
 ) => {
   const { size, page, api, dispatch, postId } = loadMoreValues;
 

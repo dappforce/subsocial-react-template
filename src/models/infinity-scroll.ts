@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
+import { SubsocialApi } from '@subsocial/api';
 import { HasHiddenVisibility } from '../store/app/helpers';
-import { AccountId } from '@subsocial/types/dto';
+import { AccountId } from '@subsocial/api/types/dto';
 
 export type RenderItemFn = (item: string) => ReactNode;
 
@@ -13,7 +13,7 @@ export type InnerLoadMoreFn<T = string> = (
 export type loadMoreValuesArgs = {
   size: number;
   page: number;
-  api: FlatSubsocialApi;
+  api: SubsocialApi;
   dispatch: any;
   visibility?: HasHiddenVisibility;
   myAddress?: AccountId;

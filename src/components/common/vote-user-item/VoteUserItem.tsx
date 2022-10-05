@@ -9,7 +9,7 @@ import { TitleSizes } from 'src/models/common/typography';
 import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { toShortAddress } from '../../utils/address';
 import Link from '../links/link/Link';
-import { AccountId } from '@subsocial/types/dto';
+import { AccountId } from '@subsocial/api/types/dto';
 import ButtonFollowAccount from '../button/button-follow/ButtonFollowAccount';
 import { getUrl, TypeUrl } from 'src/utils';
 
@@ -33,7 +33,7 @@ const VoteUserItem: FC<VoteUserItemProps> = (props) => {
       >
         <ListItemAvatar className={styles.avatar}>
           <AvatarElement
-            src={profile?.content?.avatar}
+            src={profile?.content?.image}
             size={AvatarSizes.MEDIUM}
             id={props.id}
           />

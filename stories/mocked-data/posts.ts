@@ -9,9 +9,8 @@ export const post = {
         ownerId: "3obS9hbc4kATiYuqyHER4B1TuKfbtYC5JsL1FLKq5pjCTk7E",
         hidden: false,
         spaceId: "1019",
-        repliesCount: 2,
         hiddenRepliesCount: 0,
-        visibleRepliesCount: 2,
+        repliesCount: 2,
         sharesCount: 0,
         upvotesCount: 0,
         downvotesCount: 1,
@@ -45,7 +44,6 @@ export const sharedPost = {
         spaceId: "1019",
         repliesCount: 1,
         hiddenRepliesCount: 0,
-        visibleRepliesCount: 1,
         sharesCount: 0,
         upvotesCount: 0,
         downvotesCount: 1,
@@ -53,7 +51,7 @@ export const sharedPost = {
         isRegularPost: false,
         isSharedPost: true,
         isComment: false,
-        sharedPostId: "505"
+        originalPostId: "505"
     },
     id: "506",
     content: {
@@ -80,7 +78,6 @@ export const hiddenPost = {
         spaceId: "1019",
         repliesCount: 1,
         hiddenRepliesCount: 0,
-        visibleRepliesCount: 1,
         sharesCount: 1,
         upvotesCount: 0,
         downvotesCount: 1,
@@ -112,9 +109,8 @@ export const sharedHiddenPost = {
         ownerId: "3obS9hbc4kATiYuqyHER4B1TuKfbtYC5JsL1FLKq5pjCTk7E",
         hidden: false,
         spaceId: "1019",
-        repliesCount: 1,
         hiddenRepliesCount: 0,
-        visibleRepliesCount: 1,
+        repliesCount: 1,
         sharesCount: 0,
         upvotesCount: 0,
         downvotesCount: 1,
@@ -122,7 +118,7 @@ export const sharedHiddenPost = {
         isRegularPost: false,
         isSharedPost: true,
         isComment: false,
-        sharedPostId: "507"
+        originalPostId: "507"
     },
     id: "508",
     content: {
@@ -149,7 +145,6 @@ export const postWithHiddenPost = {
         spaceId: "1030",
         repliesCount: 2,
         hiddenRepliesCount: 0,
-        visibleRepliesCount: 2,
         sharesCount: 0,
         upvotesCount: 0,
         downvotesCount: 1,

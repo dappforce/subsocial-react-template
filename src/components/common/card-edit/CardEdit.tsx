@@ -19,7 +19,7 @@ import TagsInput from '../inputs/tags-input/TagsInput';
 import { CardEditProps, CardEditType } from 'src/models/common/card-edit';
 import { loadImgUrl } from 'src/utils';
 import Editor from '../editor/Editor';
-import { CommonContent, IpfsCid } from '@subsocial/types';
+import { CommonContent, IpfsCid } from '@subsocial/api/types';
 import TxButton from '../../common/button/TxButton';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import { getTxParams } from 'src/components/utils/getTxParams';
@@ -106,7 +106,7 @@ const CardEdit: FC<CardEditProps> = ({
       ? //@ts-ignore
         existentPropsData?.content?.image
       : //@ts-ignore
-        existentPropsData?.content?.avatar || '';
+        existentPropsData?.content?.image || '';
 
     setState({
       name: existentPropsData?.content?.name || '',
@@ -145,7 +145,7 @@ const CardEdit: FC<CardEditProps> = ({
       if (type === CardEditType.Space) {
         newCid &&
           unpinIpfsCid(
-            api.subsocial.ipfs,
+            api.ipfs,
             //@ts-ignore
             existentPropsData?.struct?.contentId,
             newCid
@@ -153,17 +153,17 @@ const CardEdit: FC<CardEditProps> = ({
 
         cidImage &&
           unpinIpfsCid(
-            api.subsocial.ipfs,
+            api.ipfs,
             //@ts-ignore
             existentPropsData?.content?.image,
             cidImage
           );
       } else {
         newCid &&
-          unpinIpfsCid(api.subsocial.ipfs, profile?.struct?.contentId, newCid);
+          unpinIpfsCid(api.ipfs, profile?.struct?.contentId, newCid);
 
         cidImage &&
-          unpinIpfsCid(api.subsocial.ipfs, profile?.content?.avatar, cidImage);
+          unpinIpfsCid(api.ipfs, profile?.content?.image, cidImage);
       }
       type === CardEditType.Space
         ? router.push(`/${id}`)
@@ -180,7 +180,7 @@ const CardEdit: FC<CardEditProps> = ({
       if (type === CardEditType.Space) {
         newCid &&
           unpinIpfsCid(
-            api.subsocial.ipfs,
+            api.ipfs,
             newCid,
             //@ts-ignore
             existentPropsData?.content?.id
@@ -188,17 +188,17 @@ const CardEdit: FC<CardEditProps> = ({
 
         cidImage &&
           unpinIpfsCid(
-            api.subsocial.ipfs,
+            api.ipfs,
             cidImage,
             //@ts-ignore
             existentPropsData?.content?.image
           );
       } else {
         newCid &&
-          unpinIpfsCid(api.subsocial.ipfs, newCid, profile?.struct.contentId);
+          unpinIpfsCid(api.ipfs, newCid, profile?.struct.contentId);
 
         cidImage &&
-          unpinIpfsCid(api.subsocial.ipfs, cidImage, profile?.content?.avatar);
+          unpinIpfsCid(api.ipfs, cidImage, profile?.content?.image);
       }
     }
   };
@@ -282,7 +282,7 @@ const CardEdit: FC<CardEditProps> = ({
                 params={() =>
                   getTxParams({
                     json: json as CommonContent,
-                    ipfs: api.subsocial.ipfs,
+                    ipfs: api.ipfs,
                     buildTxParamsCallback: newTxParams,
                   })
                 }

@@ -32,7 +32,7 @@ const PostInfo: FC<PostInfoProps> = ({ post, profile, space }) => {
           image
         >
           <AvatarElement
-            src={profile?.content?.avatar}
+            src={profile?.content?.image}
             size={AvatarSizes.MEDIUM}
             id={profile?.id || post.struct.ownerId}
           />

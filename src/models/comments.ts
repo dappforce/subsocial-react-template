@@ -1,4 +1,4 @@
-import { PostId, PostWithSomeDetails, PostStruct, PostData } from '@subsocial/types/dto';
+import { PostId, PostWithSomeDetails, PostStruct, PostData } from '@subsocial/api/types/dto';
 
 export interface CommentsProps {
   parentStruct: PostStruct;

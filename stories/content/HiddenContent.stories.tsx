@@ -3,7 +3,7 @@ import React, { ComponentProps } from 'react';
 import HiddenComponent from 'src/components/common/hidden-component/HiddenComponent';
 import { comment, post, space } from '../mocked-data';
 import { TypeContent } from 'src/models/common/button';
-import { PostData, SpaceData } from '@subsocial/types/dto';
+import { PostData, SpaceData } from '@subsocial/api/types/dto';
 
 export default {
   component: HiddenComponent,

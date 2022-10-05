@@ -1,4 +1,4 @@
-import { EntityId } from '@subsocial/types/dto';
+import { EntityId } from '@subsocial/api/types/dto';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import { useApi } from 'src/components/api';

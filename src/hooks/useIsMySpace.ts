@@ -1,8 +1,8 @@
-import { SpaceStruct } from '@subsocial/types/dto';
+import { SpaceStruct } from '@subsocial/api/types/dto';
 import { isDef } from '@subsocial/utils';
 import { asAccountId } from '@subsocial/api';
 import { useMyAddress } from '../store/features/myAccount/myAccountHooks';
-import { AnyAccountId } from '@subsocial/types';
+import { AnyAccountId } from '@subsocial/api/types';
 
 export const useIsMySpace = (space?: SpaceStruct) =>
   useIsMyAddress(space?.ownerId) && isDef(space);

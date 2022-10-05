@@ -43,6 +43,8 @@ export const space = {
   }
 };
 
+export const profile = space
+
 export const hiddenSpace = {
   struct: {
     createdByAccount: "3s69FXMn5VyteGkQxmtaJkTvQDzH9BfxF8ev9qzHubZ8Ewzr",

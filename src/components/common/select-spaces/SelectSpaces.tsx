@@ -6,7 +6,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import { EntityId } from '@subsocial/types/dto';
+import { EntityId } from '@subsocial/api/types/dto';
 import { FC, useEffect } from 'react';
 import { useApi } from 'src/components/api';
 import { AvatarSizes } from 'src/models/common/avatar';

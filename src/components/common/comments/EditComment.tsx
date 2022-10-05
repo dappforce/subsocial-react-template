@@ -8,8 +8,8 @@ import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import Editor from '../editor/Editor';
 import TxButton from '../button/TxButton';
-import { OptionIpfsContent } from '@subsocial/types/substrate/classes';
-import { IpfsCid } from '@subsocial/types';
+import { OptionIpfsContent } from '@subsocial/api/substrate/wrappers';
+import { IpfsCid } from '@subsocial/api/types';
 import { useApi } from 'src/components/api';
 import { getTxParams } from 'src/components/utils/getTxParams';
 import ButtonCancel from '../button/button-cancel/ButtonCancel';
@@ -74,7 +74,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
 
     newCid &&
     unpinIpfsCid(
-      api.subsocial.ipfs,
+      api.ipfs,
       comment.struct.contentId,
       newCid,
     );
@@ -83,7 +83,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
   const onFailed: TxFailedCallback = (txResult, newCid) => {
     newCid &&
     unpinIpfsCid(
-      api.subsocial.ipfs,
+      api.ipfs,
       newCid,
       comment.struct.contentId,
     );
@@ -98,7 +98,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
       onClick={expandForm}
     >
       <AvatarElement
-        src={user?.content?.avatar}
+        src={user?.content?.image}
         size={AvatarSizes.SMALL}
         id={user?.id}
       />
@@ -124,7 +124,7 @@ const EditComment: FC<EditCommentProps> = (props) => {
             params={() =>
               getTxParams({
                 json: { body },
-                ipfs: api.subsocial.ipfs,
+                ipfs: api.ipfs,
                 buildTxParamsCallback: newTxParams,
               })
             }

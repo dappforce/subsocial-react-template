@@ -14,28 +14,28 @@ import {
 import { useApi } from '../../api';
 import { fetchProfiles } from 'src/store/features/profiles/profilesSlice';
 import { asString } from '@subsocial/utils';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
+import { SubsocialApi } from '@subsocial/api';
 import { useAppDispatch } from 'src/store/app/store';
 import { config } from 'src/config'
 import { Tab } from 'src/models/common/tabs';
-import { PostId } from '@subsocial/types/dto';
+import { PostId } from '@subsocial/api/types/dto';
 import { getPageOfIds } from '../../utils/getIds';
 import { useTranslation } from 'react-i18next';
 
 const loadSuggestedConnectionsIds = async (
-  api: FlatSubsocialApi,
-  address: unknown,
+  api: SubsocialApi,
+  address: string,
   type: ModalConnectionsFetchType
 ) => {
-  const method = await api.subsocial.substrate.getPalletQuery('profileFollows');
-  const ids = (await method[type](address)) as unknown as string[];
+  const substrateApi = await api.substrateApi
+  const ids = (await substrateApi.query.accountFollows[type](address)) as unknown as string[];
   return ids.map(asString);
 };
 const getAccountsIdsByPage = (ids: PostId[], size: number, page: number) =>
   getPageOfIds(ids, { page, size });
 
 const loadMoreAccountsFn = async (
-  loadMoreValues: any & { api: FlatSubsocialApi }
+  loadMoreValues: any & { api: SubsocialApi }
 ) => {
   const { size, page, api, dispatch, address, type } = loadMoreValues;
   const ids = await loadSuggestedConnectionsIds(api, address, type);

@@ -21,7 +21,7 @@ const ModalListUserItem: FC<ModalListUserItemProps> = ({
     <ListItem component={'button'} onClick={() => onClick(address)}>
       <ListItemAvatar className={styles.avatar}>
         <AvatarElement
-          src={profile?.content?.avatar || ''}
+          src={profile?.content?.image || ''}
           size={AvatarSizes.MEDIUM}
           id={address}
         />

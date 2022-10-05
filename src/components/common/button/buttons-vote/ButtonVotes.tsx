@@ -17,8 +17,8 @@ import {
   ReactionStruct,
   selectMyReactionByPostId,
 } from 'src/store/features/reactions/myPostReactionsSlice';
-import { ReactionEnum, ReactionId, ReactionType } from '@subsocial/types/dto';
-import { ReactionKind } from '@subsocial/types/substrate/classes';
+import { ReactionEnum, ReactionId, ReactionType } from '@subsocial/api/types/dto';
+import { ReactionKind } from '@subsocial/api/substrate/wrappers';
 import TxButton from '../TxButton';
 import { getPostStructWithUpdatedCounts } from './voting';
 import { getNewIdsFromEvent } from '@subsocial/api';

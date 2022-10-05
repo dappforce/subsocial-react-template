@@ -3,10 +3,9 @@ import {
   PostWithAllDetails,
   PostWithSomeDetails,
   PostStruct,
-  ProfileData,
   SpaceData, SpaceId, AccountId
-} from '@subsocial/types/dto';
-import { IpfsCid } from '@subsocial/types';
+} from '@subsocial/api/types/dto';
+import { IpfsCid } from '@subsocial/api/types';
 import { Visibility } from '@subsocial/api/filters';
 import { ListType } from '../components/home/HomePage';
 
@@ -52,7 +51,7 @@ export interface dataPost {
 }
 
 export interface PostInfoProps {
-  profile: ProfileData;
+  profile: SpaceData;
   post: PostData;
   space: SpaceData;
 }

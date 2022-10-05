@@ -6,7 +6,7 @@ import { getUrl, transformCount, TypeUrl } from '../../../utils';
 import AvatarElement from '../../common/avatar/AvatarElement';
 import ButtonFollowSpace from '../../common/button/button-follow/ButtonFollowSpace';
 import Title from '../../common/title/Title';
-import { SpaceWithSomeDetails } from '@subsocial/types/dto';
+import { SpaceWithSomeDetails } from '@subsocial/api/types/dto';
 import { useResponsiveSize } from '../../responsive/ResponsiveContext';
 import { useModal } from 'src/hooks/useModal';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,7 @@ const Subheader: FC<{ spaceData: SpaceWithSomeDetails }> = (props) => {
     <>
       <Modal open={isVisible} onClose={toggleModal}>
         <ModalFollow
-          count={props.spaceData.struct.followersCount}
+          count={0} // TODO: add count props.spaceData.struct.followersCount
           id={props.spaceData.id}
         />
       </Modal>
@@ -43,7 +43,7 @@ const Subheader: FC<{ spaceData: SpaceWithSomeDetails }> = (props) => {
               id: props.spaceData.id,
             })}
           >
-            {transformCount(props.spaceData.struct.postsCount)}{' '}
+            {transformCount((props.spaceData.struct as any).postsCount)}{' '}
             {t('plural.post', {
               count: props.spaceData.struct.postsCount || 0,
             })}
@@ -52,9 +52,9 @@ const Subheader: FC<{ spaceData: SpaceWithSomeDetails }> = (props) => {
         </>
       )}
       <span onClick={toggleModal} className={styles.followers}>
-        {transformCount(props.spaceData.struct.followersCount)}{' '}
+        {transformCount(0)}{' '}
         {t('plural.follower', {
-          count: props.spaceData.struct.followersCount || 0,
+          count: 0,
         })}
       </span>
     </>

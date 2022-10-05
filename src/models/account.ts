@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { NamedLink } from '@subsocial/types';
-import { AccountId } from '@subsocial/types/dto';
+import { NamedLink } from '@subsocial/api/types';
+import { AccountId } from '@subsocial/api/types/dto';
 
 export interface AccountProps {
   tabs?: ReactNode;

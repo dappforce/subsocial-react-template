@@ -9,7 +9,7 @@ import { selectSpaceContentById } from '../contents/contentsSlice';
 import {
   SpaceId,
   SpaceWithSomeDetails,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 import { useActions } from '../../app/helpers';
 
 export const useSelectSpace = (

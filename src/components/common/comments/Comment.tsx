@@ -9,7 +9,7 @@ import NewComment from './NewComment';
 import ButtonOptions from '../button/button-options/ButtonOptions';
 import Link from 'src/components/common/links/link/Link';
 import SmallLink from '../links/small-link/SmallLink';
-import { CommentContent, PostData } from '@subsocial/types/dto';
+import { CommentContent, PostData } from '@subsocial/api/types/dto';
 import { useSelectPost } from 'src/store/features/posts/postsHooks';
 import { asCommentStruct } from '@subsocial/api/subsocial/flatteners/utils';
 import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
@@ -124,7 +124,7 @@ const CommentView: FC<CommentProps> = ({ commentDetails }) => {
         image
       >
         <AvatarElement
-          src={profile?.content?.avatar}
+          src={profile?.content?.image}
           size={AvatarSizes.SMALL}
           id={comment.struct.ownerId}
         />

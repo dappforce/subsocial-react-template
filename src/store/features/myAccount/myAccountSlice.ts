@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AccountId } from '@subsocial/types/dto';
+import { AccountId } from '@subsocial/api/types/dto';
 import { Account } from 'src/models/account';
 import store from 'store';
 import { ACCOUNT_STATUS } from 'src/models/auth';

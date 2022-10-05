@@ -8,7 +8,7 @@ import { bnsToIds, idToBn } from '@subsocial/utils'
 import { getPageOfIds } from '../../utils/getIds'
 import { fetchPosts, selectPosts } from 'src/store/features/posts/postsSlice'
 import { useApi } from '../../api'
-import { PostId } from '@subsocial/types/dto'
+import { PostId } from '@subsocial/api/types/dto'
 import { useAppDispatch } from 'src/store/app/store'
 import EmptyComponent from '../../common/empty/EmptyComponent'
 import InfinityListScroll from '../../common/infinity-list/InfinityListScroll'
@@ -77,7 +77,7 @@ getInitialPropsWithRedux(SpacePage, async (props) => {
     return return404(context);
   }
 
-  const spaceId = idToBn(spaceData.id);
+  const spaceId = spaceData.id
 
   const postIds = (await subsocial.subsocial.substrate.postIdsBySpaceId(spaceId)).reverse();
 

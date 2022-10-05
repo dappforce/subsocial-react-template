@@ -7,7 +7,7 @@ import {
 } from './postsSlice';
 import { selectPostContentById } from '../contents/contentsSlice';
 import { useSelectSpace } from '../spaces/spacesHooks';
-import { PostId, PostWithSomeDetails, PostStruct } from '@subsocial/types/dto';
+import { PostId, PostWithSomeDetails, PostStruct } from '@subsocial/api/types/dto';
 import { asCommentStruct } from '@subsocial/api/subsocial/flatteners/utils';
 import { useActions } from '../../app/helpers';
 

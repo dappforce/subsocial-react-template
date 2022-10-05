@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import ButtonComponent from 'src/components/common/button/buttons-vote/ButtonVotes';
 import { ComponentProps } from 'react';
 import { post, sharedPost } from 'stories/mocked-data/posts';
-import { ReactionEnum } from '@subsocial/types/dto';
+import { ReactionEnum } from '@subsocial/api/types/dto';
 
 export default {
   component: ButtonComponent,

@@ -66,7 +66,7 @@ const ModalSendTips: FC<ModalSendTipsProps> = ({ open, toggleModal, ownerId }) =
             <AvatarElement
               size={isMobile ? AvatarSizes.HUGEST : AvatarSizes.HUGE}
               id={ownerId}
-              src={profile?.content?.avatar}
+              src={profile?.content?.image}
             />
             <div className={styles.profileInfo}>
               <Text type={TextSizes.SECONDARY} className={styles.text}>

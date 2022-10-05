@@ -1,6 +1,6 @@
 import { TabProps } from './common/tabs';
 import { ReactNode, SyntheticEvent } from 'react';
-import { AccountId, PostId, SpaceId } from '@subsocial/types/dto';
+import { AccountId, PostId, SpaceId } from '@subsocial/api/types/dto';
 import { ModalProps as ModalMaterialProps } from '@mui/material/Modal/Modal';
 import { Account } from './account';
 import { ACCOUNT_STATUS } from './auth';

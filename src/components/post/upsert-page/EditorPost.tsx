@@ -7,7 +7,7 @@ import Title from 'src/components/common/title/Title';
 import Layout from 'src/components/layout/Layout';
 import { TitleSizes } from 'src/models/common/typography';
 import styles from './UpsertPost.module.sass';
-import { IpfsCid } from '@subsocial/types';
+import { IpfsCid } from '@subsocial/api/types';
 import File from 'src/components/common/file/File';
 import Input from 'src/components/common/inputs/input/Input';
 import Embed from 'src/components/common/Embed';
@@ -30,7 +30,7 @@ import Snackbar from 'src/components/common/snackbar/Snackbar';
 import { SnackbarType } from 'src/models/common/snackbar';
 import { getInitialPostValue } from '../../utils/getInitialPostValue';
 import Post from '../post-item/Post';
-import { SharedPostStruct } from '@subsocial/types/dto';
+import { SharedPostStruct } from '@subsocial/api/types/dto';
 import { useTranslation } from 'react-i18next';
 import { config } from 'src/config';
 import { unpinIpfsCid } from 'src/components/utils/unpinIpfsCid';
@@ -42,7 +42,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
   const { api } = useApi();
   const { spaceId: currentSpaceId } = router.query;
   const postData = useSelectPost(postId);
-  const { isSharedPost, sharedPostId } =
+  const { isSharedPost, originalPostId } =
     (postData?.post.struct as SharedPostStruct) || {};
   const initialPostValue = getInitialPostValue(postData?.post.content);
 
@@ -145,7 +145,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
     if (postData) {
       newCid &&
       unpinIpfsCid(
-        api.subsocial.ipfs,
+        api.ipfs,
         //@ts-ignore
         postData?.post?.content?.id,
         newCid
@@ -153,7 +153,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
 
       cidImage &&
       unpinIpfsCid(
-        api.subsocial.ipfs,
+        api.ipfs,
         postData?.post?.content?.image,
         cidImage
       );
@@ -165,7 +165,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
   const onFailed: TxFailedCallback = (txResult, newCid) => {
     newCid &&
     unpinIpfsCid(
-      api.subsocial.ipfs,
+      api.ipfs,
       newCid,
       //@ts-ignore
       postData?.post?.content?.id
@@ -173,7 +173,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
 
     cidImage &&
     unpinIpfsCid(
-      api.subsocial.ipfs,
+      api.ipfs,
       cidImage,
       postData?.post?.content?.image
     );
@@ -271,7 +271,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
 
             {isSharedPost && (
               <Post
-                postId={sharedPostId}
+                postId={originalPostId}
                 isShowActions={false}
                 className={styles.post}
               />
@@ -289,7 +289,7 @@ export const EditorPost: FC<EditorPostProps> = (props) => {
                 params={() =>
                   getTxParams({
                     json,
-                    ipfs: api.subsocial.ipfs,
+                    ipfs: api.ipfs,
                     buildTxParamsCallback: newTxParams,
                   })
                 }

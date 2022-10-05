@@ -14,7 +14,7 @@ import { TabProps } from '../../models/common/tabs';
 import { useTranslation } from 'react-i18next';
 import { useMyAddress } from 'src/store/features/myAccount/myAccountHooks';
 import { useApi } from '../api';
-import { SpaceId } from '@subsocial/types/dto';
+import { SpaceId } from '@subsocial/api/types/dto';
 import MyFeed from '../activity/feed/MyFeed';
 import { useAuth } from '../auth/AuthContext';
 import { ACCOUNT_STATUS } from 'src/models/auth';

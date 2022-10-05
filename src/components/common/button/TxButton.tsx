@@ -14,7 +14,7 @@ import Loader from '../loader/Loader';
 import Snackbar from '../snackbar/Snackbar';
 import { useSnackbar } from 'src/hooks/useSnackbar';
 import { SnackbarType } from 'src/models/common/snackbar';
-import { IpfsCid } from '@subsocial/types';
+import { IpfsCid } from '@subsocial/api/types';
 
 const TxButton: FC<TxButtonProps> = ({
   accountId,

@@ -34,7 +34,7 @@ const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
       <div className={styles.account}>
         <div className={styles.header}>
           <AvatarElement
-            src={profile?.content?.avatar}
+            src={profile?.content?.image}
             size={AvatarSizes.MEDIUM}
             id={address}
           />
@@ -45,8 +45,8 @@ const SwitchAccountContent: FC<SwitchAccountContentProps> = (props) => {
             </Title>
             <AccountFollowers
               className={styles.followers}
-              following={profile?.struct.followingAccountsCount}
-              followers={profile?.struct.followersCount}
+              following={0} // TODO: add count profile?.struct.followingAccountsCount
+              followers={0} // TODO: add count profile?.struct.followersCount
               accountId={address}
             />
           </div>

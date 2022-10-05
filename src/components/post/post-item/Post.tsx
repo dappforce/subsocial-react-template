@@ -7,7 +7,7 @@ import PostActions from './post-actions/PostActions';
 import CardWrapper from '../../common/card-wrapper/CardWrapper';
 import { useSelectPost } from 'src/store/features/posts/postsHooks';
 import { useSelectSpace } from 'src/store/features/spaces/spacesHooks';
-import { PostWithSomeDetails } from '@subsocial/types/dto';
+import { PostWithSomeDetails } from '@subsocial/api/types/dto';
 import { useSelectProfile } from 'src/store/features/profiles/profilesHooks';
 import { useAppSelector } from 'src/store/app/store';
 import { selectMyReactionByPostId } from 'src/store/features/reactions/myPostReactionsSlice';

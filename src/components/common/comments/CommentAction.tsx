@@ -3,7 +3,7 @@ import styles from './Comments.module.sass';
 import ButtonReply from '../button/ButtonReply';
 import { CommentActionProps } from 'src/models/comments';
 import ButtonVotes from '../button/buttons-vote/ButtonVotes';
-import { ReactionEnum } from '@subsocial/types/dto';
+import { ReactionEnum } from '@subsocial/api/types/dto';
 import { useResponsiveSize } from "../../responsive/ResponsiveContext";
 
 const CommentAction: FC<CommentActionProps> = ({ onReply, comment }) => {

@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react';
 import React, { ComponentProps } from 'react';
 import { postWithHiddenPost } from '../mocked-data';
-import { PostData } from '@subsocial/types/dto';
+import { PostData } from '@subsocial/api/types/dto';
 import SpaceHiddenComponent from 'src/components/common/space-hidden-component/SpaceHiddenComponent';
 
 export default {

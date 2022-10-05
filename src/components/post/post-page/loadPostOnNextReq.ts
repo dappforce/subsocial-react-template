@@ -1,5 +1,5 @@
 import { NextContextWithRedux } from 'src/store/app';
-import { PostWithSomeDetails, SpaceWithSomeDetails } from '@subsocial/types/dto';
+import { PostWithSomeDetails, SpaceWithSomeDetails } from '@subsocial/api/types/dto';
 import { bnsToIds, idToBn } from '@subsocial/utils';
 import { fetchPosts, selectPost } from 'src/store/features/posts/postsSlice';
 import { fetchSpaces, selectSpace } from 'src/store/features/spaces/spacesSlice';
@@ -20,7 +20,7 @@ export async function loadPostOnNextReq({
 
   const postId = url[url.length - 1];
   const replyIds = await subsocial.subsocial.substrate.getReplyIdsByPostId(
-    idToBn(postId)
+      postId
   );
 
   const ids = bnsToIds(replyIds).concat(postId);

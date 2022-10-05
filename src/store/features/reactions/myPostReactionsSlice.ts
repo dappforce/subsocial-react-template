@@ -23,7 +23,7 @@ import {
   PostId,
   ReactionId,
   ReactionType,
-} from '@subsocial/types/dto';
+} from '@subsocial/api/types/dto';
 
 const sliceName = 'reactions';
 

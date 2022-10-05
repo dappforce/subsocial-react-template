@@ -22,9 +22,9 @@ import {
   selectProfileContentById,
   upsertManyContent,
 } from '../contents/contentsSlice';
-import { ProfileData, ProfileStruct } from '@subsocial/types/dto';
+import { SpaceData, SpaceStruct } from '@subsocial/api/types/dto';
 
-const profilesAdapter = createEntityAdapter<ProfileStruct>();
+const profilesAdapter = createEntityAdapter<SpaceStruct>();
 const profilesSelectors = profilesAdapter.getSelectors<RootState>(
   (state) => state.profiles
 );
@@ -51,13 +51,13 @@ type FetchProfilesArgs = FetchManyArgs<Args>;
 export const selectProfile = (
   state: RootState,
   id: EntityId
-): ProfileData | undefined =>
+): SpaceData | undefined =>
   selectOneById(state, id, selectProfileStructById, selectProfileContentById);
 
 export const selectProfiles = (
   state: RootState,
   { ids }: SelectProfilesArgs
-): ProfileData[] =>
+): SpaceData[] =>
   selectManyByIds(
     state,
     ids,
@@ -68,7 +68,7 @@ export const selectProfiles = (
 const selectUnknownProfileIds = createSelectUnknownIds(selectProfileIds);
 
 export const fetchProfiles = createAsyncThunk<
-  ProfileStruct[],
+  SpaceStruct[],
   FetchProfilesArgs,
   ThunkApiConfig
 >(
@@ -88,7 +88,8 @@ export const fetchProfiles = createAsyncThunk<
       }
     }
 
-    const profile = await api.findProfiles(newIds);
+    const profileSpaceIds = await api.blockchain.profileSpaceIdsByAccounts(newIds);
+    const profile = await api.findSpaceStructs(profileSpaceIds)
 
     const content = {
       entities: profile.map((item: any) => ({

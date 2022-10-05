@@ -1,8 +1,6 @@
 import { createContext, FC, useContext, useEffect, useState } from 'react';
-import { SubsocialApi, ISubsocialApi } from '@subsocial/api';
-import useLoader from 'src/hooks/useLoader';
+import {SubsocialApi, generateCrustAuthToken} from '@subsocial/api';
 import Snackbar from '../common/snackbar/Snackbar';
-import { HttpRequestMethod } from '@subsocial/api/types';
 import store from 'store';
 import {
   MY_ADDRESS,
@@ -22,22 +20,23 @@ export const ApiContext = createContext<ContextType>({
 
 const config = {
   substrateNodeUrl: inputConfig.substrateNodeUrl,
-  offchainUrl: '',
   ipfsNodeUrl: inputConfig.ipfsNodeUrl,
-  useServer: {
-    httpRequestMethod: 'get' as HttpRequestMethod,
-  },
 };
 
 export async function initSubsocialApi() {
-  console.log('hi', 'here')
-  return await SubsocialApi.create(config);
+  const api = await SubsocialApi.create(config);
+  const authHeader = generateCrustAuthToken('bottom drive obey lake curtain smoke basket hold race lonely fit walk//Alice')
+  api.ipfs.setWriteHeaders({
+    authorization: 'Basic ' + authHeader
+  })
+
+  return api
 }
 
 export const ApiProvider: FC = (props) => {
   const [api, setApi] = useState<SubsocialApi>({} as SubsocialApi);
   const [substrateApi, setSubstrateApi] = useState<ApiPromise>({} as ApiPromise);
-  const { isLoader, toggleLoader } = useLoader();
+  const [ isApiReady, setApiReady ] = useState(false);
   const dispatch = useAppDispatch();
   const { type, message, setSnackConfig, removeSnackbar } = useSnackbar();
   const { t } = useTranslation();
@@ -48,30 +47,28 @@ export const ApiProvider: FC = (props) => {
       setSnackConfig({ message: t('connectingToNetwork') });
     }
 
-    toggleLoader();
+    setApiReady(false)
     initSubsocialApi().then((res) => {
-      console.log(res)
       setApi(res);
-      res.subsocial.substrate.api.then((res) => {
+      res.substrateApi.then((res) => {
         setSubstrateApi(res);
-        toggleLoader();
+        setApiReady(true)
       });
     });
   }, []);
 
-  return !api ? (
-    <Snackbar
-      type={type}
-      open={isLoader}
-      message={message}
-      onClose={() => {
-        toggleLoader();
-        removeSnackbar();
-      }}
+  if (!isApiReady) {
+    return <Snackbar
+        type={type}
+        open={isApiReady}
+        message={message}
+        onClose={() => {
+          removeSnackbar();
+        }}
     />
-  ) : (
-    <ApiContext.Provider value={{ api, substrateApi }}>{props.children}</ApiContext.Provider>
-  );
+  }
+
+  return <ApiContext.Provider value={{ api, substrateApi }}>{props.children}</ApiContext.Provider>
 };
 
 export function useApi() {

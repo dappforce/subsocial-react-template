@@ -67,10 +67,10 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
   return (
     <Account
       name={content?.name || toShortAddress(id)}
-      avatar={content?.avatar}
+      avatar={content?.image}
       id={id as string}
-      followersCount={struct.followersCount}
-      followingCount={struct.followingAccountsCount}
+      followersCount={(struct as any).followersCount || 0} // TODO: resolve followersCount
+      followingCount={(struct as any).followingAccountsCount || 0}
       buttons={
         isMy ? (
           <>
@@ -117,7 +117,7 @@ const ProfileAccount: FC<ProfileAccountProps> = (props) => {
         <>
           {isMy && isDesktop && (
             <ButtonEdit
-              onClick={() => router.push(`/accounts/${address}/edit`)}
+              onClick={() => router.push(`/${struct.id}/edit`)}
             />
           )}
           <Options

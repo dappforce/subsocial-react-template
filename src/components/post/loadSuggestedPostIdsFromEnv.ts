@@ -1,13 +1,13 @@
 import { getPageOfIds } from '../utils/getIds';
-import { AnySpaceId } from '@subsocial/types';
+import { AnySpaceId } from '@subsocial/api/types';
 import { bnsToIds } from '@subsocial/utils';
-import { PostId, SpaceId } from '@subsocial/types/dto';
-import { FlatSubsocialApi } from '@subsocial/api/flat-subsocial';
+import { PostId, SpaceId } from '@subsocial/api/types/dto';
+import { SubsocialApi } from '@subsocial/api';
 
 let suggestedPostIds: string[] | undefined = undefined;
 
 export const loadSuggestedPostIds = async (
-  api: FlatSubsocialApi,
+  api: SubsocialApi,
   ids: SpaceId[]
 ) => {
   if (!api.subsocial) return [];
